@@ -1,0 +1,832 @@
+{
+    "write new block": {
+        "prefix": "nb",
+        "body": [
+            "{nb,'$1'}"
+        ],
+        "description": "Write new block"
+    },
+    "write new line": {
+        "prefix": "nl",
+        "body": [
+            "{nl, '$1'}"
+        ],
+        "description": "Write new line"
+    },
+    "debug code trace": {
+        "prefix": "ta",
+        "body": [
+            "trace 'all':$1"
+        ],
+        "description": "Trace all"
+    },
+    "'if endif' statment": {
+        "prefix": [
+            "if",
+            "logf"
+        ],
+        "body": [
+            "if $1",
+            "\t$2",
+            "endif",
+            ""
+        ],
+        "description": "'if endif' statment"
+    },
+    "'if else endif' statment": {
+        "prefix": [
+            "ife",
+            "logf"
+        ],
+        "body": [
+            "if $1",
+            "\t$2",
+            "else",
+            "\t$3",
+            "endif",
+            ""
+        ],
+        "description": "'if else endif' statment"
+    },
+    "'while endw' statment": {
+        "prefix": "whi",
+        "body": [
+            "while $1",
+            "\t$2",
+            "\tbreak",
+            "endw",
+            ""
+        ],
+        "description": "'while endw' statment"
+    },
+    "write procedure": {
+        "prefix": "prc",
+        "body": [
+            "@$1",
+            "\t$2",
+            "endp"
+        ],
+        "description": "write new procedure"
+    },
+    "end of procedure": {
+        "prefix": [
+            "endp"
+        ],
+        "body": [
+            "endp"
+        ],
+        "description": "end of procedure"
+    },
+    "True Logical Constants": {
+        "prefix": [
+            "true"
+        ],
+        "body": [
+            "true"
+        ],
+        "description": "true logical constant"
+    },
+    "False Logical Constants": {
+        "prefix": [
+            "false"
+        ],
+        "body": [
+            "false"
+        ],
+        "description": "false logical constant"
+    },
+    "global /modifier/": {
+        "prefix": [
+            "global", "gpm"
+        ],
+        "body": [
+            "global($1)"
+        ],
+        "description": "global scope modifier"
+    },
+    "local /modifier/": {
+        "prefix": [
+            "local", "gpm"
+        ],
+        "body": [
+            "local($1)"
+        ],
+        "description": "local scope modifier"
+    },
+    "string /variable/": {
+        "prefix": [
+            "string", "gpm"
+        ],
+        "body": [
+            "string($1)"
+        ],
+        "description": "string variable modifier"
+    },
+    "logical /variable/": {
+        "prefix": [
+            "logical", "gpm"
+        ],
+        "body": [
+            "logical($1)"
+        ],
+        "description": "logical variable modifier"
+    },
+    "integer /variable/": {
+        "prefix": [
+            "integer", "gpm"
+        ],
+        "body": [
+            "integer($1)"
+        ],
+        "description": "integer variable modifier"
+    },
+    "numeric /variable/": {
+        "prefix": [
+            "numeric", "gpm"
+        ],
+        "body": [
+            "numeric($1)"
+        ],
+        "description": "numeric variable modifier"
+    },
+    "if": {
+        "prefix": [
+            "if",
+            "logf"
+        ],
+        "body": [
+            "if"
+        ],
+        "description": "if"
+    },
+    "else": {
+        "prefix": [
+            "else",
+            "logf"
+        ],
+        "body": [
+            "else"
+        ],
+        "description": "else"
+    },
+    "elseif": {
+        "prefix": [
+            "elseif"
+        ],
+        "body": [
+            "elseif"
+        ],
+        "description": "elseif"
+    },
+    "endif": {
+        "prefix": [
+            "endif"
+        ],
+        "body": [
+            "endif"
+        ],
+        "description": "endif"
+    },
+    "then": {
+        "prefix": [
+            "then"
+        ],
+        "body": [
+            "then"
+        ],
+        "description": "then"
+    },
+    "and(operand)": {
+        "prefix": [
+            "and",
+            "logf"
+        ],
+        "body": [
+            "and($1)"
+        ],
+        "description": "and(operand) return TRUE if both operands are TRUE"
+    },
+    "or(operand)": {
+        "prefix": [
+            "or",
+            "logf"
+        ],
+        "body": [
+            "or($1)"
+        ],
+        "description": "or(operand) return TRUE if any of its operands is TRUE"
+    },
+    "not(argument)": {
+        "prefix": [
+            "not",
+            "logf"
+        ],
+        "body": [
+            "not($1)"
+        ],
+        "description": "not(argument) return TRUE if its argument is FALSE"
+    },
+    "eq(operand)": {
+        "prefix": [
+            "eq",
+            "logf"
+        ],
+        "body": [
+            "eq($1)"
+        ],
+        "description": "eq(operand) (or '==') return TRUE if both operands are equal"
+    },
+    "ne(operand)": {
+        "prefix": [
+            "ne",
+            "logf"
+        ],
+        "body": [
+            "ne($1)"
+        ],
+        "description": "ne(operand) (or '<>') return TRUE if both operands are different"
+    },
+    "le(operand)": {
+        "prefix": [
+            "le",
+            "logf"
+        ],
+        "body": [
+            "le($1)"
+        ],
+        "description": "le(operand) (or '<=') return TRUE if first operand is less than or equal to the second"
+    },
+    "lt(operand)": {
+        "prefix": [
+            "lt",
+            "logf"
+        ],
+        "body": [
+            "lt($1)"
+        ],
+        "description": "lt(operand) (or '<' ) return TRUE if first operand is less than the second"
+    },
+    "ge(operand)": {
+        "prefix": [
+            "ge",
+            "logf"
+        ],
+        "body": [
+            "ge($1)"
+        ],
+        "description": "ge(operand) (or '>=') return TRUE if first operand is greater than or equal to the second"
+    },
+    "gt(operand)": {
+        "prefix": [
+            "gt",
+            "logf"
+        ],
+        "body": [
+            "gt($1)"
+        ],
+        "description": "gt(operand) (or '>' ) return TRUE if first operand is greater than the second"
+    },
+    "GPPL Loop Execution Statement: while": {
+        "prefix": [
+            "while"
+        ],
+        "body": [
+            "while"
+        ],
+        "description": "GPPL Loop Execution Statement: while"
+    },
+    "GPPL Loop Execution Statement: endw": {
+        "prefix": [
+            "endw"
+        ],
+        "body": [
+            "endw"
+        ],
+        "description": "GPPL Loop Execution Statement: endw"
+    },
+    "GPPL Stop Execution Statements: abort": {
+        "prefix": [
+            "abort"
+        ],
+        "body": [
+            "abort"
+        ],
+        "description": "GPPL Stop Execution Statements: abort"
+    },
+    "GPPL Stop Execution Statements: break": {
+        "prefix": [
+            "break"
+        ],
+        "body": [
+            "break"
+        ],
+        "description": "GPPL Stop Execution Statements: break"
+    },
+    "GPPL Stop Execution Statements: return": {
+        "prefix": [
+            "return"
+        ],
+        "body": [
+            "return"
+        ],
+        "description": "GPPL Stop Execution Statements: return"
+    },
+    "GPPL Stop Execution Statements: exit": {
+        "prefix": [
+            "exit"
+        ],
+        "body": [
+            "exit"
+        ],
+        "description": "GPPL Stop Execution Statements: exit"
+    },
+    "active(variable)": {
+        "prefix": [
+            "active",
+            "lop"
+        ],
+        "body": [
+            "active($1)"
+        ],
+        "description": "active(variable) returns TRUE/FALSE (1/0) if variable is active"
+    },
+    "change(variable)": {
+        "prefix": [
+            "change",
+            "lop"
+        ],
+        "body": [
+            "change($1)"
+        ],
+        "description": "change(variable) returns TRUE/FALSE (1/0) if variable was change"
+    },
+    "even(number)": {
+        "prefix": [
+            "even",
+            "lop"
+        ],
+        "body": [
+            "even($1)"
+        ],
+        "description": "even(number) is TRUE only if the number is even"
+    },
+    "odd(number)": {
+        "prefix": [
+            "odd",
+            "lop"
+        ],
+        "body": [
+            "odd($1)"
+        ],
+        "description": "odd(number) is TRUE only if the number is odd"
+    },
+    "date()": {
+        "prefix": [
+            "date",
+            "strf"
+        ],
+        "body": [
+            "date"
+        ],
+        "description": "date returns the string value of the current date in the format 'DD-MMM-YYYY'"
+    },
+    "dup(string, count)": {
+        "prefix": [
+            "dup",
+            "strf"
+        ],
+        "body": [
+            "dup($1, $2)"
+        ],
+        "description": "dup(string, count) returns a string value, consisting of the string 'string' duplicated 'count' times"
+    },
+    "instr(str, substr, [val])": {
+        "prefix": [
+            "instr",
+            "strf"
+        ],
+        "body": [
+            "instr($1, $2, $3)"
+        ],
+        "description": "instr(str, substr, [val]) searches for the appearance of the 'substr' in 'str' from the 'val' column and returns its position from the beginning of 'str'"
+    },
+    "left(str, num)": {
+        "prefix": [
+            "left",
+            "strf"
+        ],
+        "body": [
+            "left($1, $2)"
+        ],
+        "description": "left(str, num) returns the sub-string which consists of 'num' left characters of 'str'"
+    },
+    "lower(string)": {
+        "prefix": [
+            "lower",
+            "strf"
+        ],
+        "body": [
+            "lower($1)"
+        ],
+        "description": "lower(string) returns the same string, where all upper case (CAPITAL) letters (A-Z) are replaced by their lower case equivalent (a-z)"
+    },
+    "replace(str, oldstr, newstr [, k])": {
+        "prefix": [
+            "replace",
+            "strf"
+        ],
+        "body": [
+            "replace($1, $2, $3, $4)"
+        ],
+        "description": "replace(str, oldstr, newstr [, k]) replace the 'k' appearance of the 'oldstr' in 'str' with 'newstr' and returns the 'str'"
+    },
+    "rev(string)": {
+        "prefix": [
+            "rev",
+            "strf"
+        ],
+        "body": [
+            "rev($1)"
+        ],
+        "description": "rev(string) returns the same string while reversing the order of its characters"
+    },
+    "right(str, num)": {
+        "prefix": [
+            "right",
+            "strf"
+        ],
+        "body": [
+            "right($1, $2)"
+        ],
+        "description": "right(str, num) returns the sub-string which consists of the 'num' right characters of 'str'"
+    },
+    "space(len)": {
+        "prefix": [
+            "space",
+            "strf"
+        ],
+        "body": [
+            "space($1)"
+        ],
+        "description": "space(len) returns a string of blanks (spaces) of length len"
+    },
+    "strlen(string)": {
+        "prefix": [
+            "strlen",
+            "strf"
+        ],
+        "body": [
+            "strlen($1)"
+        ],
+        "description": "strlen(string). The function returns the length of the string, i.e. the number of characters in the string"
+    },
+    "substr(string, from, len)": {
+        "prefix": [
+            "substr",
+            "strf"
+        ],
+        "body": [
+            "substr($1, $2, $3)"
+        ],
+        "description": "substr(string, from, len) returns the sub-string of length len starting in the string from position from, and with length len"
+    },
+    "time()": {
+        "prefix": [
+            "time",
+            "strf"
+        ],
+        "body": [
+            "time"
+        ],
+        "description": "time returns the string value of the current time in the format 'HH:MM:SS'"
+    },
+    "tonum(string)": {
+        "prefix": [
+            "tonum",
+            "strf"
+        ],
+        "body": [
+            "tonum($1)"
+        ],
+        "description": "tonum(string) converts the number represented in the string from string format to a numeric format"
+    },
+    "tostr(number[:format])": {
+        "prefix": [
+            "tostr",
+            "strf"
+        ],
+        "body": [
+            "tostr($1)"
+        ],
+        "description": "tostr(number[:format]) converts the number into string notation according to the format specification 'format'"
+    },
+    "trim(string)": {
+        "prefix": [
+            "trim",
+            "strf"
+        ],
+        "body": [
+            "trim($1)"
+        ],
+        "description": "trim(string) returns the same string as in the string, but removes all its trailing blanks"
+    },
+    "upper(string)": {
+        "prefix": [
+            "upper",
+            "strf"
+        ],
+        "body": [
+            "upper($1)"
+        ],
+        "description": "upper(string) returns the same string, where all the lower case letters (a-z) are replaced by their upper case (CAPITAL) equivalent (A-Z)"
+    },
+    "abs(number)": {
+        "prefix": [
+            "abs",
+            "numf"
+        ],
+        "body": [
+            "abs($1)"
+        ],
+        "description": "abs(number) returns the arc cosine of the number. The angle returned is in degrees in the range [0, 180]"
+    },
+    "acos(number)": {
+        "prefix": [
+            "acos",
+            "numf"
+        ],
+        "body": [
+            "acos($1)"
+        ],
+        "description": "acos(number) returns the arc cosine of the number. The angle returned is in degrees in the range [0, 180]"
+    },
+    "adims(array)": {
+        "prefix": [
+            "adims",
+            "numf"
+        ],
+        "body": [
+            "adims($1)"
+        ],
+        "description": "adims(array) returns the number of dimensions of the array"
+    },
+    "alen(array, dim)": {
+        "prefix": [
+            "alen",
+            "numf"
+        ],
+        "body": [
+            "alen($1, $2)"
+        ],
+        "description": "alen(array, dim) returns the number of elements in the required dimension of the array"
+    },
+    "ang(x, y)": {
+        "prefix": [
+            "ang",
+            "numf"
+        ],
+        "body": [
+            "ang($1, $2)"
+        ],
+        "description": "ang(x, y) returns the angle between vector to the point and the positive direction of the X axis"
+    },
+    "asin(number)": {
+        "prefix": [
+            "asin",
+            "numf"
+        ],
+        "body": [
+            "asin($1)"
+        ],
+        "description": "asin(number) returns the arc sine of the number. The angle returned is in degrees in the range [-90, 90]"
+    },
+    "asize(array)": {
+        "prefix": [
+            "asize",
+            "numf"
+        ],
+        "body": [
+            "asize($1)"
+        ],
+        "description": "asize(array) returns the number of elements in the array"
+    },
+    "atan(number)": {
+        "prefix": [
+            "atan",
+            "numf"
+        ],
+        "body": [
+            "atan($1)"
+        ],
+        "description": "atan(number) returns the arc tangent of the number. The angle returned is in degrees in the range [-90, 90]"
+    },
+    "atan2(y, x)": {
+        "prefix": [
+            "atan2",
+            "numf"
+        ],
+        "body": [
+            "atan2($1, $2)"
+        ],
+        "description": "atan2(y, x) returns the angle defined by the point and the positive direction of the X axis"
+    },
+    "cos(angle)": {
+        "prefix": [
+            "cos",
+            "numf"
+        ],
+        "body": [
+            "cos($1)"
+        ],
+        "description": "cos(angle) returns the cosine value of the angle"
+    },
+    "dist(x, y)": {
+        "prefix": [
+            "dist",
+            "numf"
+        ],
+        "body": [
+            "dist($1, $2)"
+        ],
+        "description": "dist(x, y) returns the distance between the point and the origin of the axis system (point (0,0) ). Dist (x, y) is equivalent to sqrt(x*x + y*y)"
+    },
+    "exp(number)": {
+        "prefix": [
+            "exp",
+            "numf"
+        ],
+        "body": [
+            "exp($1)"
+        ],
+        "description": "exp(number) returns the value of e (the base of natural logarithms) to the power of number"
+    },
+    "frac(number)": {
+        "prefix": [
+            "frac",
+            "numf"
+        ],
+        "body": [
+            "frac($1)"
+        ],
+        "description": "frac(number) returns the fraction part of the number"
+    },
+    "int(number)": {
+        "prefix": [
+            "int",
+            "numf"
+        ],
+        "body": [
+            "int($1)"
+        ],
+        "description": "int(number) returns the integer part of the number. The value is truncated, not rounded"
+    },
+    "log(number)": {
+        "prefix": [
+            "log",
+            "numf"
+        ],
+        "body": [
+            "log($1)"
+        ],
+        "description": "log(number) returns the value of the natural logarithm of the number"
+    },
+    "log10(number)": {
+        "prefix": [
+            "log10",
+            "numf"
+        ],
+        "body": [
+            "log10($1)"
+        ],
+        "description": "log10(number) returns the value of the base 10 logarithm of the number"
+    },
+    "mod(a, b)": {
+        "prefix": [
+            "mod",
+            "numf"
+        ],
+        "body": [
+            "mod($1, $2)"
+        ],
+        "description": "mod(a, b) returns the remainder R of a/b"
+    },
+    "norm360(number)": {
+        "prefix": [
+            "norm360",
+            "numf"
+        ],
+        "body": [
+            "norm360($1)"
+        ],
+        "description": "norm360(number) returns the normalized angle of the parameter in the range [0,360]"
+    },
+    "pow(b, p)": {
+        "prefix": [
+            "pow",
+            "numf"
+        ],
+        "body": [
+            "pow($1, $2)"
+        ],
+        "description": "pow(b, p) returns the value of b to the power of p"
+    },
+    "round(number, dig)": {
+        "prefix": [
+            "round",
+            "numf"
+        ],
+        "body": [
+            "round($1, $2)"
+        ],
+        "description": "round(number, dig) returns the number rounded to the required number of digits either after or before the decimal point"
+    },
+    "round2val(c, d)": {
+        "prefix": [
+            "round2val",
+            "numf"
+        ],
+        "body": [
+            "round2val($1, $2)"
+        ],
+        "description": "round2val(c, d) returns c rounded to smallest multiple of d"
+    },
+    "sign(number)": {
+        "prefix": [
+            "sign",
+            "numf"
+        ],
+        "body": [
+            "sign($1)"
+        ],
+        "description": "sign(number) returns an integer number, representing the sign of the number"
+    },
+    "sin(angle)": {
+        "prefix": [
+            "sin",
+            "numf"
+        ],
+        "body": [
+            "sin($1)"
+        ],
+        "description": "sin(angle) returns the sine value of the angle"
+    },
+    "sqrt(number)": {
+        "prefix": [
+            "sqrt",
+            "numf"
+        ],
+        "body": [
+            "sqrt($1)"
+        ],
+        "description": "sqrt(number) returns the square root of the number is equivalent to 'pow(number, 0.5)'"
+    },
+    "square(number)": {
+        "prefix": [
+            "square",
+            "numf"
+        ],
+        "body": [
+            "square($1)"
+        ],
+        "description": "square(number) returns the value of the number squared. It is equivalent to 'pow(number, 2)'"
+    },
+    "tan(angle)": {
+        "prefix": [
+            "tan",
+            "numf"
+        ],
+        "body": [
+            "tan($1)"
+        ],
+        "description": "tan(angle) returns the tangent value of the angle"
+    },
+    "todeg(angle)": {
+        "prefix": [
+            "todeg",
+            "numf"
+        ],
+        "body": [
+            "todeg($1)"
+        ],
+        "description": "todeg(angle) returns the angle (given in radians) into its equivalent in degrees"
+    },
+    "torad(angle)": {
+        "prefix": [
+            "torad",
+            "numf"
+        ],
+        "body": [
+            "torad($1)"
+        ],
+        "description": "torad(angle) returns the angle (given in degrees) into its equivalent in radians"
+    },
+    "call(@procedure)": {
+        "prefix": [
+            "call"
+        ],
+        "body": [
+            "call(@$1)"
+        ],
+        "description": "call GPPL procedures"
+    }
+}

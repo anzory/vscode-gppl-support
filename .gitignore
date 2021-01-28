@@ -1,0 +1,8 @@
+out
+dist
+node_modules
+.vscode-test/
+*.vsix
+tmp
+vsc-extension-quickstart.md
+vscode-gppl-support-*.vsix
