@@ -6,3 +6,4 @@ node_modules
 tmp
 vsc-extension-quickstart.md
 vscode-gppl-support-*.vsix
+*.txt

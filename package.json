@@ -4,7 +4,7 @@
 	"description": "GPPL language support for VSCode",
 	"version": "1.0.0",
 	"license": "MIT",
-	"publisher": "anzory",
+	"publisher": "vsc-andrey-zorin",
 	"author": {
 		"name": "Andrey Zorin"
 	},
@@ -13,11 +13,11 @@
 		"vscode": "^1.52.0"
 	},
 	"keywords": [
-		"GPPL",
-		"SolidCAM",
-		"syntax",
+		"gpp",
 		"gppl",
-		"gpp"
+		"highlighter",
+		"SolidCAM",
+		"syntax"
 	],
 	"icon": "images/icon.ico",
 	"galleryBanner": {
@@ -34,9 +34,10 @@
 		"url": "https://github.com/anzory/vscode-gppl-support/issues"
 	},
 	"categories": [
+		"Extension Packs",
+		"Language Packs",
 		"Programming Languages",
-		"Snippets",
-		"Other"
+		"Snippets"
 	],
 	"activationEvents": [
 		"onLanguage:gppl",
@@ -179,7 +180,7 @@
 		"pretest": "npm run test-compile && npm run lint",
 		"lint": "eslint src --ext ts",
 		"test": "node ./out/test/runTest.js",
-		"vsce-package":"vsce package"
+		"vsce-package": "vsce package"
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.3",
