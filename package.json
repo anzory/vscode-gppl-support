@@ -2,7 +2,7 @@
 	"name": "vscode-gppl-support",
 	"displayName": "vscode-gppl-support",
 	"description": "GPPL language support for VSCode",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"license": "MIT",
 	"publisher": "vsc-andrey-zorin",
 	"author": {

@@ -63,6 +63,9 @@ This is the first release of this extension.
 
 The initial release of vscode-gppl-support
 
+### 1.0.1
+
+Some improvements in the project structure and README file
 
 
 -----------------------------------------------------------------------------------------------------------
