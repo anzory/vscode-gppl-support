@@ -7,7 +7,7 @@ This extension provides GPPL language support for VSCode
 ## Features
 
 * Syntax highlighting
-* Sidebar with procedure tree view
+* Sidebar with procedures tree view
 * Autocomplete code
   * prefix "nb" - Write new block.
   * prefix "nl" - Write new line.
@@ -21,7 +21,7 @@ This extension provides GPPL language support for VSCode
 
 Syntax highlighting:
 ![Syntax highlighting](images/syntax-highlighting.png)
-Sidebar with procedure tree view:
+Sidebar with procedures tree view:
 ![Sidebar with procedure tree view](images/tree-view.png)
 Autocomplete code:
 ![Autocomplete code](images/autocomplete-code.png)
@@ -36,26 +36,33 @@ Autocomplete code:
 
 > Type 'gpm' to see all GPPL modifiers.
 
+-----------------------------------------------------------------------------------------------------------
 
+[Please do not hesitate to write a review and rating](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support&ssr=false#review-details)
+
+-----------------------------------------------------------------------------------------------------------
 ## Requirements
 
 There are no dependencies in this extension.
 
+-----------------------------------------------------------------------------------------------------------
 ## Extension Settings
 
 There are no special settings in this extension.
 
+-----------------------------------------------------------------------------------------------------------
 ## Known Issues
 
 There are no known issues with this extension.
 
+-----------------------------------------------------------------------------------------------------------
 ## Release Notes
 
 This is the first release of this extension.
 
 ### 1.0.0
 
-The Initial release of vscode-gppl-support
+The initial release of vscode-gppl-support
 
 
 
