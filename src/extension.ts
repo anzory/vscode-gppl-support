@@ -3,8 +3,8 @@ import { commands, ExtensionContext, window } from 'vscode';
 import { Config, configuration } from './util/config';
 import { constants } from './util/constants';
 import { StatusBar } from './util/statusBar';
-import { GPPlProceduresTreeProvider } from './providers/GPPlProceduresTreeProvider';
-import { GPPlTreeStatusProvider } from './providers/GPPlTreeStatusProvider';
+import { GpplProceduresTreeProvider } from './providers/GpplProceduresTreeProvider';
+import { GpplTreeStatusProvider } from './providers/GpplTreeStatusProvider';
 
 
 
@@ -20,7 +20,7 @@ export async function activate(context: ExtensionContext) {
 
 
 
-    const gpplProceduresTree = new GPPlProceduresTreeProvider(context);
+    const gpplProceduresTree = new GpplProceduresTreeProvider(context);
 
     window.registerTreeDataProvider('gppl.gpplProceduresTree', gpplProceduresTree);
 
@@ -37,7 +37,7 @@ export async function activate(context: ExtensionContext) {
 
     
 
-    const gpplStatus = new GPPlTreeStatusProvider(context);
+    const gpplStatus = new GpplTreeStatusProvider(context);
     window.registerTreeDataProvider('gppl.gpplStatus', gpplStatus);
 
     commands.registerCommand('gppl.gpplStatus.RefreshStatus', () => {

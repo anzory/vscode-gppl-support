@@ -17,19 +17,19 @@ import {
 } from 'vscode';
 import * as path from 'path';
 import { configuration } from '../util/config';
-import * as gpplparser from './gpplTextParser';
+import * as gpplparser from './GpplTextParser';
 import { constants } from '../util/constants';
 import { StatusBar } from '../util/statusBar';
 import { Logger } from '../util/logger';
 
 
-export class GPPlProceduresTreeProvider implements TreeDataProvider<GPPlTreeNode> {
+export class GpplProceduresTreeProvider implements TreeDataProvider<GpplTreeNode> {
 
-    private _onDidChangeTreeData: EventEmitter<GPPlTreeNode | undefined> = new EventEmitter<GPPlTreeNode | undefined>();
-    readonly onDidChangeTreeData: Event<GPPlTreeNode | undefined> = this._onDidChangeTreeData.event;
+    private _onDidChangeTreeData: EventEmitter<GpplTreeNode | undefined> = new EventEmitter<GpplTreeNode | undefined>();
+    readonly onDidChangeTreeData: Event<GpplTreeNode | undefined> = this._onDidChangeTreeData.event;
 
     private text = '';
-    private tree: Array<GPPlTreeNode>;
+    private tree: Array<GpplTreeNode>;
     private editor: TextEditor | undefined;
     private autoRefresh = false;
 
@@ -65,7 +65,7 @@ export class GPPlProceduresTreeProvider implements TreeDataProvider<GPPlTreeNode
                     this.editor = window.activeTextEditor;
                     this.autoRefresh = configuration.getParam('tree.autoRefresh');
                     StatusBar.updateStatusBar('Tree Dirty');
-                    if (this.autoRefresh) this.refresh();
+                    if (this.autoRefresh) {this.refresh();}
                 }
             }
         } else {
@@ -85,7 +85,7 @@ export class GPPlProceduresTreeProvider implements TreeDataProvider<GPPlTreeNode
                     this.editor = window.activeTextEditor;
                     this.autoRefresh = configuration.getParam('tree.autoRefresh');
                     StatusBar.updateStatusBar('Tree Dirty');
-                    if (this.autoRefresh) this.refresh();
+                    if (this.autoRefresh) {this.refresh();}
                 }
             }
         } else {
@@ -99,12 +99,12 @@ export class GPPlProceduresTreeProvider implements TreeDataProvider<GPPlTreeNode
         return element[0];
     }
 
-    getChildren(element?: GPPlTreeNode): Thenable<GPPlTreeNode[]> {
+    getChildren(element?: GpplTreeNode): Thenable<GpplTreeNode[]> {
 
         return Promise.resolve(this.parseTree());
     }
 
-    private parseTree(): GPPlTreeNode[] {
+    private parseTree(): GpplTreeNode[] {
 
         this.text = '';
         this.tree = [];
@@ -113,7 +113,7 @@ export class GPPlProceduresTreeProvider implements TreeDataProvider<GPPlTreeNode
         if (editor && editor.document) {
             this.text = editor.document.getText();
     
-            const parsed = new gpplparser.GPPlTextParser(this.text);
+            const parsed = new gpplparser.GpplTextParser(this.text);
 
             Logger.log("document.text:\n" + this.text);
 
@@ -133,12 +133,13 @@ export class GPPlProceduresTreeProvider implements TreeDataProvider<GPPlTreeNode
 }
 
 
-export class GPPlTreeNode extends TreeItem {
+export class GpplTreeNode extends TreeItem {
 
     constructor(
-        public readonly GPPlTreeNodeLabel: string,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        public readonly GpplTreeNodeLabel: string,
         public readonly collapsibleState: TreeItemCollapsibleState,
     ) {
-        super(GPPlTreeNodeLabel, collapsibleState);
+        super(GpplTreeNodeLabel, collapsibleState);
     }
 }

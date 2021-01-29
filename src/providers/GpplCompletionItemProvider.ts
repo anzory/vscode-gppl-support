@@ -5,7 +5,7 @@ import * as vscode from "vscode";
 import  { configuration } from "../util/config";
 
 
-export class GPPLCompletionItemProvider implements vscode.CompletionItemProvider {
+export class GpplCompletionItemProvider implements vscode.CompletionItemProvider {
     private completions = new vscode.CompletionList();
 
     constructor(filename: string) {

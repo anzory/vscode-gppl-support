@@ -1,11 +1,11 @@
 'use strict';
 import { Range, TreeItemCollapsibleState } from 'vscode';
 import { Logger } from '../util/logger';
-import { GPPlTreeNode } from './GPPlProceduresTreeProvider';
+import { GpplTreeNode } from './GpplProceduresTreeProvider';
 
-export class GPPlTextParser {
+export class GpplTextParser {
 
-    private procedures: Array<GPPlTreeNode>;
+    private procedures: Array<GpplTreeNode>;
 
     constructor(readonly text: string) {
 
@@ -13,7 +13,7 @@ export class GPPlTextParser {
 
     }
 
-    getTree(): Array<GPPlTreeNode> {
+    getTree(): Array<GpplTreeNode> {
         return this.procedures;
     }
 
@@ -43,10 +43,10 @@ export class GPPlTextParser {
     }
 
     // Parse Line for Procedures
-    private parseLine(line: string, lineNum: number): Array<GPPlTreeNode> {
+    private parseLine(line: string, lineNum: number): Array<GpplTreeNode> {
 
-        const procedures: Array<GPPlTreeNode> = [];
-        let node: GPPlTreeNode;
+        const procedures: Array<GpplTreeNode> = [];
+        let node: GpplTreeNode;
         const len = line.length;
 
         // Regexp to Pull key words
@@ -59,7 +59,7 @@ export class GPPlTextParser {
         const words = line.match(re) || [];
 
         words.forEach(word => {
-            node = new GPPlTreeNode(
+            node = new GpplTreeNode(
                 word,
                 TreeItemCollapsibleState.None,
             );

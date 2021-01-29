@@ -15,13 +15,13 @@ import {
 import { configuration } from '../util/config';
 
 
-export class GPPlTreeStatusProvider implements TreeDataProvider<GPPlTreeStatusNode> {
+export class GpplTreeStatusProvider implements TreeDataProvider<GpplTreeStatusNode> {
 
-    private _onDidChangeTreeData: EventEmitter<GPPlTreeStatusNode | undefined> = new EventEmitter<GPPlTreeStatusNode | undefined>();
-    readonly onDidChangeTreeData: Event<GPPlTreeStatusNode | undefined> = this._onDidChangeTreeData.event;
+    private _onDidChangeTreeData: EventEmitter<GpplTreeStatusNode | undefined> = new EventEmitter<GpplTreeStatusNode | undefined>();
+    readonly onDidChangeTreeData: Event<GpplTreeStatusNode | undefined> = this._onDidChangeTreeData.event;
 
     private text = '';
-    private tree: Array<GPPlTreeStatusNode>;
+    private tree: Array<GpplTreeStatusNode>;
     private editor: TextEditor | undefined;
     private autoRefresh = false;
 
@@ -83,14 +83,14 @@ export class GPPlTreeStatusProvider implements TreeDataProvider<GPPlTreeStatusNo
         return element;
     }
 
-    getChildren(element?: GPPlTreeStatusNode): Thenable<GPPlTreeStatusNode[]> {
+    getChildren(element?: GpplTreeStatusNode): Thenable<GpplTreeStatusNode[]> {
 
         return Promise.resolve(this.parseTree());
 
         
     }
 
-    private parseTree(): GPPlTreeStatusNode[] {
+    private parseTree(): GpplTreeStatusNode[] {
 
         this.text = '';
         this.tree = [];
@@ -106,15 +106,15 @@ export class GPPlTreeStatusProvider implements TreeDataProvider<GPPlTreeStatusNo
         }
     }
 
-    private genStats(text: string): Array<GPPlTreeStatusNode> {
+    private genStats(text: string): Array<GpplTreeStatusNode> {
 
-        const status: Array<GPPlTreeStatusNode> = []; 
+        const status: Array<GpplTreeStatusNode> = []; 
         
         return status;
     }
 }
 
-export class GPPlTreeStatusNode extends TreeItem {
+export class GpplTreeStatusNode extends TreeItem {
 
     constructor(
         public readonly label: string,

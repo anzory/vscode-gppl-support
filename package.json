@@ -2,9 +2,9 @@
 	"name": "vscode-gppl-support",
 	"displayName": "vscode-gppl-support",
 	"description": "GPPL language support for VSCode",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"license": "MIT",
-	"publisher": "vsc-andrey-zorin",
+	"publisher": "anzory",
 	"author": {
 		"name": "Andrey Zorin"
 	},
@@ -19,7 +19,7 @@
 		"SolidCAM",
 		"syntax"
 	],
-	"icon": "images/icon.ico",
+	"icon": "images/icon.png",
 	"galleryBanner": {
 		"color": "#666666",
 		"theme": "dark"

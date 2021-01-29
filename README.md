@@ -9,13 +9,13 @@ This extension provides GPPL language support for VSCode
 * Syntax highlighting
 * Sidebar with procedures tree view
 * Autocomplete code
-  * prefix "nb" - Write new block.
-  * prefix "nl" - Write new line.
-  * prefix "ta" - Write debug code trace procedure.
-  * prefix "if" - Write 'if endif' statment.
-  * prefix "ife" - Write 'if else endif' statment.
-  * prefix "whi" - Write 'while endw' statment.
-  * prefix "prc" - Write new procedure.
+  * prefix *nb* - write new block.
+  * prefix *nl* - write new line.
+  * prefix *ta* - write debug code trace procedure.
+  * prefix *if* - write 'if endif' statment.
+  * prefix *ife* - write 'if else endif' statment.
+  * prefix *whi* - write 'while endw' statment.
+  * prefix *prc* - write new procedure.
 
 
 Syntax highlighting:
@@ -57,11 +57,6 @@ There are no known issues with this extension.
 -----------------------------------------------------------------------------------------------------------
 ## Release Notes
 
-This is the first release of this extension.
-
-### 1.0.0
-
-The initial release of vscode-gppl-support
 
 ### 1.0.1
 
