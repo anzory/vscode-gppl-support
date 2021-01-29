@@ -61,20 +61,20 @@
 					".GPP",
 					".dpp"
 				],
-				"configuration": "./language/gppl-language.json"
+				"configuration": "./language/gppl/language.json"
 			}
 		],
 		"grammars": [
 			{
 				"language": "gppl",
 				"scopeName": "source.gppl",
-				"path": "./language/gppl.tmLanguage.json"
+				"path": "./language/gppl/tmLanguage.json"
 			}
 		],
 		"snippets": [
 			{
 				"language": "gppl",
-				"path": "./language/gpplSnippets.json"
+				"path": "./language/gppl/snippets.json"
 			}
 		],
 		"configuration": {
