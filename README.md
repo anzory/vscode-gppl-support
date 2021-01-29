@@ -7,7 +7,7 @@ This extension provides GPPL language support for VSCode
 ## Features
 
 * Syntax highlighting
-* Sidebar with procedure tree view
+* Sidebar with procedures tree view
 * Autocomplete code
   * prefix "nb" - Write new block.
   * prefix "nl" - Write new line.
@@ -19,7 +19,7 @@ This extension provides GPPL language support for VSCode
 
 Syntax highlighting:
 ![Syntax highlighting](images/syntax-highlighting.png)
-Sidebar with procedure tree view:
+Sidebar with procedures tree view:
 ![Sidebar with procedure tree view](images/tree-view.png)
 Autocomplete code:
 ![Autocomplete code](images/autocomplete-code.png)
@@ -53,7 +53,7 @@ This is the first release of this extension.
 
 ### 1.0.0
 
-Initial release of vscode-gppl-support
+The initial release of vscode-gppl-support
 
 
 
