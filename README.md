@@ -35,6 +35,8 @@ Autocomplete code:
 > Type 'gpm' to see all GPPL modifiers.
 
 
+[Please do not hesitate to write a review and rating](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support&ssr=false#review-details)
+
 ## Requirements
 
 There are no dependencies in this extension.
