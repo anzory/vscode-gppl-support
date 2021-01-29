@@ -17,7 +17,6 @@ This extension provides GPPL language support for VSCode
   * prefix "whi" - Write 'while endw' statment.
   * prefix "prc" - Write new procedure.
 
-  [Please do not hesitate to write a review and rating.](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support&ssr=false#review-details)
 
 Syntax highlighting:
 ![Syntax highlighting](images/syntax-highlighting.png)
@@ -36,6 +35,9 @@ Autocomplete code:
 
 > Type 'gpm' to see all GPPL modifiers.
 
+-----------------------------------------------------------------------------------------------------------
+
+[Please do not hesitate to write a review and rating](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support&ssr=false#review-details)
 
 -----------------------------------------------------------------------------------------------------------
 ## Requirements
