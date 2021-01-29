@@ -2,8 +2,9 @@ out
 dist
 node_modules
 .vscode-test/
+.vscode/
 *.vsix
-tmp
+tmp/
 vsc-extension-quickstart.md
 vscode-gppl-support-*.vsix
 *.txt
