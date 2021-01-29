@@ -11,3 +11,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Syntax highlighting
 - Autocomplete code
 - Sidebar with procedure tree view
+
+## [1.0.1] - 2021-01-29
+### Added
+- Some improvements in the project structure and README file
