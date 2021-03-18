@@ -4,6 +4,7 @@ out/**
 src/**
 node-modules/
 images/scrins/
+build/
 .gitignore
 .yarnrc
 vsc-extension-quickstart.md

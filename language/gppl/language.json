@@ -24,10 +24,10 @@
   "wordPattern": "(-?\\d*\\.\\d\\w*)|([^\\`\\~\\!\\@\\%\\^\\&\\*\\(\\)\\-\\=\\+\\[\\{\\]\\}\\\\\\|\\;\\:\\'\"\\,\\.\\<\\>\\?\\s]+)",
   "indentationRules": {
     "increaseIndentPattern": {
-      "pattern": "(^\\s*(if|else|elseif|while))|(@.*$)"
+      "pattern": "(if|else|elseif|while)|(@.*$)"
     },
     "decreaseIndentPattern": {
-      "pattern": "(^\\s*(endif|endw))|(endp)"
+      "pattern": "(else|elseif|endif|endw)|(endp)"
     }
   }
 }
