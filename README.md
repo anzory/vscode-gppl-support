@@ -18,10 +18,15 @@ This extension provides GPPL language support for VSCode
   - prefix _prc_ - write new procedure.
 
 Syntax highlighting:
+
 ![Syntax highlighting](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/syntax-highlighting.png?raw=true)
+
 Sidebar with procedures tree view:
+
 ![Sidebar with procedure tree view](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/tree-view.png?raw=true)
+
 Autocomplete code:
+
 ![Autocomplete code](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/autocomplete-code.png?raw=true)
 
 > Type 'lop' to see all GPPL logical operators.
