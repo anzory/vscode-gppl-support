@@ -28,4 +28,4 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Improved color scheme of syntax highlighting.
 - Fixed comment highlighting.
-- Fixed auto indentation.
+- Fixed auto-indentation.

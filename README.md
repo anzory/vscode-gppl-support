@@ -64,7 +64,7 @@ There are no known issues with this extension.
 
 - Improved color scheme of syntax highlighting.
 - Fixed comment highlighting.
-- Fixed auto indentation.
+- Fixed auto-indentation.
 
 ---
 
