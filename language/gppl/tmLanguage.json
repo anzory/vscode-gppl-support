@@ -105,7 +105,7 @@
       "patterns": [
         {
           "name": "comment.gppl",
-          "match": "('?(?=\\;\\{.*\\})(;\\{.*)|(\\;(?!(.*\\})).*$))",
+          "match": "('?(?=;(\\s+)?\\{.*\\})(;.*)|(;(?!(.*\\})).+$))",
           "comment": "Define GPPL Comments (https://regex101.com/r/g8o3Eg/1)"
         }
       ]
