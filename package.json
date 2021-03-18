@@ -1,203 +1,202 @@
 {
-	"name": "vscode-gppl-support",
-	"displayName": "vscode-gppl-support",
-	"description": "GPPL language support for VSCode",
-	"version": "1.0.2",
-	"license": "MIT",
-	"publisher": "anzory",
-	"author": {
-		"name": "Andrey Zorin"
-	},
-	"copyright": "Copyright (c) 2021 Andrey Zorin",
-	"engines": {
-		"vscode": "^1.52.0"
-	},
-	"keywords": [
-		"gpp",
-		"gppl",
-		"highlighter",
-		"SolidCAM",
-		"syntax"
-	],
-	"icon": "images/icon.png",
-	"galleryBanner": {
-		"color": "#666666",
-		"theme": "dark"
-	},
-	"markdown": "github",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/anzory/vscode-gppl-support.git"
-	},
-	"homepage": "https://github.com/anzory/vscode-gppl-support",
-	"bugs": {
-		"url": "https://github.com/anzory/vscode-gppl-support/issues"
-	},
-	"categories": [
-		"Extension Packs",
-		"Language Packs",
-		"Programming Languages",
-		"Snippets"
-	],
-	"activationEvents": [
-		"onLanguage:gppl",
-		"onView:gppl.gpplProceduresTree"
-	],
-	"main": "./dist/extension.js",
-	"contributes": {
-		"languages": [
-			{
-				"id": "gppl",
-				"aliases": [
-					"gppl",
-					"GPPL",
-					"gpp",
-					"syntax",
-					"highlighter",
-					"language"
-				],
-				"extensions": [
-					".gpp",
-					".GPP",
-					".dpp"
-				],
-				"configuration": "./language/gppl/language.json"
-			}
-		],
-		"grammars": [
-			{
-				"language": "gppl",
-				"scopeName": "source.gppl",
-				"path": "./language/gppl/tmLanguage.json"
-			}
-		],
-		"snippets": [
-			{
-				"language": "gppl",
-				"path": "./language/gppl/snippets.json"
-			}
-		],
-		"configuration": {
-			"type": "object",
-			"title": "GPPL",
-			"properties": {
-				"gppl.general.colorization": {
-					"type": "boolean",
-					"default": false,
-					"markdowndescription": "Enable GPPL specific colorization options",
-					"scope": "window"
-				},
-				"gppl.tree.autoRefresh": {
-					"type": "boolean",
-					"default": true,
-					"markdowndescription": "Enable GPPL Tree Auto Refresh",
-					"scope": "window"
-				},
-				"gppl.status.enable": {
-					"type": "boolean",
-					"default": true,
-					"markdowndescription": "Enable GPPL Statistics Panel",
-					"scope": "window"
-				},
-				"gppl.status.autoRefresh": {
-					"type": "boolean",
-					"default": true,
-					"markdowndescription": "Enable GPPL Stats Auto Refresh",
-					"scope": "window"
-				}
-			}
-		},
-		"viewsContainers": {
-			"activitybar": [
-				{
-					"id": "gppl",
-					"title": "GPPL",
-					"icon": "images/logo.png"
-				}
-			]
-		},
-		"views": {
-			"gppl": [
-				{
-					"id": "gppl.gpplProceduresTree",
-					"name": "Procedures Tree",
-					"contextualTitle": "GPPL Procedures Tree",
-					"type": "tree"
-				},
-				{
-					"id": "gppl.gpplStatus",
-					"name": "GPPL Stats",
-					"when": "config.gppl.statusEnable",
-					"contextualTitle": "GPPL Stats",
-					"type": "tree"
-				}
-			]
-		},
-		"viewsWelcome": [
-			{
-				"view": "gppl.gpplProceduresTree",
-				"contents": "GPPL Tree only available when viewing GPPL",
-				"when": "!gpplProceduresTreeViewEnabled"
-			},
-			{
-				"view": "gppl.gpplStatus",
-				"contents": "GPPL Stats only available when viewing GPPL",
-				"when": "!gpplStatusViewEnabled && config.gppl.statusEnable"
-			}
-		],
-		"menus": {
-			"view/title": [
-				{
-					"command": "gppl.gpplProceduresTree.RefreshTree",
-					"when": "view == gppl.gpplProceduresTree",
-					"group": "navigation"
-				},
-				{
-					"command": "gppl.gpplStatus.RefreshStatus",
-					"when": "view == gppl.gpplStatus && config.gppl.statusEnable",
-					"group": "navigation"
-				}
-			]
-		},
-		"commands": [
-			{
-				"command": "gppl.gpplProceduresTree.RefreshTree",
-				"title": "Refresh Tree"
-			},
-			{
-				"command": "gppl.gpplStatus.RefreshStatus",
-				"title": "Refresh Stats"
-			}
-		]
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run package",
-		"compile": "webpack --config ./build/node-extension.webpack.config.js",
-		"watch": "webpack --watch --config ./build/node-extension.webpack.config.js",
-		"package": "webpack --mode production --devtool hidden-source-map --config ./build/node-extension.webpack.config.js",
-		"test-compile": "tsc -p ./",
-		"test-watch": "tsc -watch -p ./",
-		"pretest": "npm run test-compile && npm run lint",
-		"lint": "eslint src --ext ts",
-		"test": "node ./out/test/runTest.js",
-		"vsce-package": "vsce package"
-	},
-	"devDependencies": {
-		"@types/glob": "^7.1.3",
-		"@types/mocha": "^8.0.4",
-		"@types/node": "^12.11.7",
-		"@types/vscode": "^1.52.0",
-		"@typescript-eslint/eslint-plugin": "^4.9.0",
-		"@typescript-eslint/parser": "^4.9.0",
-		"eslint": "^7.15.0",
-		"glob": "^7.1.6",
-		"mocha": "^8.1.3",
-		"ts-loader": "^8.0.11",
-		"typescript": "^4.1.2",
-		"vsce": "^1.84.0",
-		"vscode-test": "^1.4.1",
-		"webpack": "^5.10.0",
-		"webpack-cli": "^4.2.0"
-	},
-	"dependencies": {}
+  "name": "vscode-gppl-support",
+  "displayName": "vscode-gppl-support",
+  "description": "GPPL language support for VSCode",
+  "version": "1.0.2",
+  "license": "MIT",
+  "publisher": "anzory",
+  "author": {
+    "name": "Andrey Zorin"
+  },
+  "copyright": "Copyright (c) 2021 Andrey Zorin",
+  "engines": {
+    "vscode": "^1.54.0"
+  },
+  "keywords": [
+    "gpp",
+    "gppl",
+    "highlighter",
+    "SolidCAM",
+    "syntax"
+  ],
+  "icon": "images/icon.png",
+  "galleryBanner": {
+    "color": "#666666",
+    "theme": "dark"
+  },
+  "markdown": "github",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anzory/vscode-gppl-support.git"
+  },
+  "homepage": "https://github.com/anzory/vscode-gppl-support",
+  "bugs": {
+    "url": "https://github.com/anzory/vscode-gppl-support/issues"
+  },
+  "categories": [
+    "Extension Packs",
+    "Language Packs",
+    "Programming Languages",
+    "Snippets"
+  ],
+  "activationEvents": [
+    "onLanguage:gppl",
+    "onView:gppl.gpplProceduresTree"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "gppl",
+        "aliases": [
+          "gppl",
+          "GPPL",
+          "gpp",
+          "syntax",
+          "highlighter",
+          "language"
+        ],
+        "extensions": [
+          ".gpp",
+          ".GPP",
+          ".dpp"
+        ],
+        "configuration": "./language/gppl/language.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "gppl",
+        "scopeName": "source.gppl",
+        "path": "./language/gppl/tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "gppl",
+        "path": "./language/gppl/snippets.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "GPPL",
+      "properties": {
+        "gppl.general.colorization": {
+          "type": "boolean",
+          "default": false,
+          "markdowndescription": "Enable GPPL specific colorization options",
+          "scope": "window"
+        },
+        "gppl.tree.autoRefresh": {
+          "type": "boolean",
+          "default": true,
+          "markdowndescription": "Enable GPPL Tree Auto Refresh",
+          "scope": "window"
+        },
+        "gppl.status.enable": {
+          "type": "boolean",
+          "default": true,
+          "markdowndescription": "Enable GPPL Statistics Panel",
+          "scope": "window"
+        },
+        "gppl.status.autoRefresh": {
+          "type": "boolean",
+          "default": true,
+          "markdowndescription": "Enable GPPL Stats Auto Refresh",
+          "scope": "window"
+        }
+      }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "gppl",
+          "title": "GPPL",
+          "icon": "images/logo.png"
+        }
+      ]
+    },
+    "views": {
+      "gppl": [
+        {
+          "id": "gppl.gpplProceduresTree",
+          "name": "Procedures Tree",
+          "contextualTitle": "GPPL Procedures Tree",
+          "type": "tree"
+        },
+        {
+          "id": "gppl.gpplStatus",
+          "name": "GPPL Stats",
+          "when": "config.gppl.statusEnable",
+          "contextualTitle": "GPPL Stats",
+          "type": "tree"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "gppl.gpplProceduresTree",
+        "contents": "GPPL Tree only available when viewing GPPL",
+        "when": "!gpplProceduresTreeViewEnabled"
+      },
+      {
+        "view": "gppl.gpplStatus",
+        "contents": "GPPL Stats only available when viewing GPPL",
+        "when": "!gpplStatusViewEnabled && config.gppl.statusEnable"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "gppl.gpplProceduresTree.RefreshTree",
+          "when": "view == gppl.gpplProceduresTree",
+          "group": "navigation"
+        },
+        {
+          "command": "gppl.gpplStatus.RefreshStatus",
+          "when": "view == gppl.gpplStatus && config.gppl.statusEnable",
+          "group": "navigation"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "gppl.gpplProceduresTree.RefreshTree",
+        "title": "Refresh Tree"
+      },
+      {
+        "command": "gppl.gpplStatus.RefreshStatus",
+        "title": "Refresh Stats"
+      }
+    ]
+  },
+  "scripts": {
+    "vsce-package": "vsce package",
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack --config ./build/node-extension.webpack.config.js",
+    "watch": "webpack --watch --config ./build/node-extension.webpack.config.js",
+    "package": "webpack --mode production --devtool hidden-source-map --config ./build/node-extension.webpack.config.js",
+    "test-compile": "tsc -p ./",
+    "test-watch": "tsc -watch -p ./",
+    "pretest": "npm run test-compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.3",
+    "@types/mocha": "^8.2.1",
+    "@types/node": "^14.14.35",
+    "@types/vscode": "^1.54.0",
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "eslint": "^7.22.0",
+    "glob": "^7.1.6",
+    "mocha": "^8.3.2",
+    "ts-loader": "^8.0.18",
+    "typescript": "^4.2.3",
+    "vsce": "^1.87.0",
+    "vscode-test": "^1.5.1",
+    "webpack": "^5.26.3",
+    "webpack-cli": "^4.5.0"
+  }
 }

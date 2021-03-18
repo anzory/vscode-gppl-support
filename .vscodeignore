@@ -3,6 +3,7 @@
 out/**
 src/**
 node-modules/
+images/scrins/
 .gitignore
 .yarnrc
 vsc-extension-quickstart.md
