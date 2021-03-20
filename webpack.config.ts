@@ -40,6 +40,10 @@ const config: Configuration = {
           to: 'images',
         },
         {
+          from: resolve(__dirname, 'images/icon.ico'),
+          to: 'images',
+        },
+        {
           from: resolve(__dirname, 'README.md'),
         },
         {

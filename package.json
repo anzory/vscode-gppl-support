@@ -19,7 +19,7 @@
     "SolidCAM",
     "syntax"
   ],
-  "icon": "./images/icon.ico",
+  "icon": "images/icon.ico",
   "galleryBanner": {
     "color": "#666666",
     "theme": "dark"
