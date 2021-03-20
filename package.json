@@ -2,7 +2,7 @@
   "name": "vscode-gppl-support",
   "displayName": "vscode-gppl-support",
   "description": "GPPL language support for VSCode",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "license": "MIT",
   "publisher": "anzory",
   "author": {
@@ -96,13 +96,6 @@
           "name": "Procedures Tree",
           "contextualTitle": "GPPL Procedures Tree",
           "type": "tree"
-        },
-        {
-          "id": "gppl.gpplStatus",
-          "name": "GPPL Status",
-          "when": "config.gppl.statusEnable",
-          "contextualTitle": "GPPL Status",
-          "type": "tree"
         }
       ]
     },
@@ -111,11 +104,6 @@
         "view": "gppl.gpplProceduresTree",
         "contents": "GPPL Tree only available when viewing GPPL",
         "when": "!gpplProceduresTreeViewEnabled"
-      },
-      {
-        "view": "gppl.gpplStatus",
-        "contents": "GPPL Status only available when viewing GPPL",
-        "when": "!gpplStatusViewEnabled && config.gppl.statusEnable"
       }
     ],
     "menus": {
@@ -126,8 +114,18 @@
           "group": "navigation"
         },
         {
-          "command": "gppl.gpplStatus.RefreshStatus",
-          "when": "view == gppl.gpplStatus && config.gppl.statusEnable",
+          "command": "gppl.gpplProceduresTree.SortByAZ",
+          "when": "view == gppl.gpplProceduresTree",
+          "group": "navigation"
+        },
+        {
+          "command": "gppl.gpplProceduresTree.SortByZA",
+          "when": "view == gppl.gpplProceduresTree",
+          "group": "navigation"
+        },
+        {
+          "command": "gppl.gpplProceduresTree.SortByDefault",
+          "when": "view == gppl.gpplProceduresTree",
           "group": "navigation"
         }
       ]
@@ -135,11 +133,42 @@
     "commands": [
       {
         "command": "gppl.gpplProceduresTree.RefreshTree",
-        "title": "Refresh Tree"
+        "title": "Refresh Tree",
+        "icon": {
+          "light": "images/icon-refresh.svg",
+          "dark": "images/icon-refresh-dark.svg"
+        }
       },
       {
-        "command": "gppl.gpplStatus.RefreshStatus",
-        "title": "Refresh Status"
+        "command": "gppl.gpplProceduresTree.Selection",
+        "title": "Procedure Selection"
+      },
+      {
+        "command": "gppl.gpplProceduresTree.SortByAZ",
+        "title": "Sort By A-Z",
+        "category": "sorting",
+        "icon": {
+          "light": "images/icon-sort-a-z.svg",
+          "dark": "images/icon-sort-a-z-dark.svg"
+        }
+      },
+      {
+        "command": "gppl.gpplProceduresTree.SortByZA",
+        "title": "Sort By Z-A",
+        "category": "sorting",
+        "icon": {
+          "light": "images/icon-sort-z-a.svg",
+          "dark": "images/icon-sort-z-a-dark.svg"
+        }
+      },
+      {
+        "command": "gppl.gpplProceduresTree.SortByDefault",
+        "title": "Sort By Default",
+        "category": "sorting",
+        "icon": {
+          "light": "images/icon-no-sort.svg",
+          "dark": "images/icon-no-sort-dark.svg"
+        }
       }
     ]
   },

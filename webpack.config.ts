@@ -2,9 +2,9 @@
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import * as CopyWebpackPlugin from 'copy-webpack-plugin';
 import * as fs from 'fs';
-// import * as JsonMinimizerPlugin from "json-minimizer-webpack-plugin";
 import { resolve } from 'path';
 import { Compiler, Configuration } from 'webpack';
+// import { JsonMinimizerPlugin } from 'json-minimizer-webpack-plugin';
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
 
@@ -28,30 +28,25 @@ const config: Configuration = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: resolve(__dirname, 'language'),
+          from: './language',
           to: 'language',
         },
         {
-          from: resolve(__dirname, 'images/logo.png'),
-          to: 'images',
+          from: './images/**.png',
+          to: './',
         },
         {
-          from: resolve(__dirname, 'images/icon.png'),
-          to: 'images',
+          from: './images/**.svg',
+          to: './',
         },
         {
-          from: resolve(__dirname, 'images/icon.ico'),
-          to: 'images',
+          from: './images/**.ico',
+          to: './',
         },
         {
-          from: resolve(__dirname, 'README.md'),
-        },
-        {
-          from: resolve(__dirname, 'CHANGELOG.md'),
-        },
-        {
-          from: resolve(__dirname, 'LICENSE.md'),
-        },
+          from: './**.md',
+          to: './',
+        }
       ],
     }),
     {
@@ -63,6 +58,16 @@ const config: Configuration = {
       },
     },
   ],
+  module: {
+    rules: [
+      {
+        test: /\.ts$/,
+        exclude: /node_modules|tmp/,
+        use: ['ts-loader']
+      },
+    ]
+  },
+
   optimization: {
     minimize: true,
     minimizer: [
@@ -78,19 +83,6 @@ const config: Configuration = {
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
     extensions: ['.ts', '.js']
   },
-  module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        exclude: /node_modules|tmp/,
-        use: [
-          {
-            loader: 'ts-loader'
-          }
-        ]
-      }
-    ]
-  }
 };
 module.exports = config;
 //========================================================

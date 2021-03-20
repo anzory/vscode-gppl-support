@@ -7,7 +7,7 @@ This extension provides GPPL language support for VSCode
 ## Features
 
 - Syntax highlighting
-- Procedure tree panel with navigation capability and auto-refresh the tree
+- Procedure tree panel with navigation and sorting capability and auto-refresh the tree
 - Auto-complete & auto-indentation code
 - New auto-complete code functionality: just highlight the variable name and type the function
 
@@ -51,9 +51,10 @@ There are no known issues with this extension.
 
 ## Release Notes
 
-### 1.1.0
+### 1.1.1
 
 - New auto-complete code functionality
+- Procedure tree panel with navigation and sorting capability
 
 ---
 

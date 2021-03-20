@@ -6,11 +6,13 @@ let gppl = JSON.parse(readFileSync(resolve(__dirname, 'package.json')).toString(
 export const constants = {
   commands: {
     refreshTree: gppl.contributes.commands[0].command,
-    refreshStatus: gppl.contributes.commands[1].command
+    procedureSelection: gppl.contributes.commands[1].command,
+    sortByAZ: gppl.contributes.commands[2].command,
+    sortByZA: gppl.contributes.commands[3].command,
+    sortByDefault: gppl.contributes.commands[4].command,
   },
   languageId: gppl.contributes.languages[0].id,
   proceduresViewId: gppl.contributes.views.gppl[0].id,
-  statusViewId: gppl.contributes.views.gppl[1].id,
   configId: gppl.contributes.languages[0].id,
   server: gppl.main,
   copyright: gppl.copyright,

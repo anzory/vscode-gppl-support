@@ -1,14 +1,15 @@
-import { Position, Range, TextDocument, TextEditor, TreeItem, TreeItemCollapsibleState, window } from 'vscode';
+import {
+  Position, Range, TextDocument, TextEditor,
+  TreeItem, TreeItemCollapsibleState, window
+} from 'vscode';
 import { constants } from '../util/constants';
+import { Sorting } from './GpplProceduresTreeProvider';
 
 class GpplTextParser {
-  private proceduresViewId: string = constants.proceduresViewId;
   activeEditor: TextEditor | undefined = window.activeTextEditor;
 
-  getProcedureTreeItems(doc: TextDocument): TreeItem[] {
+  getProcedureTreeItems(doc: TextDocument, sorting: Sorting): TreeItem[] {
     let _procedures: TreeItem[] = [];
-    // let treeSort = configuration.getParam('tree.sort');
-    let treeSort: boolean = true;
     const text = doc ? doc.getText() : '';
     if (text === '') {
       return [];
@@ -26,7 +27,7 @@ class GpplTextParser {
           TreeItemCollapsibleState.None,
         );
         treeItem.command = {
-          command: this.proceduresViewId + '.Selection',
+          command: constants.commands.procedureSelection,
           title: '',
           arguments: [new Range(startPos, endPos)]
         };
@@ -34,15 +35,13 @@ class GpplTextParser {
       }
     } while (regExpRes);
 
-    if (treeSort) {
-      _procedures.sort((a: TreeItem, b: TreeItem) => {
-        let labelA = a.label ? a.label : '';
-        let labelB = b.label ? b.label : '';
-        if (labelA > labelB) { return 1; };
-        if (labelA < labelB) { return -1; };
-        return 0;
-      });
-    }
+    _procedures.sort((a: TreeItem, b: TreeItem) => {
+      let labelA = a.label ? a.label : '';
+      let labelB = b.label ? b.label : '';
+      if (labelA > labelB) { return sorting; };
+      if (labelA < labelB) { return -sorting; };
+      return 0;
+    });
     return _procedures;
   }
 }

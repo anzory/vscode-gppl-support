@@ -35,3 +35,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 
 - New auto-complete code functionality.
+
+## [1.1.1] - 2021-03-20
+
+### Added
+
+- Sorting feature to the procedures tree.

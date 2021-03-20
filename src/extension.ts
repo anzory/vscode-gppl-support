@@ -11,10 +11,13 @@ export async function activate(context: ExtensionContext) {
   Config.configure(context);
   StatusBar.configure(context);
   StatusBar.show();
-  const gpplProceduresTree = new GpplProceduresTreeProvider(context);
-  window.registerTreeDataProvider('gppl.gpplProceduresTree', gpplProceduresTree);
-  commands.registerCommand(constants.commands.refreshTree, () => { gpplProceduresTree.refresh(true); });
-  commands.registerCommand('gppl.gpplProceduresTree.Selection', range => gpplProceduresTree.select(range));
+  const gpplProceduresTreeProvider = new GpplProceduresTreeProvider(context);
+  window.registerTreeDataProvider(constants.proceduresViewId, gpplProceduresTreeProvider);
+  commands.registerCommand(constants.commands.refreshTree, () => { gpplProceduresTreeProvider.refresh(); });
+  commands.registerCommand(constants.commands.procedureSelection, range => gpplProceduresTreeProvider.select(range));
+  commands.registerCommand(constants.commands.sortByAZ, () => gpplProceduresTreeProvider.sortByAZ());
+  commands.registerCommand(constants.commands.sortByZA, () => gpplProceduresTreeProvider.sortByZA());
+  commands.registerCommand(constants.commands.sortByDefault, () => gpplProceduresTreeProvider.sortByDefault());
   languages.registerCompletionItemProvider(constants.languageId, gpplCompletionItemsProvider);
 }
 
