@@ -1,36 +1,32 @@
 'use strict';
 
 import {
-  ExtensionContext,
-  StatusBarAlignment,
-  StatusBarItem,
-  window
+  ExtensionContext, StatusBarAlignment,
+  StatusBarItem, window
 } from "vscode";
 
 
 export class StatusBar {
-  static statusBar: StatusBarItem;
+  static statusBar: StatusBarItem = window.createStatusBarItem(StatusBarAlignment.Right, 500);
 
   static configure(context: ExtensionContext) {
-    this.statusBar = this.statusBar || window.createStatusBarItem(StatusBarAlignment.Right, 100);
-
     context.subscriptions.push(this.statusBar);
   }
 
-  static updateStatusBar(message: string): void {
+  static update(message: string): void {
     if (this.statusBar !== undefined) {
       this.statusBar.text = message;
       this.statusBar.show();
     }
   }
 
-  static showStatusBar(): void {
+  static show(): void {
     if (this.statusBar !== undefined) {
       this.statusBar.show();
     }
   }
 
-  static hideStatusBar(): void {
+  static hide(): void {
     if (this.statusBar !== undefined) {
       this.statusBar.hide();
     }

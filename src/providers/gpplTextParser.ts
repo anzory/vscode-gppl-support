@@ -1,87 +1,49 @@
-'use strict';
-import { Range, TreeItemCollapsibleState } from 'vscode';
-import { Logger } from '../util/logger';
-import { GpplTreeNode } from './GpplProceduresTreeProvider';
+import { Position, Range, TextDocument, TextEditor, TreeItem, TreeItemCollapsibleState, window } from 'vscode';
+import { constants } from '../util/constants';
 
-export class GpplTextParser {
+class GpplTextParser {
+  private proceduresViewId: string = constants.proceduresViewId;
+  activeEditor: TextEditor | undefined = window.activeTextEditor;
 
-  private procedures: Array<GpplTreeNode>;
-
-  constructor (readonly text: string) {
-
-    this.procedures = this.getProcedures(text);
-
-  }
-
-  getTree(): Array<GpplTreeNode> {
-    return this.procedures;
-  }
-
-  // Split Text into Procedures by newline or ;
-  private getProcedures(text: string): Array<any> {
-
-    const nodes: Array<any> = [];
-    const lines = text.match(/.*(?:\r\n|\r|\n)/g) || [];
-
-    for (let i = 0; i < lines.length; ++i) {
-
-      const line = lines[i].trim();
-
-      if (line.length === 0) {
-        Logger.log("line.length === 0, continue");
-        continue;
-      }
-
-      const result = this.parseLine(line, i);
-      if (result.length !== 0) {
-        nodes.push(result);
-      }
+  getProcedureTreeItems(doc: TextDocument): TreeItem[] {
+    let _procedures: TreeItem[] = [];
+    // let treeSort = configuration.getParam('tree.sort');
+    let treeSort: boolean = true;
+    const text = doc ? doc.getText() : '';
+    if (text === '') {
+      return [];
     }
+    const regExp: RegExp = /^\@\w+/gm;
+    let regExpRes: RegExpExecArray | null;
 
-    return nodes;
+    do {
+      regExpRes = regExp.exec(text);
+      if (regExpRes) {
+        const startPos: Position = doc ? doc.positionAt(regExpRes.index) : new Position(0, 0);
+        const endPos: Position = doc ? doc.positionAt(regExpRes.index + regExpRes[0].length) : new Position(0, 0);
+        let treeItem: TreeItem = new TreeItem(
+          regExpRes[0],
+          TreeItemCollapsibleState.None,
+        );
+        treeItem.command = {
+          command: this.proceduresViewId + '.Selection',
+          title: '',
+          arguments: [new Range(startPos, endPos)]
+        };
+        _procedures.push(treeItem);
+      }
+    } while (regExpRes);
 
-  }
-
-  // Parse Line for Procedures
-  private parseLine(line: string, lineNum: number): Array<GpplTreeNode> {
-
-    const procedures: Array<GpplTreeNode> = [];
-    let node: GpplTreeNode;
-    const len = line.length;
-
-    // Regexp to Pull key words
-    const re = /^@.*\b/;
-
-    // Strip Comments
-    line = this.stripComments(line);
-
-    // Get Procedures
-    const words = line.match(re) || [];
-
-    words.forEach(word => {
-      node = new GpplTreeNode(
-        word,
-        TreeItemCollapsibleState.None,
-      );
-      node.command = {
-        command: 'gppl.gpplProceduresTree.Selection',
-        title: "",
-        arguments: [new Range(lineNum, 0, lineNum, len)]
-      };
-
-      procedures.push(node);
-    });
-
-    return procedures;
-  }
-
-  // Comments
-  private stripComments(line: string): string {
-
-    // Удалить всё после точки с запятой до конца строки, включая предшествующие пробелы.
-    const re1 = new RegExp(/\s*;.*/g);
-    const re2 = new RegExp(/\s+/g);
-
-    return (line.replace(re1, '').replace(re2, ''));
+    if (treeSort) {
+      _procedures.sort((a: TreeItem, b: TreeItem) => {
+        let labelA = a.label ? a.label : '';
+        let labelB = b.label ? b.label : '';
+        if (labelA > labelB) { return 1; };
+        if (labelA < labelB) { return -1; };
+        return 0;
+      });
+    }
+    return _procedures;
   }
 }
+export const gpplTextParser = new GpplTextParser();

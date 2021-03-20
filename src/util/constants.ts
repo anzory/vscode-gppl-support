@@ -1,26 +1,28 @@
-'use strict';
- import * as path from 'path';
-import { extensions } from 'vscode';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 
- const publisher = 'anzory';
- const extensionId = 'vscode-gppl-syntax';
- const extensionQualifiedID = publisher + '.' + extensionId;
- 
- const gppl = extensions.getExtension(extensionQualifiedID);
+let gppl = JSON.parse(readFileSync(resolve(__dirname, 'package.json')).toString());
 
- export const constants = {
-    configId: gppl?.packageJSON.contributes.languages[0].id,
-    copyright: gppl?.packageJSON.copyright,
-    extension: {
-        name: gppl?.packageJSON.displayName,
-        version: gppl?.packageJSON.version,
-        shortname: gppl?.packageJSON.shortName,
-    },
-    extensionOutputChannelName: gppl?.packageJSON.shortName,
-    iconsPath: path.join(__dirname, "..", "..", "resources", "icons"),
-    langId: gppl?.packageJSON.contributes.languages[0].id,
-    urls: {
-        changeLog: 'https://github.com/anzory/vscode-gppl-syntax/blob/master/CHANGELOG.md',
-        readme: 'https://github.com/anzory/vscode-gppl-syntax/blob/master/README.md',
-    },
- };
+export const constants = {
+  commands: {
+    refreshTree: gppl.contributes.commands[0].command,
+    refreshStatus: gppl.contributes.commands[1].command
+  },
+  languageId: gppl.contributes.languages[0].id,
+  proceduresViewId: gppl.contributes.views.gppl[0].id,
+  statusViewId: gppl.contributes.views.gppl[1].id,
+  configId: gppl.contributes.languages[0].id,
+  server: gppl.main,
+  copyright: gppl.copyright,
+  extension: {
+    name: gppl.name,
+    version: gppl.version,
+    shortname: gppl.shortName,
+  },
+  extensionOutputChannelName: gppl.shortName,
+  // iconsPath: join(__dirname, "..", "..", "resources", "icons"),
+  urls: {
+    changeLog: 'https://github.com/anzory/vscode-gppl-support/blob/master/CHANGELOG.md',
+    readme: 'https://github.com/anzory/vscode-gppl-support/blob/master/README.md',
+  },
+};

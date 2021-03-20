@@ -22,10 +22,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - Some improvements in the project structure and README file
 
-## [1.0.2] - 2021-03-18
+## [1.0.3] - 2021-03-18
 
 ### Added
 
 - Improved color scheme of syntax highlighting.
 - Fixed comment highlighting.
 - Fixed auto-indentation.
+
+## [1.1.0] - 2021-03-20
+
+### Added
+
+- New auto-complete code functionality.

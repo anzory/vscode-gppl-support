@@ -7,41 +7,27 @@ This extension provides GPPL language support for VSCode
 ## Features
 
 - Syntax highlighting
-- Sidebar with procedures tree view
-- Autocomplete code
-  - prefix _nb_ - write new block.
-  - prefix _nl_ - write new line.
-  - prefix _ta_ - write debug code trace procedure.
-  - prefix _if_ - write 'if endif' statment.
-  - prefix _ife_ - write 'if else endif' statment.
-  - prefix _whi_ - write 'while endw' statment.
-  - prefix _prc_ - write new procedure.
+- Procedure tree panel with navigation capability and auto-refresh the tree
+- Auto-complete & auto-indentation code
+- New auto-complete code functionality: just highlight the variable name and type the function
+
+---
+
+New auto-complete code functionality:
+
+![New auto-complete code functionality](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/auto-complete-functionality.gif?raw=true)
+
+---
 
 Syntax highlighting:
 
 ![Syntax highlighting](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/syntax-highlighting.png?raw=true)
 
+---
+
 Sidebar with procedures tree view:
 
 ![Sidebar with procedure tree view](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/tree-view.png?raw=true)
-
-Autocomplete & auto-indentation code:
-
-![Autocomplete & auto-indentation code](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/auto-indentation.gif?raw=true)
-
-> Type 'lop' to see all GPPL logical operators.
-
-> Type 'logf' to see all GPPL logical functions.
-
-> Type 'strf' to see all GPPL string functions.
-
-> Type 'numf' to see all GPPL numeric functions.
-
-> Type 'gpm' to see all GPPL modifiers.
-
----
-
-[Please do not hesitate to write a review and rating](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support&ssr=false#review-details)
 
 ---
 
@@ -65,12 +51,25 @@ There are no known issues with this extension.
 
 ## Release Notes
 
-### 1.0.3
+### 1.1.0
 
-- Improved color scheme of syntax highlighting.
-- Fixed comment highlighting.
-- Fixed auto-indentation.
+- New auto-complete code functionality
 
 ---
 
-**Enjoy!**
+## Plan to implement:
+
+- Implement "`Goto Definition`" && "`Goto Implementation`" functionality for procedures and variables
+- Show hints on hovering
+- Document formatting
+
+---
+
+You''ll help me greatly if you [write a review and rating](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support&ssr=false#review-details)
+
+Or even treat me to [coffee](https://paypal.me/anzory?locale.x=en_EN)
+😄
+
+---
+
+**`Enjoy!`**

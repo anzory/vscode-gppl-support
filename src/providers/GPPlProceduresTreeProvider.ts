@@ -1,143 +1,72 @@
 'use strict';
 import {
-  commands,
-  Event,
-  EventEmitter,
-  ExtensionContext,
-  Range,
-  Selection,
-  TextDocumentChangeEvent,
-  TextEditor,
-  TextEditorRevealType,
-  TreeDataProvider,
-  TreeItem,
-  TreeItemCollapsibleState,
-  window,
-  workspace
+  commands, Event, EventEmitter, ExtensionContext,
+  Range, Selection, TextDocumentChangeEvent,
+  TextEditor, TextEditorRevealType,
+  TreeDataProvider, TreeItem, window, workspace
 } from 'vscode';
-import { configuration } from '../util/config';
-import { Logger } from '../util/logger';
+import { constants } from '../util/constants';
 import { StatusBar } from '../util/statusBar';
-import * as gpplparser from './GpplTextParser';
+import { gpplTextParser } from './GpplTextParser';
 
 
-export class GpplProceduresTreeProvider implements TreeDataProvider<GpplTreeNode> {
+export class GpplProceduresTreeProvider implements TreeDataProvider<TreeItem> {
 
-  private _onDidChangeTreeData: EventEmitter<GpplTreeNode | undefined> = new EventEmitter<GpplTreeNode | undefined>();
-  readonly onDidChangeTreeData: Event<GpplTreeNode | undefined> = this._onDidChangeTreeData.event;
-
-  private text = '';
-  private tree: Array<GpplTreeNode>;
+  private _onDidChangeTreeData: EventEmitter<TreeItem | undefined> = new EventEmitter<TreeItem | undefined>();
+  readonly onDidChangeTreeData: Event<TreeItem | undefined> = this._onDidChangeTreeData.event;
   private editor: TextEditor | undefined;
-  private autoRefresh = false;
 
   constructor (private context: ExtensionContext) {
-    this.tree = [];
     this.editor = window.activeTextEditor;
     window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
     workspace.onDidChangeTextDocument(e => this.onDocumentChanged(e));
-
-    this.parseTree();
-
-    this.autoRefresh = configuration.getParam('tree.autoRefresh');
-
-    this.onActiveEditorChanged();
-
-  }
-
-  refresh(): void {
-
-    this.parseTree();
-
-    this._onDidChangeTreeData.fire(undefined);
-    StatusBar.updateStatusBar('Tree Up to Date');
+    StatusBar.update('Tree needs to be updated');
   }
 
   private onActiveEditorChanged(): void {
+    StatusBar.update('Tree needs to be updated');
     if (window.activeTextEditor) {
-      if (window.activeTextEditor.document.uri.scheme === 'file') {
-        const enabled = window.activeTextEditor.document.languageId === 'gppl';
-        commands.executeCommand('setContext', 'gpplProceduresTreeViewEnabled', enabled);
-
-        if (enabled) {
-          this.editor = window.activeTextEditor;
-          this.autoRefresh = configuration.getParam('tree.autoRefresh');
-          StatusBar.updateStatusBar('Tree Dirty');
-          if (this.autoRefresh) { this.refresh(); }
-        }
+      if (window.activeTextEditor.document.languageId === constants.languageId) {
+        this.refresh(true);
+      } else {
+        this.refresh(false);
       }
     } else {
-      commands.executeCommand('setContext', 'gpplProceduresTreeViewEnabled', false);
-      this.refresh();
-      StatusBar.hideStatusBar();
+      this.refresh(false);
     }
   }
 
   private onDocumentChanged(changeEvent: TextDocumentChangeEvent): void {
+    StatusBar.update('Tree needs to be updated');
     if (window.activeTextEditor) {
-      if (window.activeTextEditor.document.uri.scheme === 'file') {
-        const enabled = window.activeTextEditor.document.languageId === 'gppl';
-        commands.executeCommand('setContext', 'gpplProceduresTreeViewEnabled', enabled);
-
-        if (enabled) {
-          this.editor = window.activeTextEditor;
-          this.autoRefresh = configuration.getParam('tree.autoRefresh');
-          StatusBar.updateStatusBar('Tree Dirty');
-          if (this.autoRefresh) { this.refresh(); }
-        }
+      if (window.activeTextEditor.document.languageId === constants.languageId) {
+        this.refresh(true);
+      } else {
+        this.refresh(false);
       }
-    } else {
-      commands.executeCommand('setContext', 'gpplProceduresTreeViewEnabled', false);
-      this.refresh();
-      StatusBar.hideStatusBar();
     }
   }
 
-  getTreeItem(element: any): TreeItem {
-    return element[0];
+  getTreeItem(element: TreeItem): TreeItem {
+    return element;
   }
-
-  getChildren(element?: GpplTreeNode): Thenable<GpplTreeNode[]> {
-
-    return Promise.resolve(this.parseTree());
-  }
-
-  private parseTree(): GpplTreeNode[] {
-
-    this.text = '';
-    this.tree = [];
-    const editor = window.activeTextEditor;
-
-    if (editor && editor.document) {
-      this.text = editor.document.getText();
-
-      const parsed = new gpplparser.GpplTextParser(this.text);
-
-      Logger.log("document.text:\n" + this.text);
-
-      return parsed.getTree();
-
+  getChildren(element?: TreeItem): TreeItem[] {
+    if (this.editor && this.editor.document) {
+      return gpplTextParser.getProcedureTreeItems(this.editor.document);
     } else {
       return [];
     }
   }
-
   select(range: Range) {
     if (this.editor) {
       this.editor.selection = new Selection(range.start, range.end);
       this.editor.revealRange(range, TextEditorRevealType.InCenter);
     }
   }
-}
-
-
-export class GpplTreeNode extends TreeItem {
-
-  constructor (
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    public readonly GpplTreeNodeLabel: string,
-    public readonly collapsibleState: TreeItemCollapsibleState,
-  ) {
-    super(GpplTreeNodeLabel, collapsibleState);
+  refresh(viewEnable: boolean): void {
+    this._onDidChangeTreeData.fire(undefined);
+    StatusBar.update('Tree successfully updated');
+    this.editor = window.activeTextEditor;
+    commands.executeCommand('setContext', 'gpplProceduresTreeViewEnabled', viewEnable);
   }
 }

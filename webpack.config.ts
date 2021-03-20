@@ -2,8 +2,11 @@
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import * as CopyWebpackPlugin from 'copy-webpack-plugin';
 import * as fs from 'fs';
+// import * as JsonMinimizerPlugin from "json-minimizer-webpack-plugin";
 import { resolve } from 'path';
 import { Compiler, Configuration } from 'webpack';
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
 
 let dist = 'dist';
 const config: Configuration = {
@@ -56,6 +59,14 @@ const config: Configuration = {
       },
     },
   ],
+  optimization: {
+    minimize: true,
+    minimizer: [
+      // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
+      `...`,
+      new JsonMinimizerPlugin(),
+    ],
+  },
   externals: {
     vscode: 'commonjs vscode' // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
   },

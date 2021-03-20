@@ -2,7 +2,7 @@
   "name": "vscode-gppl-support",
   "displayName": "vscode-gppl-support",
   "description": "GPPL language support for VSCode",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "license": "MIT",
   "publisher": "anzory",
   "author": {
@@ -19,7 +19,7 @@
     "SolidCAM",
     "syntax"
   ],
-  "icon": "images/icon.png",
+  "icon": "./images/icon.ico",
   "galleryBanner": {
     "color": "#666666",
     "theme": "dark"
@@ -57,9 +57,7 @@
           "language"
         ],
         "extensions": [
-          ".gpp",
-          ".GPP",
-          ".dpp"
+          ".gpp"
         ],
         "configuration": "./language/gppl/language.json"
       }
@@ -80,39 +78,14 @@
     "configuration": {
       "type": "object",
       "title": "GPPL",
-      "properties": {
-        "gppl.general.colorization": {
-          "type": "boolean",
-          "default": false,
-          "markdowndescription": "Enable GPPL specific colorization options",
-          "scope": "window"
-        },
-        "gppl.tree.autoRefresh": {
-          "type": "boolean",
-          "default": true,
-          "markdowndescription": "Enable GPPL Tree Auto Refresh",
-          "scope": "window"
-        },
-        "gppl.status.enable": {
-          "type": "boolean",
-          "default": true,
-          "markdowndescription": "Enable GPPL Statistics Panel",
-          "scope": "window"
-        },
-        "gppl.status.autoRefresh": {
-          "type": "boolean",
-          "default": true,
-          "markdowndescription": "Enable GPPL Stats Auto Refresh",
-          "scope": "window"
-        }
-      }
+      "properties": {}
     },
     "viewsContainers": {
       "activitybar": [
         {
           "id": "gppl",
           "title": "GPPL",
-          "icon": "images/logo.png"
+          "icon": "./images/logo.png"
         }
       ]
     },
@@ -126,9 +99,9 @@
         },
         {
           "id": "gppl.gpplStatus",
-          "name": "GPPL Stats",
+          "name": "GPPL Status",
           "when": "config.gppl.statusEnable",
-          "contextualTitle": "GPPL Stats",
+          "contextualTitle": "GPPL Status",
           "type": "tree"
         }
       ]
@@ -141,7 +114,7 @@
       },
       {
         "view": "gppl.gpplStatus",
-        "contents": "GPPL Stats only available when viewing GPPL",
+        "contents": "GPPL Status only available when viewing GPPL",
         "when": "!gpplStatusViewEnabled && config.gppl.statusEnable"
       }
     ],
@@ -166,16 +139,16 @@
       },
       {
         "command": "gppl.gpplStatus.RefreshStatus",
-        "title": "Refresh Stats"
+        "title": "Refresh Status"
       }
     ]
   },
   "scripts": {
     "vsce-package": "npm run vscode:prepublish && cd dist && vsce package",
     "vscode:prepublish": "npm run package",
-    "compile": "webpack --mode=development",
-    "watch": "webpack --watch --mode=development",
-    "package": "webpack --mode=production",
+    "compile": "webpack --mode development",
+    "watch": "webpack --watch --mode development",
+    "package": "webpack --mode production",
     "test-compile": "tsc -p ./",
     "test-watch": "tsc -watch -p ./",
     "pretest": "npm run test-compile && npm run lint",
@@ -197,6 +170,7 @@
     "eslint": "^7.22.0",
     "fs": "^0.0.1-security",
     "glob": "^7.1.6",
+    "json-minimizer-webpack-plugin": "^2.1.0",
     "mocha": "^8.3.2",
     "ts-loader": "^8.0.18",
     "ts-node": "^9.1.1",
