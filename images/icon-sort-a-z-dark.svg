@@ -11,9 +11,9 @@
    sodipodi:docname="icon-sort-a-z-dark.svg"
    id="svg4"
    version="1.1"
+   width="24"
    viewBox="0 0 24 24"
-   height="24"
-   width="24">
+   height="24">
   <metadata
      id="metadata10">
     <rdf:RDF>
@@ -22,6 +22,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -29,16 +30,13 @@
      id="defs8" />
   <sodipodi:namedview
      inkscape:current-layer="svg4"
-     inkscape:window-maximized="0"
-     inkscape:window-y="0"
-     inkscape:window-x="0"
-     inkscape:cy="12"
-     inkscape:cx="12"
-     inkscape:zoom="35.833333"
+     inkscape:cy="11.468322"
+     inkscape:cx="11.124172"
+     inkscape:zoom="30.625"
      showgrid="true"
      id="namedview6"
-     inkscape:window-height="906"
-     inkscape:window-width="1775"
+     inkscape:window-height="480"
+     inkscape:window-width="640"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0"
      guidetolerance="10"
@@ -46,15 +44,14 @@
      objecttolerance="10"
      borderopacity="1"
      bordercolor="#666666"
-     pagecolor="#ffffff"
-     inkscape:document-rotation="0">
+     pagecolor="#ffffff">
     <inkscape:grid
-       type="xygrid"
-       id="grid830" />
+       id="grid835"
+       type="xygrid" />
   </sodipodi:namedview>
   <path
-     style="fill:#f5f5f5;fill-opacity:1"
+     sodipodi:nodetypes="ccccccccccccccccccccccc"
+     style="fill:#f0f0f0;fill-opacity:1;stroke:none;stroke-opacity:1"
      id="path2"
-     d="m 6,21 5,-5 H 7 V 3 H 5 V 16 H 1 Z m 16,-4 h -8 v -2 h 8 z m 2,2 H 14 v 2 h 10 z m -4,-8 h -6 v 2 h 6 z M 18,7 h -4 v 2 h 4 z M 16,3 h -2 v 2 h 2 z"
-     sodipodi:nodetypes="ccccccccccccccccccccccccccccccccc" />
+     d="M 6,5 H 4 V 17 H 1.5 L 5,20.5 8.5,17 H 6 Z m 4,0 v 2 h 4 V 5 Z m 0,14 H 22 V 17 H 10 Z m 0,-6 h 8 v -2 h -8 z" />
 </svg>
