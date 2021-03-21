@@ -39,13 +39,21 @@ Syntax highlighting:
 
 ## Requirements
 
-There are no dependencies in this extension.
+There are no dependencies in this extension, but I highly recommend using:
+
+- nice extension [coenraads.bracket-pair-colorizer-2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
+
+- [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono?preview.text_type=custom) font Designed by JetBrains, Philipp Nurullin, Konstantin Bulenkov
 
 ---
 
 ## Extension Settings
 
-There are no special settings in this extension.
+There are one settings in this extension: set `Enable Preview From Code Navigation` to `true`
+
+![settings](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/settings.png?raw=true)
+
+This will change the behavior when the `Go To Definition` opens in a new tab every time
 
 ---
 
@@ -57,7 +65,7 @@ There are no known issues with this extension.
 
 ## Release Notes
 
-### 1.2.0
+### 1.2.1
 
 - New auto-complete code functionality
 - Procedure tree panel with navigation and sorting capability

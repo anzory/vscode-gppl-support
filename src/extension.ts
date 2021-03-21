@@ -3,7 +3,7 @@ import {
   commands, ExtensionContext, languages, window
 } from 'vscode';
 import { gpplCompletionItemsProvider } from './providers/GpplCompletionItemsProvider';
-import { gpplDefinitionProvider } from './providers/GpplDefinitionProvider';
+import { gpplProcedureDefinitionProvider } from './providers/GpplProcedureDefinitionProvider';
 import { GpplProceduresTreeProvider } from './providers/GpplProceduresTreeProvider';
 import { Config } from './util/config';
 import { constants } from './util/constants';
@@ -21,7 +21,7 @@ export async function activate(context: ExtensionContext) {
   commands.registerCommand(constants.commands.sortByZA, () => gpplProceduresTreeProvider.sortByZA());
   commands.registerCommand(constants.commands.sortByDefault, () => gpplProceduresTreeProvider.sortByDefault());
   languages.registerCompletionItemProvider(constants.languageId, gpplCompletionItemsProvider);
-  languages.registerDefinitionProvider(constants.languageId, gpplDefinitionProvider);
+  languages.registerDefinitionProvider(constants.languageId, gpplProcedureDefinitionProvider);
 }
 
 export function deactivate() {

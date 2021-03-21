@@ -3,7 +3,7 @@ import {
   CompletionItemKind
 } from 'vscode';
 
-export const gpplComletionsItems: CompletionItem[] = [
+export const gpplComletionsItemsList: CompletionItem[] = [
   {
     label: 'new block',
     commitCharacters: ['n', 'b'],

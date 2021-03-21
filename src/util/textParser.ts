@@ -2,15 +2,15 @@ import {
   Location, Position, Range, TextDocument,
   TreeItem, TreeItemCollapsibleState, Uri
 } from 'vscode';
-import { constants } from '../util/constants';
-import { Sorting } from './GpplProceduresTreeProvider';
+import { Sorting } from '../providers/GpplProceduresTreeProvider';
+import { constants } from './constants';
 
 interface ItemLocation {
   name: string,
   range: Range;
 }
 
-class GpplTextParser {
+class TextParser {
 
   getItemLocations(doc: TextDocument, regExp: RegExp): ItemLocation[] {
     const text = doc ? doc.getText() : '';
@@ -36,7 +36,7 @@ class GpplTextParser {
   }
 
   getProcedureLocation(doc: TextDocument, position: Position): Location[] {
-    let _procedures: Location[] = [];
+    let locations: Location[] = [];
     let word = doc.getText(doc.getWordRangeAtPosition(position));
     const regExp: RegExp = new RegExp('^' + word + '\\b', 'gm');
 
@@ -45,15 +45,15 @@ class GpplTextParser {
         Uri.parse(doc.uri + '#' + item.name),
         item.range
       );
-      _procedures.push(location);
+      locations.push(location);
     });
 
-    return _procedures;
+    return locations;
   }
 
-  getProcedureTreeItems(doc: TextDocument, sorting: Sorting): TreeItem[] {
+  getProcedureTreeItemList(doc: TextDocument, sorting: Sorting): TreeItem[] {
     let _procedures: TreeItem[] = [];
-    const regExp: RegExp = /^\@\w+/gm;
+    const regExp: RegExp = /^\@\w+\b/gm;
     this.getItemLocations(doc, regExp)?.forEach(item => {
       let treeItem: TreeItem = new TreeItem(
         item.name,
@@ -76,4 +76,4 @@ class GpplTextParser {
     return _procedures;
   }
 }
-export const gpplTextParser = new GpplTextParser();
+export const textParser = new TextParser();

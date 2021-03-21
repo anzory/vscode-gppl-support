@@ -7,7 +7,7 @@ import {
 } from 'vscode';
 import { constants } from '../util/constants';
 import { StatusBar } from '../util/statusBar';
-import { gpplTextParser } from './GpplTextParser';
+import { textParser } from '../util/textParser';
 
 export enum Sorting {
   byAZ = 1,
@@ -61,7 +61,7 @@ export class GpplProceduresTreeProvider implements TreeDataProvider<TreeItem> {
   }
   getChildren(element?: TreeItem): TreeItem[] {
     if (this.editor && this.editor.document) {
-      this.tree = gpplTextParser.getProcedureTreeItems(this.editor.document, this.sorting);
+      this.tree = textParser.getProcedureTreeItemList(this.editor.document, this.sorting);
       return this.tree;
     } else {
       return [];
