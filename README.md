@@ -15,7 +15,7 @@ This extension provides GPPL language support for VSCode
 
 New auto-complete code functionality:
 
-![New auto-complete code functionality](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/auto-complete-functionality.gif?raw=true)
+![New auto-complete code functionality](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/auto-complete-functionality-1.gif?raw=true)
 
 ---
 
