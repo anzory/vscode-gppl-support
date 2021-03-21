@@ -1,8 +1,10 @@
 'use strict';
-import { commands, ExtensionContext, languages, window } from 'vscode';
-import { gpplCompletionItemsProvider } from './providers/completionItemProvider';
+import {
+  commands, ExtensionContext, languages, window
+} from 'vscode';
+import { gpplCompletionItemsProvider } from './providers/GpplCompletionItemsProvider';
+import { gpplDefinitionProvider } from './providers/GpplDefinitionProvider';
 import { GpplProceduresTreeProvider } from './providers/GpplProceduresTreeProvider';
-// import { GpplTreeStatusProvider } from './providers/GpplTreeStatusProvider';
 import { Config } from './util/config';
 import { constants } from './util/constants';
 import { StatusBar } from './util/statusBar';
@@ -19,6 +21,7 @@ export async function activate(context: ExtensionContext) {
   commands.registerCommand(constants.commands.sortByZA, () => gpplProceduresTreeProvider.sortByZA());
   commands.registerCommand(constants.commands.sortByDefault, () => gpplProceduresTreeProvider.sortByDefault());
   languages.registerCompletionItemProvider(constants.languageId, gpplCompletionItemsProvider);
+  languages.registerDefinitionProvider(constants.languageId, gpplDefinitionProvider);
 }
 
 export function deactivate() {

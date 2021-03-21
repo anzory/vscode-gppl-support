@@ -1,3 +1,4 @@
+// @ts-ignore
 'use strict';
 import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 import * as CopyWebpackPlugin from 'copy-webpack-plugin';

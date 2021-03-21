@@ -19,15 +19,21 @@ New auto-complete code functionality:
 
 ---
 
-Syntax highlighting:
+Sidebar with procedures tree view & sorting capability:
 
-![Syntax highlighting](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/syntax-highlighting.png?raw=true)
+![Sidebar with procedure tree view](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/tree-sort.gif?raw=true)
 
 ---
 
-Sidebar with procedures tree view:
+"`Goto Definition`" functionality for procedures
 
-![Sidebar with procedure tree view](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/tree-view.png?raw=true)
+![Goto Definition](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/goto-definition.gif?raw=true)
+
+---
+
+Syntax highlighting:
+
+![Syntax highlighting](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/syntax-highlighting.png?raw=true)
 
 ---
 
@@ -51,16 +57,17 @@ There are no known issues with this extension.
 
 ## Release Notes
 
-### 1.1.1
+### 1.2.0
 
 - New auto-complete code functionality
 - Procedure tree panel with navigation and sorting capability
+- Implement "`Goto Definition`" functionality for procedures
 
 ---
 
 ## Plan to implement:
 
-- Implement "`Goto Definition`" && "`Goto Implementation`" functionality for procedures and variables
+- "`Goto Implementation`" functionality for procedures and variables
 - Show hints on hovering
 - Document formatting
 
