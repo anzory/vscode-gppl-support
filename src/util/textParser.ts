@@ -1,17 +1,20 @@
 import {
-  Location, Position, Range, TextDocument,
-  TreeItem, TreeItemCollapsibleState, Uri
+  Location,
+  Position,
+  Range,
+  TextDocument,
+  TreeItem,
+  TreeItemCollapsibleState,
 } from 'vscode';
 import { Sorting } from '../providers/GpplProceduresTreeProvider';
 import { constants } from './constants';
 
 interface ItemLocation {
-  name: string,
+  name: string;
   range: Range;
 }
 
 class TextParser {
-
   getItemLocations(doc: TextDocument, regExp: RegExp): ItemLocation[] {
     const text = doc ? doc.getText() : '';
     if (text === '') {
@@ -22,11 +25,15 @@ class TextParser {
     do {
       regExpRes = regExp.exec(text);
       if (regExpRes) {
-        const startPos: Position = doc ? doc.positionAt(regExpRes.index) : new Position(0, 0);
-        const endPos: Position = doc ? doc.positionAt(regExpRes.index + regExpRes[0].length) : new Position(0, 0);
+        const startPos: Position = doc
+          ? doc.positionAt(regExpRes.index)
+          : new Position(0, 0);
+        const endPos: Position = doc
+          ? doc.positionAt(regExpRes.index + regExpRes[0].length)
+          : new Position(0, 0);
         let item: ItemLocation = {
           name: regExpRes[0],
-          range: new Range(startPos, endPos)
+          range: new Range(startPos, endPos),
         };
         items.push(item);
       }
@@ -40,11 +47,14 @@ class TextParser {
     let word = doc.getText(doc.getWordRangeAtPosition(position));
     const regExp: RegExp = new RegExp('^' + word + '\\b', 'gm');
 
-    this.getItemLocations(doc, regExp)?.forEach(item => {
+    this.getItemLocations(doc, regExp)?.forEach((item) => {
+      // console.log(Uri.parse(/**/ doc.uri + '?' + item.name));
       let location: Location = new Location(
-        Uri.parse(doc.uri + '#' + item.name),
+        // Uri.parse(doc.uri + '#' + item.name),
+        doc.uri,
         item.range
       );
+      console.log(location);
       locations.push(location);
     });
 
@@ -54,23 +64,27 @@ class TextParser {
   getProcedureTreeItemList(doc: TextDocument, sorting: Sorting): TreeItem[] {
     let _procedures: TreeItem[] = [];
     const regExp: RegExp = /^\@\w+\b/gm;
-    this.getItemLocations(doc, regExp)?.forEach(item => {
+    this.getItemLocations(doc, regExp)?.forEach((item) => {
       let treeItem: TreeItem = new TreeItem(
         item.name,
-        TreeItemCollapsibleState.None,
+        TreeItemCollapsibleState.None
       );
       treeItem.command = {
         command: constants.commands.procedureSelection,
         title: '',
-        arguments: [item.range]
+        arguments: [item.range],
       };
       _procedures.push(treeItem);
     });
     _procedures.sort((a: TreeItem, b: TreeItem) => {
       let labelA = a.label ? a.label : '';
       let labelB = b.label ? b.label : '';
-      if (labelA > labelB) { return sorting; };
-      if (labelA < labelB) { return -sorting; };
+      if (labelA > labelB) {
+        return sorting;
+      }
+      if (labelA < labelB) {
+        return -sorting;
+      }
       return 0;
     });
     return _procedures;

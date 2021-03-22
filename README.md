@@ -1,4 +1,4 @@
-# GPPL language support for VSCode | README
+# Full GPPL language support for VSCode (highlighting and more...)
 
 ![Logo](https://github.com/anzory/vscode-gppl-support/blob/master/images/logo.png?raw=true)
 
@@ -75,9 +75,9 @@ There are no known issues with this extension.
 
 ## Plan to implement:
 
-- "`Goto Implementation`" functionality for procedures and variables
-- Show hints on hovering
 - Document formatting
+- Show hints on hovering
+- "`Goto Implementation`" functionality for procedures and variables
 
 ---
 

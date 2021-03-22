@@ -2,7 +2,7 @@
   "name": "vscode-gppl-support",
   "displayName": "vscode-gppl-support",
   "description": "GPPL language support for VSCode",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "license": "MIT",
   "publisher": "anzory",
   "author": {
@@ -78,7 +78,38 @@
     "configuration": {
       "type": "object",
       "title": "GPPL",
-      "properties": {}
+      "properties": {
+        "gppl.files.encoding": {
+          "type": "string",
+          "default": "windows1251",
+          "description": "Default GPPL files encoding",
+          "scope": "window"
+        },
+        "gppl.editor.defaultFormatter": {
+          "type": "string",
+          "default": "anzory.vscode-gppl-support",
+          "description": "Default GPPL files formatter",
+          "scope": "window"
+        },
+        "gppl.format.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Allows you to format GPPL documents",
+          "scope": "window"
+        },
+        "gppl.format.tabSize": {
+          "type": "number",
+          "default": 2,
+          "description": "Size of a tab in spaces for the formatter",
+          "scope": "window"
+        },
+        "gppl.format.insertSpaces": {
+          "type": "boolean",
+          "default": true,
+          "description": "Prefer spaces over tabs",
+          "scope": "window"
+        }
+      }
     },
     "viewsContainers": {
       "activitybar": [
