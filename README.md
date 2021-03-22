@@ -65,11 +65,9 @@ There are no known issues with this extension.
 
 ## Release Notes
 
-### 1.2.1
+### 1.2.2
 
-- New auto-complete code functionality
-- Procedure tree panel with navigation and sorting capability
-- Implement "`Goto Definition`" functionality for procedures
+- Fixed a bug when the `Go To Definition` opened a new tab every time
 
 ---
 

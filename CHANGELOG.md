@@ -47,3 +47,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 
 - "`Goto Definition`" functionality for procedures.
+
+## [1.2.2] - 2021-03-22
+
+### Added
+
+- Fixed a bug when the `Go To Definition` opened a new tab every time
