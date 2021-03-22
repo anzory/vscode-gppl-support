@@ -1,7 +1,9 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 
-let gppl = JSON.parse(readFileSync(resolve(__dirname, 'package.json')).toString());
+let gppl = JSON.parse(
+  readFileSync(resolve(__dirname, 'package.json')).toString()
+);
 
 export const constants = {
   commands: {
@@ -14,6 +16,8 @@ export const constants = {
   languageId: gppl.contributes.languages[0].id,
   proceduresViewId: gppl.contributes.views.gppl[0].id,
   configId: gppl.contributes.languages[0].id,
+  // tabSize: gppl.contributes.properties['gppl.format.tabSize'].default,
+  // insertSpaces: gppl.contributes.properties['gppl.format.insertSpaces'].default,
   server: gppl.main,
   copyright: gppl.copyright,
   extension: {
@@ -24,7 +28,9 @@ export const constants = {
   extensionOutputChannelName: gppl.shortName,
   // iconsPath: join(__dirname, "..", "..", "resources", "icons"),
   urls: {
-    changeLog: 'https://github.com/anzory/vscode-gppl-support/blob/master/CHANGELOG.md',
-    readme: 'https://github.com/anzory/vscode-gppl-support/blob/master/README.md',
+    changeLog:
+      'https://github.com/anzory/vscode-gppl-support/blob/master/CHANGELOG.md',
+    readme:
+      'https://github.com/anzory/vscode-gppl-support/blob/master/README.md',
   },
 };

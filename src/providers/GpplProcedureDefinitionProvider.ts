@@ -4,7 +4,6 @@ import {
 } from 'vscode';
 import { textParser } from '../util/textParser';
 
-
 class GpplProcedureDefinitionProvider implements DefinitionProvider {
   provideDefinition(
     document: TextDocument,
