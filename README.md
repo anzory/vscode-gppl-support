@@ -55,7 +55,7 @@ There are no dependencies in this extension, but I highly recommend using:
 
 ## Known Issues
 
-There are no known issues with this extension.
+- There are no known issues with this extension.
 
 ---
 
