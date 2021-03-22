@@ -49,11 +49,7 @@ There are no dependencies in this extension, but I highly recommend using:
 
 ## Extension Settings
 
-There are one settings in this extension: set `Enable Preview From Code Navigation` to `true`
-
-![settings](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/settings-600.jpg?raw=true)
-
-This will change the behavior when the `Go To Definition` opens in a new tab every time
+- There are no settings in this extension
 
 ---
 
