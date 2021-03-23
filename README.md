@@ -76,6 +76,7 @@ There are no hard dependencies here, but I highly recommend using:
 ### 1.3.0
 
 - Added simple `Document Formatting` functionality
+- Added several settings for extension
 
 ---
 
