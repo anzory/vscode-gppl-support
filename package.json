@@ -1,7 +1,7 @@
 {
   "name": "vscode-gppl-support",
   "displayName": "vscode-gppl-support",
-  "description": "GPPL language support for VSCode",
+  "description": "Full GPPL language support for VSCode: highlighting, formatting, autocomplete and code snippets.",
   "version": "1.3.0",
   "license": "MIT",
   "publisher": "anzory",

@@ -1,8 +1,8 @@
-# Full GPPL language support for VSCode (highlighting and more...)
+# Full GPPL language support for VSCode (formatting, highlighting and more...)
 
 ![Logo](https://github.com/anzory/vscode-gppl-support/blob/master/images/logo.png?raw=true)
 
-This extension provides GPPL language support for VSCode
+This extension provides Full GPPL language support for VSCode: highlighting, formatting, autocomplete and code snippets.
 
 ## Features
 
@@ -29,7 +29,7 @@ Sidebar with procedures tree view & sorting capability:
 
 "`Go to Definition`" functionality for procedures
 
-(by `Ctrl+Click`, or: `RightClick -> Go to Definition` or `F12`)
+(by `Ctrl+Click`, or `RightClick -> Go to Definition`, or `F12`)
 
 ![Go to Definition](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/goto-definition.gif?raw=true)
 
