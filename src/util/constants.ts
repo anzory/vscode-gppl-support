@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+import { workspace } from 'vscode';
 
 let gppl = JSON.parse(
   readFileSync(resolve(__dirname, 'package.json')).toString()
@@ -16,9 +17,10 @@ export const constants = {
   languageId: gppl.contributes.languages[0].id,
   proceduresViewId: gppl.contributes.views.gppl[0].id,
   configId: gppl.contributes.languages[0].id,
-  // tabSize: gppl.contributes.properties['gppl.format.tabSize'].default,
-  // insertSpaces: gppl.contributes.properties['gppl.format.insertSpaces'].default,
-  server: gppl.main,
+  tabSize: workspace.getConfiguration().get<number>('gppl.format.tabSize'),
+  insertSpaces: workspace
+    .getConfiguration()
+    .get<boolean>('gppl.format.insertSpaces'),
   copyright: gppl.copyright,
   extension: {
     name: gppl.name,

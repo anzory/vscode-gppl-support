@@ -2,14 +2,10 @@ import {
   CancellationToken,
   DocumentFormattingEditProvider,
   FormattingOptions,
-  Position,
-  Range,
   TextDocument,
   TextEdit,
   workspace,
 } from 'vscode';
-import { constants } from '../util/constants';
-import { Logger } from '../util/logger';
 
 class GpplDocumentFormattingEditProvider
   implements DocumentFormattingEditProvider {
@@ -18,25 +14,26 @@ class GpplDocumentFormattingEditProvider
     options: FormattingOptions,
     token: CancellationToken
   ): TextEdit[] {
-    Logger.enable();
-    try {
+    let isFormatEnable = workspace
+      .getConfiguration()
+      .get<boolean>('gppl.format.enable');
+    let n = workspace.getConfiguration().get<number>('gppl.format.tabSize');
+    let indentSize = n ? n : 2;
+    let indent;
+    if (workspace.getConfiguration().get<boolean>('gppl.format.insertSpaces')) {
+      indent = ' ';
+    } else {
+      indent = '\t';
+    }
+    indent = indent.repeat(indentSize);
+    let docLineCount = document.lineCount;
+    if (isFormatEnable) {
       let textEdits: TextEdit[] = [];
-      let textEdit: TextEdit;
-      let docLineCount = document.lineCount;
       let indentLevel = 0;
-      // let indentSize = 2; /*= constants.tabSize;
-      let indentSize = 2;
-      // console.log('constants.tabSize=', constants.tabSize);
-      console.log(
-        'Configuration=',
-        workspace.getConfiguration(constants.languageId)
-      );
-      options.insertSpaces = true;
-      options.tabSize = 2;
-      let indent = '_'.repeat(indentSize);
       for (let i = 0; i < docLineCount - 1; i++) {
+        let textEdit: TextEdit;
         let formattedLineText = '';
-        let lineText = document.lineAt(i).text?.trim();
+        let lineText = document.lineAt(i).text?.trimLeft();
         if (/^(\@\w+)|(\bif)|(\bwhile)/.test(lineText)) {
           formattedLineText = indent.repeat(indentLevel) + lineText;
           ++indentLevel;
@@ -52,22 +49,14 @@ class GpplDocumentFormattingEditProvider
         } else {
           formattedLineText = lineText;
         }
-
         textEdit = new TextEdit(
-          new Range(
-            new Position(0, 0),
-            new Position(0, formattedLineText.length + 1)
-          ),
-          formattedLineText
+          document.lineAt(i).range,
+          formattedLineText.trimRight()
         );
         textEdits.push(textEdit);
       }
-      console.log(textEdits);
-      Logger.log('return textEdits');
       return textEdits;
-    } catch (error) {
-      Logger.log(error);
-    } finally {
+    } else {
       return [];
     }
   }

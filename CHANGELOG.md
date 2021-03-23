@@ -53,3 +53,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 
 - Fixed a bug when the `Go To Definition` opened a new tab every time
+
+## [1.3.0] - 2021-03-23
+
+### Added
+
+- simple `Document Formatting` functionality
+- several settings for extension

@@ -7,9 +7,11 @@ This extension provides GPPL language support for VSCode
 ## Features
 
 - Syntax highlighting
+- Simple Document Formatting functionality
 - Procedure tree panel with navigation and sorting capability and auto-refresh the tree
+- Go to Definition functionality for procedures
 - Auto-complete & auto-indentation code
-- New auto-complete code functionality: just highlight the variable name and type the function
+- New auto-complete code functionality: just highlight the variable name and type the name of function
 
 ---
 
@@ -25,31 +27,41 @@ Sidebar with procedures tree view & sorting capability:
 
 ---
 
-"`Goto Definition`" functionality for procedures
+"`Go to Definition`" functionality for procedures
 
-![Goto Definition](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/goto-definition.gif?raw=true)
+(by `Ctrl+Click`, or: `RightClick -> Go to Definition` or `F12`)
 
----
-
-Syntax highlighting:
-
-![Syntax highlighting](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/syntax-highlighting.png?raw=true)
-
----
-
-## Requirements
-
-There are no dependencies in this extension, but I highly recommend using:
-
-- nice extension [coenraads.bracket-pair-colorizer-2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
-
-- [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono?preview.text_type=custom) font Designed by JetBrains, Philipp Nurullin, Konstantin Bulenkov
+![Go to Definition](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/goto-definition.gif?raw=true)
 
 ---
 
 ## Extension Settings
 
-- There are no settings in this extension
+There are a few settings for this extension:
+
+(File -> Preferenses -> Settins -> Extensions)
+
+- `Editor: Default Formatter`: you must specify _'anzory.vscode-gppl-support'_ to be able to format GPPL documents (by default)
+- `Format: Enable`: specifies whether or not the document can be formatted
+- `Format: Insert Spaces`: indicates whether or not to replace tabs with spaces
+- `Format: Tab Size`: specifies the indent size
+- `Files: Encoding`: one of the [common encodings](https://en.wikipedia.org/wiki/Character_encoding#Common_character_encodings)
+
+In addition, the formatting behavior depends on the following settings:
+
+(File -> Preferenses -> Settins -> Text Editor -> Formatting)
+
+- `Format On Save`: defines whether or not the document will be formatted when it is saved
+
+---
+
+## Dependencies
+
+There are no hard dependencies here, but I highly recommend using:
+
+- nice extension [coenraads.bracket-pair-colorizer-2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
+
+- [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono?preview.text_type=custom) font Designed by JetBrains, Philipp Nurullin, Konstantin Bulenkov
 
 ---
 
@@ -61,17 +73,17 @@ There are no dependencies in this extension, but I highly recommend using:
 
 ## Release Notes
 
-### 1.2.2
+### 1.3.0
 
-- Fixed a bug when the `Go To Definition` opened a new tab every time
+- Added simple `Document Formatting` functionality
 
 ---
 
 ## Plan to implement:
 
-- Document formatting
 - Show hints on hovering
-- "`Goto Implementation`" functionality for procedures and variables
+- Add code and variable highlighting in tracing mode
+- "`Go to Implementation`" functionality for procedures and variables
 
 ---
 
