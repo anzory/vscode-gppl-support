@@ -7,7 +7,7 @@ import { resolve } from 'path';
 import { Compiler, Configuration } from 'webpack';
 // import { JsonMinimizerPlugin } from 'json-minimizer-webpack-plugin';
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
+const JsonMinimizerPlugin = require('json-minimizer-webpack-plugin');
 
 let dist = 'dist';
 const config: Configuration = {
@@ -15,13 +15,13 @@ const config: Configuration = {
   mode: 'none', // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
 
   entry: {
-    main: './src/extension.ts'
+    main: './src/extension.ts',
   }, // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
   output: {
     // the bundle is stored in the 'dist' folder (check package.json), 📖 -> https://webpack.js.org/configuration/output/
     path: resolve(__dirname, 'dist'),
     filename: '[name].js',
-    libraryTarget: 'commonjs2'
+    libraryTarget: 'commonjs2',
   },
   // devtool: 'nosources-source-map',
   plugins: [
@@ -33,11 +33,11 @@ const config: Configuration = {
           to: 'language',
         },
         {
-          from: './images/**.png',
+          from: './images/icons/**.*',
           to: './',
         },
         {
-          from: './images/**.svg',
+          from: './images/**.png',
           to: './',
         },
         {
@@ -47,7 +47,10 @@ const config: Configuration = {
         {
           from: './**.md',
           to: './',
-        }
+          globOptions: {
+            ignore: ['./README.md'],
+          },
+        },
       ],
     }),
     {
@@ -64,9 +67,9 @@ const config: Configuration = {
       {
         test: /\.ts$/,
         exclude: /node_modules|tmp/,
-        use: ['ts-loader']
+        use: ['ts-loader'],
       },
-    ]
+    ],
   },
 
   optimization: {
@@ -78,17 +81,19 @@ const config: Configuration = {
     ],
   },
   externals: {
-    vscode: 'commonjs vscode' // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
+    vscode: 'commonjs vscode', // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
   },
   resolve: {
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js'],
   },
 };
 module.exports = config;
 //========================================================
-function writeDistPackageJson() {
-  let distPackageJson = JSON.parse(fs.readFileSync('./package.json').toString());
+function writeDistPackageJson(): void {
+  let distPackageJson = JSON.parse(
+    fs.readFileSync('./package.json').toString()
+  );
   delete distPackageJson.scripts;
   delete distPackageJson.devDependencies;
   distPackageJson.publisher = 'anzory';
@@ -98,6 +103,6 @@ function writeDistPackageJson() {
     resolve(__dirname, dist, 'package.json'),
     JSON.stringify(distPackageJson, null, ' '),
     'utf8',
-    () => { }
+    () => {}
   );
 }

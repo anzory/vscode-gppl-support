@@ -17,6 +17,7 @@ export const constants = {
   languageId: gppl.contributes.languages[0].id,
   proceduresViewId: gppl.contributes.views.gppl[0].id,
   configId: gppl.contributes.languages[0].id,
+  formatEnable: workspace.getConfiguration().get<number>('gppl.format.enable'),
   tabSize: workspace.getConfiguration().get<number>('gppl.format.tabSize'),
   insertSpaces: workspace
     .getConfiguration()

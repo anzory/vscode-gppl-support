@@ -18,17 +18,17 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [1.0.1] - 2021-01-29
 
-### Added
+### Fixed
 
-- Some improvements in the project structure and README file
+- some improvements in the project structure and README file
 
 ## [1.0.3] - 2021-03-18
 
-### Added
+### Fixed
 
-- Improved color scheme of syntax highlighting.
-- Fixed comment highlighting.
-- Fixed auto-indentation.
+- color scheme of syntax highlighting.
+- comment highlighting.
+- auto-indentation.
 
 ## [1.1.0] - 2021-03-20
 
@@ -50,9 +50,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [1.2.2] - 2021-03-22
 
-### Added
+### Fixed
 
-- Fixed a bug when the `Go To Definition` opened a new tab every time
+- a bug when the `Go To Definition` opened a new tab every time
 
 ## [1.3.0] - 2021-03-23
 
@@ -60,3 +60,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - simple `Document Formatting` functionality
 - several settings for extension
+
+## [1.3.1] - 2021-03-25
+
+### Fixed
+
+- bug: the last line of the gppl-file is not formatted
+- bug: comments shouldn't be involved in formatting

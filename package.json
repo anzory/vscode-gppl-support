@@ -2,7 +2,7 @@
   "name": "vscode-gppl-support",
   "displayName": "vscode-gppl-support",
   "description": "Full GPPL language support for VSCode: highlighting, formatting, autocomplete and code snippets.",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "license": "MIT",
   "publisher": "anzory",
   "author": {
@@ -20,7 +20,7 @@
     "highlighter",
     "formatting"
   ],
-  "icon": "images/icon.ico",
+  "icon": "images/logo.png",
   "galleryBanner": {
     "color": "#666666",
     "theme": "dark"
@@ -96,7 +96,7 @@
         },
         "gppl.format.tabSize": {
           "type": "number",
-          "default": 3,
+          "default": 2,
           "description": "Size of a tab in spaces for the formatter",
           "scope": "window"
         },
@@ -113,7 +113,7 @@
         {
           "id": "gppl",
           "title": "GPPL",
-          "icon": "./images/logo.png"
+          "icon": "./images/icon.ico"
         }
       ]
     },
@@ -131,7 +131,7 @@
       {
         "view": "gppl.gpplProceduresTree",
         "contents": "GPPL Tree only available when viewing GPPL",
-        "when": "!gpplProceduresTreeViewEnabled"
+        "when": "gpplProceduresTreeViewEnabled !== true"
       }
     ],
     "menus": {
@@ -163,8 +163,8 @@
         "command": "gppl.gpplProceduresTree.RefreshTree",
         "title": "Refresh Tree",
         "icon": {
-          "light": "images/icon-refresh.svg",
-          "dark": "images/icon-refresh-dark.svg"
+          "light": "images/icons/arrow-clockwise.svg",
+          "dark": "images/icons/arrow-clockwise-dark.svg"
         }
       },
       {
@@ -176,8 +176,8 @@
         "title": "Sort By A-Z",
         "category": "sorting",
         "icon": {
-          "light": "images/icon-sort-a-z.svg",
-          "dark": "images/icon-sort-a-z-dark.svg"
+          "light": "images/icons/sort-up.svg",
+          "dark": "images/icons/sort-up-dark.svg"
         }
       },
       {
@@ -185,8 +185,8 @@
         "title": "Sort By Z-A",
         "category": "sorting",
         "icon": {
-          "light": "images/icon-sort-z-a.svg",
-          "dark": "images/icon-sort-z-a-dark.svg"
+          "light": "images/icons/sort-down.svg",
+          "dark": "images/icons/sort-down-dark.svg"
         }
       },
       {
@@ -194,8 +194,8 @@
         "title": "Sort By Default",
         "category": "sorting",
         "icon": {
-          "light": "images/icon-no-sort.svg",
-          "dark": "images/icon-no-sort-dark.svg"
+          "light": "images/icons/sort-up-down.svg",
+          "dark": "images/icons/sort-up-down-dark.svg"
         }
       }
     ]

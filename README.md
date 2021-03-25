@@ -1,7 +1,5 @@
 # Full GPPL language support for VSCode (formatting, highlighting and more...)
 
-![Logo](https://github.com/anzory/vscode-gppl-support/blob/master/images/logo.png?raw=true)
-
 This extension provides Full GPPL language support for VSCode: highlighting, formatting, autocomplete and code snippets.
 
 ## Features
@@ -11,7 +9,7 @@ This extension provides Full GPPL language support for VSCode: highlighting, for
 - Procedure tree panel with navigation and sorting capability and auto-refresh the tree
 - Go to Definition functionality for procedures
 - Auto-complete & auto-indentation code
-- New auto-complete code functionality: just highlight the variable name and type the name of function
+- New auto-complete code functionality: just highlight the variable name and type the name of function - the variable will be wrapped in the function automatically
 
 ---
 
@@ -73,10 +71,10 @@ There are no hard dependencies here, but I highly recommend using:
 
 ## Release Notes
 
-### 1.3.0
+### 1.3.1
 
-- Added simple `Document Formatting` functionality
-- Added several settings for extension
+- Fixed bug: the last line of the gppl-file is not formatted
+- Fixed bug: comments shouldn't be involved in formatting
 
 ---
 
