@@ -33,14 +33,14 @@ class GpplDocumentFormattingEditProvider
         if (lineText.substr(0, 1) === ';') {
           formattedLineText = indent.repeat(indentLevel) + lineText;
         } else {
-          if (/^(\@\w+)|(\bif)|(\bwhile)/.test(lineText)) {
+          if (/(^\@\w+)|(^\b[i|I]f)|(^\b[w|W]hile)/.test(lineText)) {
             formattedLineText = indent.repeat(indentLevel) + lineText;
             ++indentLevel;
-          } else if (/^(\belse)/.test(lineText)) {
+          } else if (/(^\b[e|E]lse)/.test(lineText)) {
             --indentLevel;
             formattedLineText = indent.repeat(indentLevel) + lineText;
             ++indentLevel;
-          } else if (/^(\bend(w|p|if))/.test(lineText)) {
+          } else if (/(^\b[e|E]nd(w|p|if))/.test(lineText)) {
             --indentLevel;
             formattedLineText = indent.repeat(indentLevel) + lineText;
           } else if (lineText !== '') {

@@ -67,3 +67,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - bug: the last line of the gppl-file is not formatted
 - bug: comments shouldn't be involved in formatting
+
+## [1.3.2] - 2021-03-29
+
+### Fixed
+
+- bug: formatting does not work when capital letters are used

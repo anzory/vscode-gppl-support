@@ -71,10 +71,9 @@ There are no hard dependencies here, but I highly recommend using:
 
 ## Release Notes
 
-### 1.3.1
+### 1.3.2
 
-- Fixed bug: the last line of the gppl-file is not formatted
-- Fixed bug: comments shouldn't be involved in formatting
+- Fixed bug: formatting does not work when capital letters are used
 
 ---
 

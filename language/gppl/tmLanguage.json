@@ -27,7 +27,7 @@
         },
         {
           "name": "keyword.modifier.gppl",
-          "match": "\\b(true|false)\\b",
+          "match": "\\b([t|T][rue|RUE]|[f|F][alse|ALSE])\\b",
           "comment": "Define Logical Constants"
         },
         {
@@ -37,12 +37,12 @@
         },
         {
           "name": "keyword.control.gppl",
-          "match": "\\b(if|else|elseif|endif|then|and|or|not|eq|ne|le|lt|ge|gt|==|<>|<=|<|>=|>)\\b",
+          "match": "\\b([i|I]f|[e|E]lse|[e|E]lse[i|I]f|[e|E]nd[i|I]f|[t|T]hen|[a|A]nd|[o|O]r|[n|N]ot|[e|E]q|[n|N]e|[l|L]e|[l|L]t|[g|G]e|[g|G]t|==|<>|<=|<|>=|>)\\b",
           "comment": "Define GPPL Logical Functions"
         },
         {
           "name": "keyword.control.gppl",
-          "match": "\\b(while|endw)\\b",
+          "match": "\\b([w|W]hile|[e|E]ndw)\\b",
           "comment": "Define GPPL Loop Execution Statement"
         },
         {
@@ -72,7 +72,7 @@
         },
         {
           "name": "invalid.gppl",
-          "match": "\\bcall\\b",
+          "match": "\\b[c|C]all\\b",
           "comment": "Define Call GPPL Procedures"
         },
         {
