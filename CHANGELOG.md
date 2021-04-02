@@ -40,7 +40,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Added
 
-- Sorting feature to the procedures tree.
+- Sort feature to the procedures tree.
 
 ## [1.2.1] - 2021-03-21
 

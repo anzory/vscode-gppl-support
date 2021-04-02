@@ -6,7 +6,7 @@ import {
   TreeItem,
   TreeItemCollapsibleState,
 } from 'vscode';
-import { Sorting } from '../providers/GpplProceduresTreeProvider';
+import { Sort } from '../providers/GppProceduresTreeProvider';
 import { constants } from './constants';
 
 interface ItemLocation {
@@ -55,7 +55,7 @@ class TextParser {
     return locations;
   }
 
-  getProcedureTreeItemList(doc: TextDocument, sorting: Sorting): TreeItem[] {
+  getProcedureTreeItemList(doc: TextDocument, sorting: Sort): TreeItem[] {
     let _procedures: TreeItem[] = [];
     const regExp: RegExp = /^\@\w+\b/gm;
     this.getItemLocations(doc, regExp)?.forEach((item) => {

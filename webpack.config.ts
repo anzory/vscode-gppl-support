@@ -29,8 +29,8 @@ const config: Configuration = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: './language',
-          to: 'language',
+          from: './languages',
+          to: 'languages',
         },
         {
           from: './images/icons/**.*',
@@ -45,10 +45,14 @@ const config: Configuration = {
           to: './',
         },
         {
+          from: './images/**.svg',
+          to: './',
+        },
+        {
           from: './**.md',
           to: './',
           globOptions: {
-            ignore: ['./README.md'],
+            // ignore: ['./README.md'],
           },
         },
       ],

@@ -2,33 +2,34 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { workspace } from 'vscode';
 
-let gppl = JSON.parse(
+let gpp = JSON.parse(
   readFileSync(resolve(__dirname, 'package.json')).toString()
 );
 
 export const constants = {
   commands: {
-    refreshTree: gppl.contributes.commands[0].command,
-    procedureSelection: gppl.contributes.commands[1].command,
-    sortByAZ: gppl.contributes.commands[2].command,
-    sortByZA: gppl.contributes.commands[3].command,
-    sortByDefault: gppl.contributes.commands[4].command,
+    refreshTree: gpp.contributes.commands[0].command,
+    procedureSelection: gpp.contributes.commands[1].command,
+    sortByAZ: gpp.contributes.commands[2].command,
+    sortByZA: gpp.contributes.commands[3].command,
+    sortByDefault: gpp.contributes.commands[4].command,
+    formatDocument: gpp.contributes.commands[5].command,
   },
-  languageId: gppl.contributes.languages[0].id,
-  proceduresViewId: gppl.contributes.views.gppl[0].id,
-  configId: gppl.contributes.languages[0].id,
-  formatEnable: workspace.getConfiguration().get<number>('gppl.format.enable'),
-  tabSize: workspace.getConfiguration().get<number>('gppl.format.tabSize'),
+  languageId: gpp.contributes.languages[0].id,
+  proceduresViewId: gpp.contributes.views.gpp[0].id,
+  configId: gpp.contributes.languages[0].id,
+  formatEnable: workspace.getConfiguration().get<number>('gpp.format.enable'),
+  tabSize: workspace.getConfiguration().get<number>('gpp.format.tabSize'),
   insertSpaces: workspace
     .getConfiguration()
-    .get<boolean>('gppl.format.insertSpaces'),
-  copyright: gppl.copyright,
+    .get<boolean>('gpp.format.insertSpaces'),
+  copyright: gpp.copyright,
   extension: {
-    name: gppl.name,
-    version: gppl.version,
-    shortname: gppl.shortName,
+    name: gpp.name,
+    version: gpp.version,
+    shortname: gpp.shortName,
   },
-  extensionOutputChannelName: gppl.shortName,
+  extensionOutputChannelName: gpp.shortName,
   // iconsPath: join(__dirname, "..", "..", "resources", "icons"),
   urls: {
     changeLog:

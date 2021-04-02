@@ -25,10 +25,10 @@
   "wordPattern": "(-?\\d+\\.\\d+)|(-?\\d+\\.?)|(@\\w+)|(\\w+)",
   "indentationRules": {
     "increaseIndentPattern": {
-      "pattern": "(if|else|elseif|while)|(@.*$)"
+      "pattern": "([iI]f|[eE]lse|[eE]lse[iI]f|[wW]hile)|(@.*$)"
     },
     "decreaseIndentPattern": {
-      "pattern": "(else|elseif|endif|endw)|(endp)"
+      "pattern": "([eE]lse|[eE]lse[iI]f|[eE]nd[iI]f|[eE]ndw)|([eE]ndp)"
     }
   }
 }

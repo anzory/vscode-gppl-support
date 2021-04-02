@@ -1,9 +1,9 @@
 'use strict';
 import { commands, ExtensionContext, languages, window } from 'vscode';
-import { gpplCompletionItemsProvider } from './providers/GpplCompletionItemsProvider';
-import { gpplDocumentFormattingEditProvider } from './providers/GpplDocumentFormattingEditProvider';
-import { gpplProcedureDefinitionProvider } from './providers/GpplProcedureDefinitionProvider';
-import { GpplProceduresTreeProvider } from './providers/GpplProceduresTreeProvider';
+import { gppCompletionItemsProvider } from './providers/GppCompletionItemsProvider';
+import { gppDocumentFormattingEditProvider } from './providers/GppDocumentFormattingEditProvider';
+import { gppProcedureDefinitionProvider } from './providers/GppProcedureDefinitionProvider';
+import { GppProceduresTreeProvider } from './providers/GppProceduresTreeProvider';
 import { Config } from './util/config';
 import { constants } from './util/constants';
 import { StatusBar } from './util/statusBar';
@@ -12,42 +12,51 @@ export async function activate(context: ExtensionContext) {
   Config.configure(context);
   StatusBar.configure(context);
   StatusBar.show();
-  const gpplProceduresTreeProvider = new GpplProceduresTreeProvider(context);
+  const editor = window.activeTextEditor;
+  const document = editor?.document;
+  const gppProceduresTreeProvider = new GppProceduresTreeProvider(context);
   window.registerTreeDataProvider(
     constants.proceduresViewId,
-    gpplProceduresTreeProvider
+    gppProceduresTreeProvider
   );
   commands.registerCommand(constants.commands.refreshTree, () => {
-    gpplProceduresTreeProvider.refresh();
+    gppProceduresTreeProvider.refresh();
   });
   commands.registerCommand(constants.commands.procedureSelection, (range) =>
-    gpplProceduresTreeProvider.select(range)
+    gppProceduresTreeProvider.select(range)
   );
   commands.registerCommand(constants.commands.sortByAZ, () =>
-    gpplProceduresTreeProvider.sortByAZ()
+    gppProceduresTreeProvider.sortByAZ()
   );
   commands.registerCommand(constants.commands.sortByZA, () =>
-    gpplProceduresTreeProvider.sortByZA()
+    gppProceduresTreeProvider.sortByZA()
   );
   commands.registerCommand(constants.commands.sortByDefault, () =>
-    gpplProceduresTreeProvider.sortByDefault()
+    gppProceduresTreeProvider.sortByDefault()
   );
+  commands.registerCommand(constants.commands.formatDocument, () => {
+    commands.executeCommand(
+      'vscode.executeFormatDocumentProvider',
+      editor?.document.uri,
+      { insertSpaces: true, tabSize: 2 }
+    );
+  });
   context.subscriptions.push(
     languages.registerCompletionItemProvider(
       constants.languageId,
-      gpplCompletionItemsProvider
+      gppCompletionItemsProvider
     )
   );
   context.subscriptions.push(
     languages.registerDefinitionProvider(
       constants.languageId,
-      gpplProcedureDefinitionProvider
+      gppProcedureDefinitionProvider
     )
   );
   context.subscriptions.push(
     languages.registerDocumentFormattingEditProvider(
       constants.languageId,
-      gpplDocumentFormattingEditProvider
+      gppDocumentFormattingEditProvider
     )
   );
 }

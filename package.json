@@ -1,6 +1,6 @@
 {
-  "name": "vscode-gppl-support",
-  "displayName": "vscode-gppl-support",
+  "name": "vscode-gpp-support",
+  "displayName": "vscode-gpp-support",
   "description": "Full GPPL language support for VSCode: highlighting, formatting, autocomplete and code snippets.",
   "version": "1.3.2",
   "license": "MIT",
@@ -14,13 +14,13 @@
   },
   "keywords": [
     "gpp",
-    "gppl",
+    "gpp",
     "SolidCAM",
     "syntax",
     "highlighter",
     "formatting"
   ],
-  "icon": "images/logo.png",
+  "icon": "images/new-logo.png",
   "galleryBanner": {
     "color": "#666666",
     "theme": "dark"
@@ -28,11 +28,11 @@
   "markdown": "github",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anzory/vscode-gppl-support.git"
+    "url": "https://github.com/anzory/vscode-gpp-support.git"
   },
-  "homepage": "https://github.com/anzory/vscode-gppl-support",
+  "homepage": "https://github.com/anzory/vscode-gpp-support",
   "bugs": {
-    "url": "https://github.com/anzory/vscode-gppl-support/issues"
+    "url": "https://github.com/anzory/vscode-gpp-support/issues"
   },
   "categories": [
     "Extension Packs",
@@ -42,68 +42,89 @@
     "Formatters"
   ],
   "activationEvents": [
-    "onLanguage:gppl",
-    "onView:gppl.gpplProceduresTree"
+    "onLanguage:gpp",
+    "onView:gpp.ProceduresTree"
   ],
   "main": "./dist/main.js",
   "contributes": {
     "languages": [
       {
-        "id": "gppl",
+        "id": "gpp",
         "aliases": [
-          "GPPL"
+          "GPP"
         ],
         "extensions": [
           ".gpp"
         ],
-        "configuration": "./language/gppl/language.json"
+        "configuration": "./languages/gpp/gpp-language.json"
+      },
+      {
+        "id": "gcode",
+        "aliases": [
+          "GCode"
+        ],
+        "extensions": [
+          ".nc"
+        ],
+        "configuration": "./languages/gcode/gcode-language.json"
       }
     ],
     "grammars": [
       {
-        "language": "gppl",
-        "scopeName": "source.gppl",
-        "path": "./language/gppl/tmLanguage.json"
+        "language": "gpp",
+        "scopeName": "source.gpp",
+        "path": "./languages/gpp/gpp.tmLanguage.json"
+      },
+      {
+        "language": "gcode",
+        "scopeName": "source.gcode",
+        "path": "./languages/gcode/gcode.tmLanguage.json"
       }
     ],
     "snippets": [
       {
-        "language": "gppl",
-        "path": "./language/gppl/snippets.json"
+        "language": "gpp",
+        "path": "./languages/gpp/snippets.json"
       }
     ],
     "configuration": {
       "type": "object",
       "title": "GPPL",
       "properties": {
-        "gppl.files.encoding": {
+        "gpp.files.encoding": {
           "type": "string",
           "default": "windows1251",
           "description": "Default GPPL files encoding",
           "scope": "window"
         },
-        "gppl.editor.defaultFormatter": {
+        "gpp.editor.defaultFormatter": {
           "type": "string",
-          "default": "anzory.vscode-gppl-support",
+          "default": "anzory.vscode-gpp-support",
           "description": "Default GPPL files formatter",
           "scope": "window"
         },
-        "gppl.format.enable": {
+        "gpp.format.enable": {
           "type": "boolean",
           "default": true,
           "description": "Allows you to format GPPL documents",
           "scope": "window"
         },
-        "gppl.format.tabSize": {
+        "gpp.format.tabSize": {
           "type": "number",
           "default": 2,
           "description": "Size of a tab in spaces for the formatter",
           "scope": "window"
         },
-        "gppl.format.insertSpaces": {
+        "gpp.format.insertSpaces": {
           "type": "boolean",
           "default": true,
           "description": "Prefer spaces over tabs",
+          "scope": "window"
+        },
+        "gpp.format.insertSpacesAroundEqualSign": {
+          "type": "boolean",
+          "default": true,
+          "description": "Determines whether spaces should be inserted before and after the `equal` sign",
           "scope": "window"
         }
       }
@@ -111,56 +132,64 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "gppl",
-          "title": "GPPL",
-          "icon": "./images/icon.ico"
+          "id": "gpp",
+          "title": "GPP",
+          "icon": "./images/new-logo.svg",
+          "when": "view == gpp.ProceduresTree"
         }
       ]
     },
     "views": {
-      "gppl": [
+      "gpp": [
         {
-          "id": "gppl.gpplProceduresTree",
+          "id": "gpp.ProceduresTree",
           "name": "Procedures Tree",
           "contextualTitle": "GPPL Procedures Tree",
+          "when": "gppProceduresTreeViewEnabled !== true",
           "type": "tree"
         }
       ]
     },
     "viewsWelcome": [
       {
-        "view": "gppl.gpplProceduresTree",
+        "view": "gpp.ProceduresTree",
         "contents": "GPPL Tree only available when viewing GPPL",
-        "when": "gpplProceduresTreeViewEnabled !== true"
+        "when": "gppProceduresTreeViewEnabled !== true"
       }
     ],
     "menus": {
       "view/title": [
         {
-          "command": "gppl.gpplProceduresTree.RefreshTree",
-          "when": "view == gppl.gpplProceduresTree",
+          "command": "gpp.ProceduresTree.RefreshTree",
+          "when": "view == gpp.ProceduresTree",
           "group": "navigation"
         },
         {
-          "command": "gppl.gpplProceduresTree.SortByAZ",
-          "when": "view == gppl.gpplProceduresTree",
+          "command": "gpp.ProceduresTree.SortByAZ",
+          "when": "view == gpp.ProceduresTree",
           "group": "navigation"
         },
         {
-          "command": "gppl.gpplProceduresTree.SortByZA",
-          "when": "view == gppl.gpplProceduresTree",
+          "command": "gpp.ProceduresTree.SortByZA",
+          "when": "view == gpp.ProceduresTree",
           "group": "navigation"
         },
         {
-          "command": "gppl.gpplProceduresTree.SortByDefault",
-          "when": "view == gppl.gpplProceduresTree",
+          "command": "gpp.ProceduresTree.SortByDefault",
+          "when": "view == gpp.ProceduresTree",
           "group": "navigation"
+        }
+      ],
+      "editor/title/run": [
+        {
+          "command": "gpp.Editor.Format",
+          "when": "editorHasDocumentFormattingProvider"
         }
       ]
     },
     "commands": [
       {
-        "command": "gppl.gpplProceduresTree.RefreshTree",
+        "command": "gpp.ProceduresTree.RefreshTree",
         "title": "Refresh Tree",
         "icon": {
           "light": "images/icons/arrow-clockwise.svg",
@@ -168,11 +197,11 @@
         }
       },
       {
-        "command": "gppl.gpplProceduresTree.Selection",
+        "command": "gpp.ProceduresTree.Selection",
         "title": "Procedure Selection"
       },
       {
-        "command": "gppl.gpplProceduresTree.SortByAZ",
+        "command": "gpp.ProceduresTree.SortByAZ",
         "title": "Sort By A-Z",
         "category": "sorting",
         "icon": {
@@ -181,7 +210,7 @@
         }
       },
       {
-        "command": "gppl.gpplProceduresTree.SortByZA",
+        "command": "gpp.ProceduresTree.SortByZA",
         "title": "Sort By Z-A",
         "category": "sorting",
         "icon": {
@@ -190,12 +219,21 @@
         }
       },
       {
-        "command": "gppl.gpplProceduresTree.SortByDefault",
+        "command": "gpp.ProceduresTree.SortByDefault",
         "title": "Sort By Default",
         "category": "sorting",
         "icon": {
           "light": "images/icons/sort-up-down.svg",
           "dark": "images/icons/sort-up-down-dark.svg"
+        }
+      },
+      {
+        "command": "gpp.Editor.Format",
+        "title": "Format Document",
+        "category": "formatting",
+        "icon": {
+          "light": "images/icons/text-indent-left.svg",
+          "dark": "images/icons/text-indent-left-dark.svg"
         }
       }
     ]
