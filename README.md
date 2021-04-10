@@ -4,12 +4,13 @@ This extension provides Full GPPL language support for VSCode: highlighting, for
 
 ## Features
 
-- Syntax highlighting
+- Syntax highlighting with customization capability from `settings.json` file
 - Simple Document Formatting functionality
 - Procedure tree panel with navigation and sorting capability and auto-refresh the tree
 - Go to Definition functionality for procedures
 - Auto-complete & auto-indentation code
 - New auto-complete code functionality: just highlight the variable name and type the name of function - the variable will be wrapped in the function automatically
+- Full compatibility with `SolidCAM debugger`
 
 ---
 
@@ -57,7 +58,9 @@ In addition, the formatting behavior depends on the following settings:
 
 There are no hard dependencies here, but I highly recommend using:
 
-- nice extension [coenraads.bracket-pair-colorizer-2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
+- very useful extension [coenraads.bracket-pair-colorizer-2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
+
+- just as useful extension [alefragnani.bookmarks](https://marketplace.visualstudio.com/items?itemName=alefragnani.bookmarks)
 
 - [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono?preview.text_type=custom) font Designed by JetBrains, Philipp Nurullin, Konstantin Bulenkov
 
@@ -71,9 +74,13 @@ There are no hard dependencies here, but I highly recommend using:
 
 ## Release Notes
 
-### 1.3.2
+### 1.4.0
 
-- Fixed bug: formatting does not work when capital letters are used
+- Added customization capability of syntax highlighting from `settings.json` file
+
+- Added "`Go to Definition`" functionality for user variables
+
+- Added full compatibility with `SolidCAM debugger`
 
 ---
 

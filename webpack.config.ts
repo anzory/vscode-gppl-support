@@ -1,11 +1,11 @@
 // @ts-ignore
 'use strict';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
-import * as CopyWebpackPlugin from 'copy-webpack-plugin';
 import * as fs from 'fs';
 import { resolve } from 'path';
 import { Compiler, Configuration } from 'webpack';
-// import { JsonMinimizerPlugin } from 'json-minimizer-webpack-plugin';
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+const copyPlugin = require('copy-webpack-plugin');
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const JsonMinimizerPlugin = require('json-minimizer-webpack-plugin');
 
@@ -22,11 +22,11 @@ const config: Configuration = {
     path: resolve(__dirname, 'dist'),
     filename: '[name].js',
     libraryTarget: 'commonjs2',
+    clean: true,
   },
   // devtool: 'nosources-source-map',
   plugins: [
-    new CleanWebpackPlugin(),
-    new CopyWebpackPlugin({
+    new copyPlugin({
       patterns: [
         {
           from: './languages',

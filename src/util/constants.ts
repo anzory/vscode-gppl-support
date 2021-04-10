@@ -30,7 +30,6 @@ export const constants = {
     shortname: gpp.shortName,
   },
   extensionOutputChannelName: gpp.shortName,
-  // iconsPath: join(__dirname, "..", "..", "resources", "icons"),
   urls: {
     changeLog:
       'https://github.com/anzory/vscode-gppl-support/blob/master/CHANGELOG.md',

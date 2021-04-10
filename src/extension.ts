@@ -1,19 +1,29 @@
 'use strict';
-import { commands, ExtensionContext, languages, window } from 'vscode';
+import {
+  commands,
+  ExtensionContext,
+  languages,
+  TextEdit,
+  TextEditor,
+  Uri,
+  window,
+  workspace,
+  WorkspaceEdit,
+} from 'vscode';
 import { gppCompletionItemsProvider } from './providers/GppCompletionItemsProvider';
+import { gppDefinitionProvider } from './providers/GppDefinitionProvider';
 import { gppDocumentFormattingEditProvider } from './providers/GppDocumentFormattingEditProvider';
-import { gppProcedureDefinitionProvider } from './providers/GppProcedureDefinitionProvider';
 import { GppProceduresTreeProvider } from './providers/GppProceduresTreeProvider';
-import { Config } from './util/config';
+import { configuration } from './util/config';
 import { constants } from './util/constants';
 import { StatusBar } from './util/statusBar';
 
 export async function activate(context: ExtensionContext) {
-  Config.configure(context);
+  configuration.configure(context);
   StatusBar.configure(context);
   StatusBar.show();
-  const editor = window.activeTextEditor;
-  const document = editor?.document;
+  const editor: TextEditor | undefined = window.activeTextEditor;
+
   const gppProceduresTreeProvider = new GppProceduresTreeProvider(context);
   window.registerTreeDataProvider(
     constants.proceduresViewId,
@@ -34,12 +44,19 @@ export async function activate(context: ExtensionContext) {
   commands.registerCommand(constants.commands.sortByDefault, () =>
     gppProceduresTreeProvider.sortByDefault()
   );
-  commands.registerCommand(constants.commands.formatDocument, () => {
-    commands.executeCommand(
+  commands.registerCommand(constants.commands.formatDocument, async () => {
+    const docUri: Uri | undefined = editor?.document.uri;
+    const textEdits: TextEdit[] | undefined = await commands.executeCommand(
       'vscode.executeFormatDocumentProvider',
-      editor?.document.uri,
-      { insertSpaces: true, tabSize: 2 }
+      docUri
     );
+    if (textEdits && docUri) {
+      const edit = new WorkspaceEdit();
+      for (const textEdit of textEdits) {
+        edit.replace(docUri, textEdit.range, textEdit.newText);
+      }
+      await workspace.applyEdit(edit);
+    }
   });
   context.subscriptions.push(
     languages.registerCompletionItemProvider(
@@ -50,7 +67,7 @@ export async function activate(context: ExtensionContext) {
   context.subscriptions.push(
     languages.registerDefinitionProvider(
       constants.languageId,
-      gppProcedureDefinitionProvider
+      gppDefinitionProvider
     )
   );
   context.subscriptions.push(

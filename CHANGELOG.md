@@ -73,3 +73,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Fixed
 
 - bug: formatting does not work when capital letters are used
+
+## [1.4.0] - 2021-04-10
+
+### Added
+
+- customization capability of syntax highlighting from `settings.json` file
+
+- "`Go to Definition`" functionality for user variables
+
+- full compatibility with `SolidCAM debugger`

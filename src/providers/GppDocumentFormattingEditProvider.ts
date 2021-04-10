@@ -17,14 +17,14 @@ class GppDocumentFormattingEditProvider
     options: FormattingOptions,
     token: CancellationToken
   ): TextEdit[] {
-    let docLineCount = document.lineCount;
+    let documentLineCount = document.lineCount;
     if (constants.formatEnable) {
       let textEditList: TextEdit[] = [];
-      for (let i = 0; i < docLineCount; i++) {
+      for (let i = 0; i < documentLineCount; i++) {
         textEditList.push(
           new TextEdit(
             document.lineAt(i).range,
-            this.formatWithIndentation(document.lineAt(i).text?.trimLeft())
+            this.formatLineWithIndentation(document.lineAt(i).text?.trimLeft())
           )
         );
       }
@@ -34,7 +34,7 @@ class GppDocumentFormattingEditProvider
       return [];
     }
   }
-  formatWithIndentation(text: string): string {
+  formatLineWithIndentation(text: string): string {
     let _formattedText: string;
     if (text.substr(0, 1) === ';') {
       _formattedText = this.indent.repeat(this.indentLevel) + text;

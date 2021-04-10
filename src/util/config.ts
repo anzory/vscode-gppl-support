@@ -1,5 +1,12 @@
 'use strict';
-import { ConfigurationChangeEvent, ExtensionContext, workspace, WorkspaceConfiguration } from "vscode";
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+import {
+  ConfigurationChangeEvent,
+  ExtensionContext,
+  workspace,
+  WorkspaceConfiguration,
+} from 'vscode';
 import { constants } from './constants';
 
 type IgpplSettings = {
@@ -8,26 +15,25 @@ type IgpplSettings = {
   trAutoRef: boolean;
   statusEnabled: boolean;
 };
-
-
 export class Config {
   private config: WorkspaceConfiguration;
   //private settings: IgpplSettings;
 
-  static configure(context: ExtensionContext) {
+  configure(context: ExtensionContext) {
     context.subscriptions.push(
-      workspace.onDidChangeConfiguration(configuration.onConfigurationChanged, configuration)
+      workspace.onDidChangeConfiguration(
+        configuration.onConfigurationChanged,
+        configuration
+      )
     );
   }
 
-  constructor () {
+  constructor() {
     // Static reference to configuration
     this.config = workspace.getConfiguration(constants.configId);
-
+    this.addColorizationSettings();
     // Initialize
-
   }
-
   private onConfigurationChanged(e: ConfigurationChangeEvent) {
     if (!e.affectsConfiguration(constants.configId)) {
       this.reloadConfig();
@@ -44,12 +50,9 @@ export class Config {
   }
 
   setParam(param: string, value: any, global = true): boolean {
-
     try {
       this.config.update(param, value, global);
-    }
-    catch (err) {
-      console.log('Error updating configuration');
+    } catch (err) {
       return false;
     }
 
@@ -57,9 +60,81 @@ export class Config {
 
     if (this.config !== undefined) {
       return true;
-    } else { return false; }
+    } else {
+      return false;
+    }
   }
 
+  private addColorizationSettings() {
+    let workspaceTokenColorCustomizations = workspace.getConfiguration(
+      'editor.tokenColorCustomizations'
+    );
+    // ===================================================================================
+    let customTokenColorCustomizations: any = {};
+    Object.assign(
+      customTokenColorCustomizations,
+      workspaceTokenColorCustomizations
+    );
+
+    let colorsDefaultDark = JSON.parse(
+      readFileSync(
+        resolve(__dirname, 'languages', 'gpp', 'colorsDefaultDark.json')
+      ).toString()
+    );
+    let colorsDefaultLight = JSON.parse(
+      readFileSync(
+        resolve(__dirname, 'languages', 'gpp', 'colorsDefaultLight.json')
+      ).toString()
+    );
+
+    if (!customTokenColorCustomizations['[Default Dark+]']) {
+      Object.assign(customTokenColorCustomizations, colorsDefaultDark);
+    } else {
+      let wpDarkRules: any[] =
+        customTokenColorCustomizations['[Default Dark+]'].textMateRules;
+      let gppDarkRules: any[] =
+        colorsDefaultDark['[Default Dark+]'].textMateRules;
+
+      gppDarkRules.forEach((set) => {
+        let exist: boolean = false;
+        wpDarkRules.forEach((wpSet) => {
+          exist = set.scope === wpSet.scope ? true : false;
+        });
+
+        if (!exist) {
+          customTokenColorCustomizations['[Default Dark+]'].textMateRules.push(
+            set
+          );
+        }
+      });
+    }
+
+    if (!customTokenColorCustomizations['[Default Light+]']) {
+      Object.assign(customTokenColorCustomizations, colorsDefaultLight);
+    } else {
+      let wpLightRules: any[] =
+        customTokenColorCustomizations['[Default Light+]'].textMateRules;
+      let gppLightRules: any[] =
+        colorsDefaultLight['[Default Light+]'].textMateRules;
+
+      gppLightRules.forEach((set) => {
+        let exist: boolean = false;
+        wpLightRules.forEach((wpSet) => {
+          exist = set.scope === wpSet.scope ? true : false;
+        });
+
+        if (!exist) {
+          customTokenColorCustomizations['[Default Light+]'].textMateRules.push(
+            set
+          );
+        }
+      });
+    }
+
+    workspace
+      .getConfiguration('editor')
+      .update('tokenColorCustomizations', customTokenColorCustomizations, true);
+  }
 }
 
 export const configuration = new Config();

@@ -15,7 +15,10 @@ interface ItemLocation {
 }
 
 class TextParser {
-  getItemLocations(doc: TextDocument, regExp: RegExp): ItemLocation[] {
+  getItemLocations(
+    doc: TextDocument | undefined,
+    regExp: RegExp
+  ): ItemLocation[] {
     const text = doc ? doc.getText() : '';
     if (text === '') {
       return [];
@@ -42,10 +45,10 @@ class TextParser {
     return items;
   }
 
-  getProcedureLocation(doc: TextDocument, position: Position): Location[] {
+  getWordLocations(doc: TextDocument, position: Position): Location[] {
     let locations: Location[] = [];
     let word = doc.getText(doc.getWordRangeAtPosition(position));
-    const regExp: RegExp = new RegExp('^' + word + '\\b', 'gm');
+    const regExp: RegExp = new RegExp('(' + word + '\\b)', 'gm');
 
     this.getItemLocations(doc, regExp)?.forEach((item) => {
       let location: Location = new Location(doc.uri, item.range);
@@ -54,7 +57,6 @@ class TextParser {
 
     return locations;
   }
-
   getProcedureTreeItemList(doc: TextDocument, sorting: Sort): TreeItem[] {
     let _procedures: TreeItem[] = [];
     const regExp: RegExp = /^\@\w+\b/gm;

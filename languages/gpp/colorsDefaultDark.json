@@ -1,0 +1,134 @@
+{
+  "[Default Dark+]": {
+    "textMateRules": [
+      {
+        "name": "GPP digits",
+        "scope": "keyword.control.digits.gpp",
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#B5CEA8"
+        }
+      },
+      {
+        "name": "GPP loop statement",
+        "scope": "keyword.control.loop.statement.gpp",
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#C586C0"
+        }
+      },
+      {
+        "name": "GPP stop statement",
+        "scope": "keyword.control.stop.statement.gpp",
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#ff5b5b"
+        }
+      },
+      {
+        "name": "GPP logical flags",
+        "scope": "keyword.control.logical.flags.gpp",
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#C586C0"
+        }
+      },
+      {
+        "name": "GPP string function",
+        "scope": "keyword.control.string.function.gpp",
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#C586C0"
+        }
+      },
+      {
+        "name": "GPP dialog function",
+        "scope": "keyword.control.dialog.function.gpp",
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#C586C0"
+        }
+      },
+      {
+        "name": "GPP procedures",
+        "scope": "keyword.control.procedures.gpp",
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#DCDCAA"
+        }
+      },
+      {
+        "name": "GPP procedure call",
+        "scope": "keyword.control.procedure.call.gpp",
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#C586C0"
+        }
+      },
+      {
+        "name": "GPP user variable",
+        "scope": "keyword.control.user.variable.gpp",
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#9CDCFE"
+        }
+      },
+      {
+        "name": "GPP system variable",
+        "scope": "keyword.control.system.variable.gpp",
+        "settings": {
+          "fontStyle": "italic",
+          "foreground": "#569CD6"
+        }
+      },
+      {
+        "name": "GPP logical constants",
+        "scope": "keyword.control.logical.constants.gpp",
+        "settings": {
+          "fontStyle": "underline",
+          "foreground": "#569CD6"
+        }
+      },
+      {
+        "name": "GPP variable modifier",
+        "scope": "keyword.control.variable.modifier.gpp",
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#4EC9B0"
+        }
+      },
+      {
+        "name": "GPP logical operators",
+        "scope": "keyword.control.logical.operators.gpp",
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#C586C0"
+        }
+      },
+      {
+        "name": "GPP numeric function",
+        "scope": "keyword.control.numeric.function.gpp",
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#C586C0"
+        }
+      },
+      {
+        "name": "GPP double quoted string",
+        "scope": "string.quoted.double.gpp",
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#CE9178"
+        }
+      },
+      {
+        "name": "GPP comment",
+        "scope": "comment.gpp",
+        "settings": {
+          "fontStyle": "",
+          "foreground": "#6A9955"
+        }
+      }
+    ]
+  }
+}
