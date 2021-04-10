@@ -97,10 +97,10 @@ export class Config {
 
       gppDarkRules.forEach((set) => {
         let exist: boolean = false;
-        wpDarkRules.forEach((wpSet) => {
-          exist = set.scope === wpSet.scope ? true : false;
+        exist = wpDarkRules.some((wpSet) => {
+          return set.scope === wpSet.scope;
         });
-
+        console.log('Dark exist=', exist);
         if (!exist) {
           customTokenColorCustomizations['[Default Dark+]'].textMateRules.push(
             set
@@ -119,10 +119,10 @@ export class Config {
 
       gppLightRules.forEach((set) => {
         let exist: boolean = false;
-        wpLightRules.forEach((wpSet) => {
-          exist = set.scope === wpSet.scope ? true : false;
+        exist = wpLightRules.some((wpSet) => {
+          return set.scope === wpSet.scope;
         });
-
+        console.log('Light exist=', exist);
         if (!exist) {
           customTokenColorCustomizations['[Default Light+]'].textMateRules.push(
             set
