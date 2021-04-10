@@ -74,7 +74,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - bug: formatting does not work when capital letters are used
 
-## [1.4.0] - 2021-04-10
+## [1.4.1] - 2021-04-10
 
 ### Added
 

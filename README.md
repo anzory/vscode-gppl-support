@@ -74,7 +74,7 @@ There are no hard dependencies here, but I highly recommend using:
 
 ## Release Notes
 
-### 1.4.0
+### 1.4.1
 
 - Added customization capability of syntax highlighting from `settings.json` file
 

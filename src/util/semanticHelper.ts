@@ -83,7 +83,6 @@ class SemanticHelper {
       });
     return _items;
   }
-  // =====================================================================================
 
   isThisSystemVariable(name: string): boolean {
     if (this._systemVariables.find((x) => x === name)) {

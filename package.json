@@ -2,7 +2,7 @@
   "name": "vscode-gpp-support",
   "displayName": "Full GPP Language Support",
   "description": "Full GPP language support for VSCode: highlighting, formatting, autocomplete, code snippets and more.",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "license": "MIT",
   "publisher": "anzory",
   "author": "Andrey Zorin",
