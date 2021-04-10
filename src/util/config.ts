@@ -100,7 +100,6 @@ export class Config {
         exist = wpDarkRules.some((wpSet) => {
           return set.scope === wpSet.scope;
         });
-        console.log('Dark exist=', exist);
         if (!exist) {
           customTokenColorCustomizations['[Default Dark+]'].textMateRules.push(
             set
@@ -122,7 +121,6 @@ export class Config {
         exist = wpLightRules.some((wpSet) => {
           return set.scope === wpSet.scope;
         });
-        console.log('Light exist=', exist);
         if (!exist) {
           customTokenColorCustomizations['[Default Light+]'].textMateRules.push(
             set
