@@ -14,6 +14,7 @@ import { gppCompletionItemsProvider } from './providers/GppCompletionItemsProvid
 import { gppDefinitionProvider } from './providers/GppDefinitionProvider';
 import { gppDocumentFormattingEditProvider } from './providers/GppDocumentFormattingEditProvider';
 import { GppProceduresTreeProvider } from './providers/GppProceduresTreeProvider';
+import { gppReferenceProvider } from './providers/GppReferenceProvider';
 import { configuration } from './util/config';
 import { constants } from './util/constants';
 import { StatusBar } from './util/statusBar';
@@ -68,6 +69,12 @@ export async function activate(context: ExtensionContext) {
     languages.registerDefinitionProvider(
       constants.languageId,
       gppDefinitionProvider
+    )
+  );
+  context.subscriptions.push(
+    languages.registerReferenceProvider(
+      constants.languageId,
+      gppReferenceProvider
     )
   );
   context.subscriptions.push(

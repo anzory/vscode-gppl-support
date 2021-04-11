@@ -19,9 +19,12 @@ class GppDefinitionProvider implements DefinitionProvider {
   ): ProviderResult<Definition | DefinitionLink[]> {
     let word = document.getText(document.getWordRangeAtPosition(position));
     let res: Location | undefined;
-    let locations = textParser.getWordLocations(document, position);
+    let locations: Location[];
     if (semanticHelper.isThisUserVariable(word)) {
+      locations = textParser.getWordLocations(document, '\\b' + word);
       res = locations[0];
+    } else {
+      locations = textParser.getWordLocations(document, word);
     }
     locations.forEach((location: Location) => {
       let w = document.getText(location.range);

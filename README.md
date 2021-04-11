@@ -80,6 +80,8 @@ There are no hard dependencies here, but I highly recommend using:
 
 - Added "`Go to Definition`" functionality for user variables
 
+- Added "`Go to References`" functionality for procedures and variables
+
 - Added full compatibility with `SolidCAM debugger`
 
 ---
@@ -88,7 +90,6 @@ There are no hard dependencies here, but I highly recommend using:
 
 - Show hints on hovering
 - Add code and variable highlighting in tracing mode
-- "`Go to Implementation`" functionality for procedures and variables
 
 ---
 

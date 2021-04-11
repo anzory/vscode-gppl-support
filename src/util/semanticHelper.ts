@@ -100,6 +100,13 @@ class SemanticHelper {
       return false;
     }
   }
+
+  isThisProcedureDefinition(name: string): boolean {
+    if (name.includes('@', 0)) {
+    }
+    return false;
+  }
+
   onDocumentChanged(e?: TextDocumentChangeEvent) {
     this.parseUserVariables();
     this.parseSystemVariables();

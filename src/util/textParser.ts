@@ -45,9 +45,8 @@ class TextParser {
     return items;
   }
 
-  getWordLocations(doc: TextDocument, position: Position): Location[] {
+  getWordLocations(doc: TextDocument, word: String): Location[] {
     let locations: Location[] = [];
-    let word = doc.getText(doc.getWordRangeAtPosition(position));
     const regExp: RegExp = new RegExp('(' + word + '\\b)', 'gm');
 
     this.getItemLocations(doc, regExp)?.forEach((item) => {
