@@ -74,22 +74,17 @@ There are no hard dependencies here, but I highly recommend using:
 
 ## Release Notes
 
-### 1.4.1
+### 1.5.0
 
-- Added customization capability of syntax highlighting from `settings.json` file
-
-- Added "`Go to Definition`" functionality for user variables
-
-- Added "`Go to References`" functionality for procedures and variables
-
-- Added full compatibility with `SolidCAM debugger`
+- Added hints on hovering
 
 ---
 
 ## Plan to implement:
 
-- Show hints on hovering
 - Add code and variable highlighting in tracing mode
+
+- Add support for `#region` in the procedures tree
 
 ---
 

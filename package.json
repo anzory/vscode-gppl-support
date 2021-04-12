@@ -2,7 +2,8 @@
   "name": "vscode-gpp-support",
   "displayName": "Full GPP Language Support",
   "description": "Full GPP language support for VSCode: highlighting, formatting, autocomplete, code snippets and more.",
-  "version": "1.4.2",
+  "version": "1.5.0",
+  "preview": true,
   "license": "MIT",
   "publisher": "anzory",
   "author": "Andrey Zorin",
@@ -26,11 +27,11 @@
   "markdown": "github",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anzory/vscode-gpp-support.git"
+    "url": "https://github.com/anzory/vscode-gppl-support.git"
   },
-  "homepage": "https://github.com/anzory/vscode-gpp-support",
+  "homepage": "https://github.com/anzory/vscode-gppl-support",
   "bugs": {
-    "url": "https://github.com/anzory/vscode-gpp-support/issues"
+    "url": "https://github.com/anzory/vscode-gppl-support/issues"
   },
   "categories": [
     "Extension Packs",
@@ -239,8 +240,8 @@
   "scripts": {
     "vsce-package": "npm run vscode:prepublish && cd dist && vsce package",
     "vscode:prepublish": "npm run package",
-    "compile": "webpack --mode=development",
-    "watch": "webpack --watch --mode=development",
+    "compile": "webpack --mode=development --devtool=eval-source-map",
+    "watch": "webpack --watch --mode=development --devtool=eval-source-map",
     "package": "webpack --mode=production",
     "test-compile": "tsc -p ./",
     "test-watch": "tsc -watch -p ./",

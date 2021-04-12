@@ -20,18 +20,22 @@ class GppDefinitionProvider implements DefinitionProvider {
     let word = document.getText(document.getWordRangeAtPosition(position));
     let res: Location | undefined;
     let locations: Location[];
+    locations = textParser.getWordLocations(document, word);
     if (semanticHelper.isThisUserVariable(word)) {
-      locations = textParser.getWordLocations(document, '\\b' + word);
       res = locations[0];
     } else {
-      locations = textParser.getWordLocations(document, word);
+      locations.forEach((location: Location) => {
+        let w = document.getText(location.range);
+        if (
+          semanticHelper.isThisProcedureDeclaration(w) &&
+          location.range.start.character === 0
+        ) {
+          res = location;
+        } else {
+          res = undefined;
+        }
+      });
     }
-    locations.forEach((location: Location) => {
-      let w = document.getText(location.range);
-      if (w.includes('@', 0) && location.range.start.character === 0) {
-        res = location;
-      }
-    });
     return Promise.resolve(res);
   }
 }

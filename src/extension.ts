@@ -13,6 +13,7 @@ import {
 import { gppCompletionItemsProvider } from './providers/GppCompletionItemsProvider';
 import { gppDefinitionProvider } from './providers/GppDefinitionProvider';
 import { gppDocumentFormattingEditProvider } from './providers/GppDocumentFormattingEditProvider';
+import { gppHoverProvider } from './providers/GppHoverProvider';
 import { GppProceduresTreeProvider } from './providers/GppProceduresTreeProvider';
 import { gppReferenceProvider } from './providers/GppReferenceProvider';
 import { configuration } from './util/config';
@@ -26,10 +27,6 @@ export async function activate(context: ExtensionContext) {
   const editor: TextEditor | undefined = window.activeTextEditor;
 
   const gppProceduresTreeProvider = new GppProceduresTreeProvider(context);
-  window.registerTreeDataProvider(
-    constants.proceduresViewId,
-    gppProceduresTreeProvider
-  );
   commands.registerCommand(constants.commands.refreshTree, () => {
     gppProceduresTreeProvider.refresh();
   });
@@ -60,6 +57,12 @@ export async function activate(context: ExtensionContext) {
     }
   });
   context.subscriptions.push(
+    window.registerTreeDataProvider(
+      constants.proceduresViewId,
+      gppProceduresTreeProvider
+    )
+  );
+  context.subscriptions.push(
     languages.registerCompletionItemProvider(
       constants.languageId,
       gppCompletionItemsProvider
@@ -76,6 +79,9 @@ export async function activate(context: ExtensionContext) {
       constants.languageId,
       gppReferenceProvider
     )
+  );
+  context.subscriptions.push(
+    languages.registerHoverProvider(constants.languageId, gppHoverProvider)
   );
   context.subscriptions.push(
     languages.registerDocumentFormattingEditProvider(

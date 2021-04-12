@@ -25,10 +25,11 @@ class GppReferenceProvider implements ReferenceProvider {
     if (semanticHelper.isThisUserVariable(word)) {
       locations = textParser.getWordLocations(document, '\\b' + word);
       res = locations;
+    } else {
     }
 
-    if (word.includes('@', 0)) {
-      locations = textParser.getWordLocations(document, word);
+    if (semanticHelper.isThisProcedureDeclaration(word)) {
+      locations = textParser.getWordLocations(document, '\\b' + word);
       res = locations;
     }
     return Promise.resolve(res);

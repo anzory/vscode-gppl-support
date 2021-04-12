@@ -6,11 +6,13 @@ import {
   ExtensionContext,
   Range,
   Selection,
+  TextDocument,
   TextDocumentChangeEvent,
   TextEditor,
   TextEditorRevealType,
   TreeDataProvider,
   TreeItem,
+  TreeItemCollapsibleState,
   window,
   workspace,
 } from 'vscode';
@@ -76,7 +78,7 @@ export class GppProceduresTreeProvider implements TreeDataProvider<TreeItem> {
   }
   getChildren(element?: TreeItem): TreeItem[] {
     if (this.editor && this.editor.document) {
-      this.tree = textParser.getProcedureTreeItemList(
+      this.tree = this.getProcedureTreeItemList(
         this.editor.document,
         this.sorting
       );
@@ -114,5 +116,34 @@ export class GppProceduresTreeProvider implements TreeDataProvider<TreeItem> {
   sortByDefault() {
     this.sorting = Sort.byDefault;
     this.refresh();
+  }
+  getProcedureTreeItemList(doc: TextDocument, sorting: Sort): TreeItem[] {
+    let _procedures: TreeItem[] = [];
+    const regExp: RegExp = /(?<=^[\s?]+)\@\w+/gm;
+    textParser.getRegExpLocations(doc, regExp).forEach((item) => {
+      let treeItem: TreeItem = new TreeItem(
+        doc.getText(item.range),
+        TreeItemCollapsibleState.None
+      );
+      treeItem.command = {
+        command: constants.commands.procedureSelection,
+        title: '',
+        arguments: [item.range],
+      };
+      _procedures.push(treeItem);
+    });
+
+    _procedures.sort((a: TreeItem, b: TreeItem) => {
+      let labelA = a.label ? a.label : '';
+      let labelB = b.label ? b.label : '';
+      if (labelA > labelB) {
+        return sorting;
+      }
+      if (labelA < labelB) {
+        return -sorting;
+      }
+      return 0;
+    });
+    return _procedures;
   }
 }

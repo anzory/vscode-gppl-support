@@ -12,7 +12,7 @@ const JsonMinimizerPlugin = require('json-minimizer-webpack-plugin');
 let dist = 'dist';
 const config: Configuration = {
   target: 'node', // vscode extensions run in a Node.js-context 📖 -> https://webpack.js.org/configuration/node/
-  mode: 'none', // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
+  // mode: 'none', // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
 
   entry: {
     main: './src/extension.ts',
@@ -81,7 +81,7 @@ const config: Configuration = {
     minimizer: [
       // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
       `...`,
-      new JsonMinimizerPlugin(),
+      // new JsonMinimizerPlugin(),
     ],
   },
   externals: {

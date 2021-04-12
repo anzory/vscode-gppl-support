@@ -85,3 +85,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - "`Go to References`" functionality for procedures and variables
 
 - full compatibility with `SolidCAM debugger`
+
+## [1.5.0] - 2021-04-13
+
+### Added
+
+- hints on hovering
