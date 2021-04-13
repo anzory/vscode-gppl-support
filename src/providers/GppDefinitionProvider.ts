@@ -18,21 +18,16 @@ class GppDefinitionProvider implements DefinitionProvider {
     token: CancellationToken
   ): ProviderResult<Definition | DefinitionLink[]> {
     let word = document.getText(document.getWordRangeAtPosition(position));
-    let res: Location | undefined;
+    let res: Location | undefined = undefined;
     let locations: Location[];
-    locations = textParser.getWordLocations(document, word);
     if (semanticHelper.isThisUserVariable(word)) {
+      locations = textParser.getWordLocations(document, '\\b' + word);
       res = locations[0];
-    } else {
+    } else if (semanticHelper.isThisProcedureDeclaration(word)) {
+      locations = textParser.getWordLocations(document, word);
       locations.forEach((location: Location) => {
-        let w = document.getText(location.range);
-        if (
-          semanticHelper.isThisProcedureDeclaration(w) &&
-          location.range.start.character === 0
-        ) {
+        if (location.range.start.character === 0) {
           res = location;
-        } else {
-          res = undefined;
         }
       });
     }

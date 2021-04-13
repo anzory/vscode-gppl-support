@@ -31,8 +31,13 @@ class GppHoverProvider implements HoverProvider {
           'gpp'
         );
       }
+      if (gppVar?.references) {
+        hoverContent.appendMarkdown(
+          '\n---' + '\nFind `' + gppVar.references.length + '` references'
+        );
+      }
       if (gppVar?.info) {
-        hoverContent.appendMarkdown('Info: ' + gppVar.info);
+        hoverContent.appendMarkdown('\n\n--- \nInfo: ' + gppVar.info);
       }
     }
     if (semanticHelper.isThisLocalUserVariable(word)) {
@@ -48,8 +53,13 @@ class GppHoverProvider implements HoverProvider {
           'gpp'
         );
       }
+      if (gppVar?.references) {
+        hoverContent.appendMarkdown(
+          '\n---' + '\nFind `' + gppVar.references.length + '` references'
+        );
+      }
       if (gppVar?.info) {
-        hoverContent.appendMarkdown('Info: ' + gppVar.info);
+        hoverContent.appendMarkdown('\n\n--- \nInfo: ' + gppVar.info);
       }
     }
     if (semanticHelper.isThisSystemVariable(word)) {

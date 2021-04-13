@@ -17,7 +17,7 @@ class GppReferenceProvider implements ReferenceProvider {
     context: ReferenceContext,
     token: CancellationToken
   ): ProviderResult<Location[]> {
-    let res: Location[] | undefined;
+    let res: Location[] | undefined = undefined;
 
     let wordRange = document.getWordRangeAtPosition(position);
     let word = document.getText(wordRange);
@@ -25,11 +25,8 @@ class GppReferenceProvider implements ReferenceProvider {
     if (semanticHelper.isThisUserVariable(word)) {
       locations = textParser.getWordLocations(document, '\\b' + word);
       res = locations;
-    } else {
-    }
-
-    if (semanticHelper.isThisProcedureDeclaration(word)) {
-      locations = textParser.getWordLocations(document, '\\b' + word);
+    } else if (semanticHelper.isThisProcedureDeclaration(word)) {
+      locations = textParser.getWordLocations(document, /*'\\b' +*/ word);
       res = locations;
     }
     return Promise.resolve(res);
