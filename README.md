@@ -7,8 +7,10 @@ This extension provides Full GPPL language support for VSCode: highlighting, for
 - Syntax highlighting with customization capability from `settings.json` file
 - Simple Document Formatting functionality
 - Procedure tree panel with navigation and sorting capability and auto-refresh the tree
-- Go to Definition functionality for procedures
+- Go to Definition functionality for procedures and variables
+- Go to References functionality for procedures and user variables
 - Auto-complete & auto-indentation code
+- Shown hints when hovering
 - New auto-complete code functionality: just highlight the variable name and type the name of function - the variable will be wrapped in the function automatically
 - Full compatibility with `SolidCAM debugger`
 
@@ -74,7 +76,7 @@ There are no hard dependencies here, but I highly recommend using:
 
 ## Release Notes
 
-### 1.5.0
+### 1.5.2
 
 - Added hints on hovering
 

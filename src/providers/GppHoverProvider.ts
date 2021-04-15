@@ -32,8 +32,10 @@ class GppHoverProvider implements HoverProvider {
         );
       }
       if (gppVar?.references) {
+        let rf: string;
+        rf = gppVar.references.length > 1 ? 'references' : 'reference';
         hoverContent.appendMarkdown(
-          '\n---' + '\nFind `' + gppVar.references.length + '` references'
+          '\n---' + '\nFound `' + gppVar.references.length + '` ' + rf
         );
       }
       if (gppVar?.info) {
