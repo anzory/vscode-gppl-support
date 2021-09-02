@@ -62,7 +62,7 @@
         },
         {
           "name": "keyword.control.numeric.function.gpp",
-          "match": "\\b(abs|acos|adims|alen|ang|asin|asize|atan|atan2|cos|dist|exp|frac|int|log|log10|mod|norm360|pow|round|round2val|sign|sin|sqrt|square|tan|todeg|torad)\\b",
+          "match": "\\b(abs|acos|adims|alen|ang|asin|asize|atan|atan2|cos|dist|exp|frac|int|log|log10|mod|norm360|pow|round|round2val|sign|sin|sqrt|square|tan|todeg|torad|trace)\\b",
           "comment": "Define GPPL Numeric Functions"
         },
         {

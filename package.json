@@ -2,7 +2,7 @@
   "name": "vscode-gpp-support",
   "displayName": "SolidCAM GPP Language Support",
   "description": "Full SolidCAM GPP language support for VSCode: highlighting, formatting, autocomplete, code snippets and more.",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "preview": false,
   "license": "MIT",
   "publisher": "anzory",

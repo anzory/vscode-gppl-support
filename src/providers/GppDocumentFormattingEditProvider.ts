@@ -1,14 +1,7 @@
-import {
-  CancellationToken,
-  DocumentFormattingEditProvider,
-  FormattingOptions,
-  TextDocument,
-  TextEdit,
-} from 'vscode';
+import { CancellationToken, DocumentFormattingEditProvider, FormattingOptions, TextDocument, TextEdit } from 'vscode';
 import { constants } from '../util/constants';
 
-class GppDocumentFormattingEditProvider
-  implements DocumentFormattingEditProvider {
+class GppDocumentFormattingEditProvider implements DocumentFormattingEditProvider {
   indentLevel: number = 0;
   indent: string = this.getIndentLetter();
 
@@ -22,10 +15,7 @@ class GppDocumentFormattingEditProvider
       let textEditList: TextEdit[] = [];
       for (let i = 0; i < documentLineCount; i++) {
         textEditList.push(
-          new TextEdit(
-            document.lineAt(i).range,
-            this.formatLineWithIndentation(document.lineAt(i).text?.trimLeft())
-          )
+          new TextEdit(document.lineAt(i).range, this.formatLineWithIndentation(document.lineAt(i).text?.trimLeft()))
         );
       }
       this.indentLevel = 0;

@@ -1,12 +1,6 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import {
-  Location,
-  TextDocumentChangeEvent,
-  TextEditor,
-  window,
-  workspace,
-} from 'vscode';
+import { Location, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
 import { textParser } from './textParser';
 
 export interface IGppVariable {
@@ -93,9 +87,7 @@ class SemanticHelper {
 
   private parseSystemVariables() {
     this._systemVariables = JSON.parse(
-      readFileSync(
-        resolve(__dirname, 'languages', 'gpp', 'gpp.tmLanguage.json')
-      ).toString()
+      readFileSync(resolve(__dirname, 'languages', 'gpp', 'gpp.tmLanguage.json')).toString()
     )
       .repository.keywords.patterns[12].match.replace('(?i)\\b(', '')
       .replace(')\\b', '')
@@ -105,10 +97,7 @@ class SemanticHelper {
         name: sv,
         scope: 'global',
         type: '',
-        references: textParser.getWordLocations(
-          this.editor?.document,
-          '\\b' + sv
-        ),
+        references: textParser.getWordLocations(this.editor?.document, '\\b' + sv),
         info: '',
       });
     });
@@ -120,13 +109,15 @@ class SemanticHelper {
   }
 
   private parseUserVariables() {
+    this._globalUserVariables = [];
+    this._globalGppUserVariables = [];
+    this._localUserVariables = [];
+    this._localGppUserVariables = [];
+
     this.editor = window.activeTextEditor;
     let doc = this.editor?.document;
     if (doc) {
-      let locations: Location[] = textParser.getRegExpLocations(
-        doc,
-        /\bglobal\b.*$/gm
-      );
+      let locations: Location[] = textParser.getRegExpLocations(doc, /\bglobal\b.*$/gm);
       locations.forEach((location) => {
         let line = doc?.getText(location.range);
         if (line) {
@@ -146,10 +137,10 @@ class SemanticHelper {
           });
         }
       });
-      locations = textParser.getRegExpLocations(doc, /\blocal\b.*$/gm);
 
       //
 
+      locations = textParser.getRegExpLocations(doc, /\blocal\b.*$/gm);
       locations.forEach((location) => {
         let line = doc?.getText(location.range);
         if (line) {
@@ -159,6 +150,7 @@ class SemanticHelper {
           let gppType = line.split(' ')[1];
           this.parseLine(line).forEach((ulv) => {
             this._localUserVariables.push(ulv);
+
             this._localGppUserVariables.push({
               name: ulv,
               scope: gppScope,
@@ -182,10 +174,10 @@ class SemanticHelper {
       .replace(/\binteger\b/g, '')
       .replace(/\bnumeric\b/g, '')
       .trim()
-      .replace(/\s\s/g, ' ')
-      .replace(/\s\s/g, ' ')
-      .replace(/\s\s/g, ' ')
-      .replace(/\s\s/g, ' ')
+      .replace(/[\s]{2,}/g, ' ')
+      // .replace(/\s\s/g, ' ')
+      // .replace(/\s\s/g, ' ')
+      // .replace(/\s\s/g, ' ')
       .split(/\s/g)
       .forEach((uv) => {
         if (uv && !this.isThisSystemVariable(uv)) {
@@ -200,9 +192,7 @@ class SemanticHelper {
   }
 
   isThisUserVariable(name: string): boolean {
-    return (
-      this.isThisLocalUserVariable(name) || this.isThisGlobalUserVariable(name)
-    );
+    return this.isThisLocalUserVariable(name) || this.isThisGlobalUserVariable(name);
   }
 
   isThisGlobalUserVariable(name: string): boolean {
@@ -221,6 +211,7 @@ class SemanticHelper {
   onDocumentChanged(e?: TextDocumentChangeEvent) {
     this.parseUserVariables();
     this.parseSystemVariables();
+
     //
     //
   }

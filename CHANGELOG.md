@@ -91,3 +91,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 
 - hints on hovering
+
+## [1.5.3] - 2021-09-02
+
+### Fixed
+
+- bug: The information section is not updated when cursor is pointing

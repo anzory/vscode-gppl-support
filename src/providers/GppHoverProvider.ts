@@ -5,38 +5,30 @@ import {
   MarkdownString,
   Position,
   ProviderResult,
+  Range,
   TextDocument,
 } from 'vscode';
-import { semanticHelper } from '../util/semanticHelper';
+import { IGppVariable, semanticHelper } from '../util/semanticHelper';
 
 class GppHoverProvider implements HoverProvider {
-  provideHover(
-    document: TextDocument,
-    position: Position,
-    token: CancellationToken
-  ): ProviderResult<Hover> {
+  constructor() {}
+  provideHover(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<Hover> {
     let hoverContent: MarkdownString = new MarkdownString();
-    let wordRange = document.getWordRangeAtPosition(position);
-    let word = document.getText(wordRange);
+    let wordRange: Range | undefined = document.getWordRangeAtPosition(position);
+    let word: string = document.getText(wordRange);
+
     if (semanticHelper.isThisGlobalUserVariable(word)) {
-      let gppVar = semanticHelper.getGlobalGppUserVariable(word);
+      let gppVar: IGppVariable | undefined = semanticHelper.getGlobalGppUserVariable(word);
       if (gppVar) {
         hoverContent.appendCodeblock(
-          gppVar.scope +
-            ' ' +
-            gppVar.type +
-            ' ' +
-            gppVar.name +
-            ' ; (user variable)',
+          gppVar.scope + ' ' + gppVar.type + ' ' + gppVar.name + ' ; (user variable)',
           'gpp'
         );
       }
       if (gppVar?.references) {
         let rf: string;
         rf = gppVar.references.length > 1 ? 'references' : 'reference';
-        hoverContent.appendMarkdown(
-          '\n---' + '\nFound `' + gppVar.references.length + '` ' + rf
-        );
+        hoverContent.appendMarkdown('\n---' + '\nFound `' + gppVar.references.length + '` ' + rf);
       }
       if (gppVar?.info) {
         hoverContent.appendMarkdown('\n\n--- \nInfo: ' + gppVar.info);
@@ -46,19 +38,12 @@ class GppHoverProvider implements HoverProvider {
       let gppVar = semanticHelper.getLocalGppUserVariable(word);
       if (gppVar) {
         hoverContent.appendCodeblock(
-          gppVar.scope +
-            ' ' +
-            gppVar.type +
-            ' ' +
-            gppVar.name +
-            ' ; (user variable)',
+          gppVar.scope + ' ' + gppVar.type + ' ' + gppVar.name + ' ; (user variable)',
           'gpp'
         );
       }
       if (gppVar?.references) {
-        hoverContent.appendMarkdown(
-          '\n---' + '\nFind `' + gppVar.references.length + '` references'
-        );
+        hoverContent.appendMarkdown('\n---' + '\nFind `' + gppVar.references.length + '` references');
       }
       if (gppVar?.info) {
         hoverContent.appendMarkdown('\n\n--- \nInfo: ' + gppVar.info);
@@ -74,4 +59,4 @@ class GppHoverProvider implements HoverProvider {
   }
 }
 
-export const gppHoverProvider = new GppHoverProvider();
+export const gppHoverProvider: GppHoverProvider = new GppHoverProvider();

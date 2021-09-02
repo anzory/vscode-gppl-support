@@ -95,18 +95,11 @@ const config: Configuration = {
 module.exports = config;
 //========================================================
 function writeDistPackageJson(): void {
-  let distPackageJson = JSON.parse(
-    fs.readFileSync('./package.json').toString()
-  );
+  let distPackageJson = JSON.parse(fs.readFileSync('./package.json').toString());
   delete distPackageJson.scripts;
   delete distPackageJson.devDependencies;
   distPackageJson.publisher = 'anzory';
   distPackageJson.name = 'vscode-gppl-support';
   distPackageJson.main = './main';
-  fs.writeFile(
-    resolve(__dirname, dist, 'package.json'),
-    JSON.stringify(distPackageJson, null, ' '),
-    'utf8',
-    () => {}
-  );
+  fs.writeFile(resolve(__dirname, dist, 'package.json'), JSON.stringify(distPackageJson, null, ' '), 'utf8', () => {});
 }

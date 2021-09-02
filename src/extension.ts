@@ -30,18 +30,10 @@ export async function activate(context: ExtensionContext) {
   commands.registerCommand(constants.commands.refreshTree, () => {
     gppProceduresTreeProvider.refresh();
   });
-  commands.registerCommand(constants.commands.procedureSelection, (range) =>
-    gppProceduresTreeProvider.select(range)
-  );
-  commands.registerCommand(constants.commands.sortByAZ, () =>
-    gppProceduresTreeProvider.sortByAZ()
-  );
-  commands.registerCommand(constants.commands.sortByZA, () =>
-    gppProceduresTreeProvider.sortByZA()
-  );
-  commands.registerCommand(constants.commands.sortByDefault, () =>
-    gppProceduresTreeProvider.sortByDefault()
-  );
+  commands.registerCommand(constants.commands.procedureSelection, (range) => gppProceduresTreeProvider.select(range));
+  commands.registerCommand(constants.commands.sortByAZ, () => gppProceduresTreeProvider.sortByAZ());
+  commands.registerCommand(constants.commands.sortByZA, () => gppProceduresTreeProvider.sortByZA());
+  commands.registerCommand(constants.commands.sortByDefault, () => gppProceduresTreeProvider.sortByDefault());
   commands.registerCommand(constants.commands.formatDocument, async () => {
     const docUri: Uri | undefined = editor?.document.uri;
     const textEdits: TextEdit[] | undefined = await commands.executeCommand(
@@ -56,38 +48,15 @@ export async function activate(context: ExtensionContext) {
       await workspace.applyEdit(edit);
     }
   });
+  context.subscriptions.push(window.registerTreeDataProvider(constants.proceduresViewId, gppProceduresTreeProvider));
   context.subscriptions.push(
-    window.registerTreeDataProvider(
-      constants.proceduresViewId,
-      gppProceduresTreeProvider
-    )
+    languages.registerCompletionItemProvider(constants.languageId, gppCompletionItemsProvider)
   );
+  context.subscriptions.push(languages.registerDefinitionProvider(constants.languageId, gppDefinitionProvider));
+  context.subscriptions.push(languages.registerReferenceProvider(constants.languageId, gppReferenceProvider));
+  context.subscriptions.push(languages.registerHoverProvider(constants.languageId, gppHoverProvider));
   context.subscriptions.push(
-    languages.registerCompletionItemProvider(
-      constants.languageId,
-      gppCompletionItemsProvider
-    )
-  );
-  context.subscriptions.push(
-    languages.registerDefinitionProvider(
-      constants.languageId,
-      gppDefinitionProvider
-    )
-  );
-  context.subscriptions.push(
-    languages.registerReferenceProvider(
-      constants.languageId,
-      gppReferenceProvider
-    )
-  );
-  context.subscriptions.push(
-    languages.registerHoverProvider(constants.languageId, gppHoverProvider)
-  );
-  context.subscriptions.push(
-    languages.registerDocumentFormattingEditProvider(
-      constants.languageId,
-      gppDocumentFormattingEditProvider
-    )
+    languages.registerDocumentFormattingEditProvider(constants.languageId, gppDocumentFormattingEditProvider)
   );
 }
 

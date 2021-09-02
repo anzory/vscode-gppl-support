@@ -27,11 +27,8 @@ export enum Sort {
 }
 
 export class GppProceduresTreeProvider implements TreeDataProvider<TreeItem> {
-  private _onDidChangeTreeData: EventEmitter<
-    TreeItem | undefined
-  > = new EventEmitter<TreeItem | undefined>();
-  readonly onDidChangeTreeData: Event<TreeItem | undefined> = this
-    ._onDidChangeTreeData.event;
+  private _onDidChangeTreeData: EventEmitter<TreeItem | undefined> = new EventEmitter<TreeItem | undefined>();
+  readonly onDidChangeTreeData: Event<TreeItem | undefined> = this._onDidChangeTreeData.event;
   private editor: TextEditor | undefined;
   private tree: TreeItem[];
   private sorting: Sort;
@@ -48,9 +45,7 @@ export class GppProceduresTreeProvider implements TreeDataProvider<TreeItem> {
   private onActiveEditorChanged(): void {
     StatusBar.update('Tree needs to be updated');
     if (window.activeTextEditor) {
-      if (
-        window.activeTextEditor.document.languageId === constants.languageId
-      ) {
+      if (window.activeTextEditor.document.languageId === constants.languageId) {
         this.refresh(true);
       } else {
         this.refresh(false);
@@ -63,9 +58,7 @@ export class GppProceduresTreeProvider implements TreeDataProvider<TreeItem> {
   private onDocumentChanged(changeEvent: TextDocumentChangeEvent): void {
     StatusBar.update('Tree needs to be updated');
     if (window.activeTextEditor) {
-      if (
-        window.activeTextEditor.document.languageId === constants.languageId
-      ) {
+      if (window.activeTextEditor.document.languageId === constants.languageId) {
         this.refresh(true);
       } else {
         this.refresh(false);
@@ -78,10 +71,7 @@ export class GppProceduresTreeProvider implements TreeDataProvider<TreeItem> {
   }
   getChildren(element?: TreeItem): TreeItem[] {
     if (this.editor && this.editor.document) {
-      this.tree = this.getProcedureTreeItemList(
-        this.editor.document,
-        this.sorting
-      );
+      this.tree = this.getProcedureTreeItemList(this.editor.document, this.sorting);
       return this.tree;
     } else {
       return [];
@@ -98,11 +88,7 @@ export class GppProceduresTreeProvider implements TreeDataProvider<TreeItem> {
     StatusBar.update('Tree successfully updated');
     this.editor = window.activeTextEditor;
     if (viewEnable) {
-      commands.executeCommand(
-        'setContext',
-        'gppProceduresTreeViewEnabled',
-        viewEnable
-      );
+      commands.executeCommand('setContext', 'gppProceduresTreeViewEnabled', viewEnable);
     }
   }
   sortByAZ() {
@@ -121,10 +107,7 @@ export class GppProceduresTreeProvider implements TreeDataProvider<TreeItem> {
     let _procedures: TreeItem[] = [];
     const regExp: RegExp = /(?<=^[\s?]+)\@\w+/gm;
     textParser.getRegExpLocations(doc, regExp).forEach((item) => {
-      let treeItem: TreeItem = new TreeItem(
-        doc.getText(item.range),
-        TreeItemCollapsibleState.None
-      );
+      let treeItem: TreeItem = new TreeItem(doc.getText(item.range), TreeItemCollapsibleState.None);
       treeItem.command = {
         command: constants.commands.procedureSelection,
         title: '',
