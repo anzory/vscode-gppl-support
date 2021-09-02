@@ -36,6 +36,12 @@ Sidebar with procedures tree view & sorting capability:
 
 ---
 
+Displays information about variables when the cursor is pointing
+
+![Displays information](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/info-when-hover.gif?raw=true)
+
+---
+
 ## Extension Settings
 
 There are a few settings for this extension:
@@ -76,9 +82,9 @@ There are no hard dependencies here, but I highly recommend using:
 
 ## Release Notes
 
-### 1.5.2
+### 1.5.3
 
-- Added hints on hovering
+- Fixeed bug: The information section is not updated when cursor is pointing
 
 ---
 
