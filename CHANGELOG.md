@@ -97,3 +97,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Fixed
 
 - bug: The information section is not updated when cursor is pointing
+
+## [1.5.5] - 2021-09-04
+
+### Added
+
+- The list of SolidCAM GPPL global system variables has been updated and completed to highlight.

@@ -22,6 +22,7 @@ class SemanticHelper {
 
   constructor() {
     workspace.onDidChangeTextDocument((e) => this.onDocumentChanged(e));
+    window.onDidChangeActiveTextEditor(() => this.onDocumentChanged());
     this.editor = window.activeTextEditor;
     this.onDocumentChanged(undefined);
   }
@@ -98,14 +99,9 @@ class SemanticHelper {
         scope: 'global',
         type: '',
         references: textParser.getWordLocations(this.editor?.document, '\\b' + sv),
-        info: '',
+        info: undefined,
       });
     });
-  }
-
-  private getInfo(line: string): string {
-    let gppInfo = line.split(';');
-    return gppInfo.slice(1).join(';');
   }
 
   private parseUserVariables() {
@@ -121,11 +117,11 @@ class SemanticHelper {
       locations.forEach((location) => {
         let line = doc?.getText(location.range);
         if (line) {
-          line.trim().replaceAll(/\s\s/g, ' ');
+          line.trim().replaceAll(/\s{2,}/g, ' ');
           let gppInfo = this.getInfo(line);
           let gppScope = line.trim().split(' ')[0];
           let gppType = line.trim().split(' ')[1];
-          this.parseLine(line).forEach((ugv) => {
+          this.getVariables(line).forEach((ugv) => {
             this._globalUserVariables.push(ugv);
             this._globalGppUserVariables.push({
               name: ugv,
@@ -144,13 +140,12 @@ class SemanticHelper {
       locations.forEach((location) => {
         let line = doc?.getText(location.range);
         if (line) {
-          line.trim();
+          line.trim().replaceAll(/\s{2,}/g, ' ');
           let gppInfo = this.getInfo(line);
           let gppScope = line.split(' ')[0];
           let gppType = line.split(' ')[1];
-          this.parseLine(line).forEach((ulv) => {
+          this.getVariables(line).forEach((ulv) => {
             this._localUserVariables.push(ulv);
-
             this._localGppUserVariables.push({
               name: ulv,
               scope: gppScope,
@@ -164,21 +159,27 @@ class SemanticHelper {
     }
   }
 
-  private parseLine(line: string): string[] {
+  private getInfo(line: string): string | undefined {
+    if (/\;/.test(line)) {
+      return line.replace(/^([^\;]+);\s{0,}/g, '');
+    } else {
+      return undefined;
+    }
+  }
+
+  private getVariables(line: string): string[] {
     let _items: string[] = [];
     line
+      .replace(/\;.*/g, '')
       .replace(/\bglobal\b/g, '')
       .replace(/\blocal\b/g, '')
       .replace(/\bstring\b/g, '')
       .replace(/\blogical\b/g, '')
       .replace(/\binteger\b/g, '')
       .replace(/\bnumeric\b/g, '')
+      .replace(/\s{2,}/g, ' ')
       .trim()
-      .replace(/[\s]{2,}/g, ' ')
-      // .replace(/\s\s/g, ' ')
-      // .replace(/\s\s/g, ' ')
-      // .replace(/\s\s/g, ' ')
-      .split(/\s/g)
+      .split(' ')
       .forEach((uv) => {
         if (uv && !this.isThisSystemVariable(uv)) {
           _items.push(uv);

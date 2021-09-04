@@ -3,7 +3,7 @@ import { Location, Position, Range, TextDocument } from 'vscode';
 class TextParser {
   getLine() {}
 
-  getWordLocations(doc: TextDocument | undefined, word: String): Location[] {
+  getWordLocations(doc: TextDocument | undefined, word: string): Location[] {
     const regExp: RegExp = new RegExp('(' + word + '\\b)', 'gm');
     return this.getRegExpLocations(doc, regExp);
   }

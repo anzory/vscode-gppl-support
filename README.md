@@ -1,6 +1,6 @@
-# Full GPPL language support for VSCode (formatting, highlighting and more...)
+# Full SolidCAM GPP Language support for VSCode (formatting, highlighting and more...)
 
-This extension provides Full GPPL language support for VSCode: highlighting, formatting, autocomplete and code snippets.
+This extension provides Full GPPL language support for VSCode: highlighting, formatting, autocomplete, code snippets, sidebar with procedures tree view & sorting capability.
 
 ## Features
 
@@ -66,25 +66,29 @@ In addition, the formatting behavior depends on the following settings:
 
 There are no hard dependencies here, but I highly recommend using:
 
-- very useful extension [coenraads.bracket-pair-colorizer-2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
+- very useful extension [coenraads.bracket-pair-colorizer-2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2) to make your pair brackets look better.
 
-- just as useful extension [alefragnani.bookmarks](https://marketplace.visualstudio.com/items?itemName=alefragnani.bookmarks)
+- just as useful extension [alefragnani.bookmarks](https://marketplace.visualstudio.com/items?itemName=alefragnani.bookmarks).
 
-- [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono?preview.text_type=custom) font Designed by JetBrains, Philipp Nurullin, Konstantin Bulenkov
+- [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono?preview.text_type=custom) font Designed by JetBrains, Philipp Nurullin, Konstantin Bulenkov.
+
+- [Color Highlight](https://marketplace.visualstudio.com/items?itemName=naumovs.color-highlight) if you want to set up a different syntax highlighting.
 
 ---
 
 ## Known Issues
 
-- There are no known issues with this extension.
+There are no known issues with this extension.
+
+See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gppl-support/issues/new/choose).
 
 ---
 
 ## Release Notes
 
-### 1.5.3
+### 1.5.5
 
-- Fixeed bug: The information section is not updated when cursor is pointing
+- The list of SolidCAM GPPL global system variables has been updated and completed to highlight.
 
 ---
 
