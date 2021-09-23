@@ -10,7 +10,7 @@ import {
 import { semanticHelper } from '../util/semanticHelper';
 import { textParser } from '../util/textParser';
 
-class GppReferenceProvider implements ReferenceProvider {
+class GpplReferenceProvider implements ReferenceProvider {
   provideReferences(
     document: TextDocument,
     position: Position,
@@ -33,4 +33,4 @@ class GppReferenceProvider implements ReferenceProvider {
   }
 }
 
-export const gppReferenceProvider = new GppReferenceProvider();
+export const gpplReferenceProvider = new GpplReferenceProvider();

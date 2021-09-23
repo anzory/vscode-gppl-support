@@ -1,8 +1,15 @@
-import { CancellationToken, DocumentFormattingEditProvider, FormattingOptions, TextDocument, TextEdit } from 'vscode';
+import {
+  CancellationToken,
+  DocumentFormattingEditProvider,
+  FormattingOptions,
+  TextDocument,
+  TextEdit,
+  workspace,
+} from 'vscode';
 import { constants } from '../util/constants';
 
-class GppDocumentFormattingEditProvider implements DocumentFormattingEditProvider {
-  indentLevel: number = 0;
+class GpplDocumentFormattingEditProvider implements DocumentFormattingEditProvider {
+  indentLevel = 0;
   indent: string = this.getIndentLetter();
 
   provideDocumentFormattingEdits(
@@ -10,10 +17,9 @@ class GppDocumentFormattingEditProvider implements DocumentFormattingEditProvide
     options: FormattingOptions,
     token: CancellationToken
   ): TextEdit[] {
-    let documentLineCount = document.lineCount;
-    if (constants.formatEnable) {
-      let textEditList: TextEdit[] = [];
-      for (let i = 0; i < documentLineCount; i++) {
+    if (constants.format.enable) {
+      const textEditList: TextEdit[] = [];
+      for (let i = 0; i < document.lineCount; i++) {
         textEditList.push(
           new TextEdit(document.lineAt(i).range, this.formatLineWithIndentation(document.lineAt(i).text?.trimLeft()))
         );
@@ -24,19 +30,27 @@ class GppDocumentFormattingEditProvider implements DocumentFormattingEditProvide
       return [];
     }
   }
+
   formatLineWithIndentation(text: string): string {
     let _formattedText: string;
-    if (text.substr(0, 1) === ';') {
+    text = text.replace(/[;\s]{0,}#(end)?region\b/, ';#$1region');
+    if (text.substr(0, 1) === ';' && !/(;#(end)?region)/.test(text)) {
       _formattedText = this.indent.repeat(this.indentLevel) + text;
     } else {
-      if (/(^\@\w+)|(^\b(i|I)f)|(^\b(w|W)hile)/.test(text)) {
+      if (
+        /^@\w+|(^\b(i|I)f\b)|(^\b(w|W)hile\b)/.test(text) ||
+        (constants.format.applyIndentsToRegions && /#region\b/.test(text))
+      ) {
         _formattedText = this.indent.repeat(this.indentLevel) + text;
         ++this.indentLevel;
-      } else if (/(^\b(e|E)lse)/.test(text)) {
+      } else if (/(^\b(e|E)(lse|lse(i|I)f))/.test(text)) {
         --this.indentLevel;
         _formattedText = this.indent.repeat(this.indentLevel) + text;
         ++this.indentLevel;
-      } else if (/(^\b(e|E)nd(w|p|(i|I)f))/.test(text)) {
+      } else if (
+        /(^\b(e|E)nd(w|p|((i|I)f)))/.test(text) ||
+        (constants.format.applyIndentsToRegions && /#endregion\b/.test(text))
+      ) {
         --this.indentLevel;
         _formattedText = this.indent.repeat(this.indentLevel) + text;
       } else if (text !== '') {
@@ -48,12 +62,13 @@ class GppDocumentFormattingEditProvider implements DocumentFormattingEditProvide
     return _formattedText.trimRight();
   }
   getIndentLetter(): string {
-    let indentSize = constants.tabSize ? constants.tabSize : 2;
-    if (constants.insertSpaces) {
+    const indentSize = constants.format.tabSize ? constants.format.tabSize : 2;
+    if (constants.format.preferSpace) {
       return ' '.repeat(indentSize);
     } else {
       return '\t'.repeat(indentSize);
     }
   }
 }
-export const gppDocumentFormattingEditProvider = new GppDocumentFormattingEditProvider();
+
+export const gpplDocumentFormattingEditProvider = new GpplDocumentFormattingEditProvider();

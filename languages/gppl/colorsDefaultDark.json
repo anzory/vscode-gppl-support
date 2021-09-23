@@ -1,132 +1,140 @@
 {
-  "[Default Light+]": {
+  "[Default Dark+]": {
     "textMateRules": [
       {
         "name": "GPP digits",
-        "scope": "keyword.control.digits.gpp",
+        "scope": "keyword.control.digits.gppl",
         "settings": {
           "fontStyle": "",
-          "foreground": "#098658"
+          "foreground": "#B5CEA8"
         }
       },
       {
         "name": "GPP loop statement",
-        "scope": "keyword.control.loop.statement.gpp",
+        "scope": "keyword.control.loop.statement.gppl",
         "settings": {
           "fontStyle": "",
-          "foreground": "#AF00DB"
+          "foreground": "#C586C0"
         }
       },
       {
         "name": "GPP stop statement",
-        "scope": "keyword.control.stop.statement.gpp",
+        "scope": "keyword.control.stop.statement.gppl",
         "settings": {
-          "fontStyle": "bold",
-          "foreground": "#cf4949"
+          "fontStyle": "",
+          "foreground": "#ff5b5b"
         }
       },
       {
         "name": "GPP logical flags",
-        "scope": "keyword.control.logical.flags.gpp",
+        "scope": "keyword.control.logical.flags.gppl",
         "settings": {
           "fontStyle": "",
-          "foreground": "#AF00DB"
+          "foreground": "#C586C0"
         }
       },
       {
         "name": "GPP string function",
-        "scope": "keyword.control.string.function.gpp",
+        "scope": "keyword.control.string.function.gppl",
         "settings": {
           "fontStyle": "",
-          "foreground": "#AF00DB"
+          "foreground": "#C586C0"
         }
       },
       {
         "name": "GPP dialog function",
-        "scope": "keyword.control.dialog.function.gpp",
+        "scope": "keyword.control.dialog.function.gppl",
         "settings": {
           "fontStyle": "",
-          "foreground": "#AF00DB"
+          "foreground": "#C586C0"
         }
       },
       {
         "name": "GPP procedures",
-        "scope": "keyword.control.procedures.gpp",
+        "scope": "keyword.control.procedures.gppl",
         "settings": {
           "fontStyle": "",
-          "foreground": "#795E26"
+          "foreground": "#DCDCAA"
         }
       },
       {
         "name": "GPP procedure call",
-        "scope": "keyword.control.procedure.call.gpp",
+        "scope": "keyword.control.procedure.call.gppl",
         "settings": {
           "fontStyle": "",
-          "foreground": "#AF00DB"
+          "foreground": "#C586C0"
         }
       },
       {
         "name": "GPP user variable",
-        "scope": "keyword.control.user.variable.gpp",
+        "scope": "keyword.control.user.variable.gppl",
         "settings": {
           "fontStyle": "",
-          "foreground": "#0070C1"
+          "foreground": "#9CDCFE"
         }
       },
       {
         "name": "GPP system variable",
-        "scope": "keyword.control.system.variable.gpp",
+        "scope": "keyword.control.system.variable.gppl",
         "settings": {
           "fontStyle": "italic",
-          "foreground": "#0000FF"
+          "foreground": "#569CD6"
         }
       },
       {
         "name": "GPP logical constants",
-        "scope": "keyword.control.logical.constants.gpp",
+        "scope": "keyword.control.logical.constants.gppl",
         "settings": {
           "fontStyle": "underline",
-          "foreground": "#001080"
+          "foreground": "#569CD6"
         }
       },
       {
         "name": "GPP variable modifier",
-        "scope": "keyword.control.variable.modifier.gpp",
+        "scope": "keyword.control.variable.modifier.gppl",
         "settings": {
           "fontStyle": "",
-          "foreground": "#267F99"
+          "foreground": "#4EC9B0"
         }
       },
       {
         "name": "GPP logical operators",
-        "scope": "keyword.control.logical.operators.gpp",
+        "scope": "keyword.control.logical.operators.gppl",
         "settings": {
           "fontStyle": "",
-          "foreground": "#AF00DB"
+          "foreground": "#C586C0"
         }
       },
       {
         "name": "GPP numeric function",
-        "scope": "keyword.control.numeric.function.gpp",
+        "scope": "keyword.control.numeric.function.gppl",
         "settings": {
           "fontStyle": "",
-          "foreground": "#AF00DB"
+          "foreground": "#C586C0"
         }
       },
       {
         "name": "GPP double quoted string",
-        "scope": "string.quoted.double.gpp",
+        "scope": "string.quoted.double.gppl",
         "settings": {
           "fontStyle": "",
-          "foreground": "#A01515"
+          "foreground": "#CE9178"
         }
       },
       {
         "name": "GPP comment",
-        "scope": "comment.gpp",
+        "scope": "comment.gppl",
         "settings": {
           "fontStyle": "",
-          "foreground": "#008000"
+          "foreground": "#6A9955"
+        }
+      },
+      {
+        "name": "User-defined procedure area",
+        "scope": "keyword.control.user.region.gppl",
+        "settings": {
+          "fontStyle": "bold",
+          "foreground": "#001080"
         }
       }
     ]

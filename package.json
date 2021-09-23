@@ -1,20 +1,21 @@
 {
-  "name": "vscode-gpp-support",
-  "displayName": "SolidCAM GPP Language Support",
-  "description": "Full SolidCAM GPP language support for VSCode: highlighting, formatting, autocomplete, code snippets and more.",
-  "version": "1.5.5",
+  "name": "vscode-gppl-support",
+  "displayName": "SolidCAM postprocessor editor",
+  "description": "Full SolidCAM GPP language support for VSCode: highlighting, formatting, autocomplete, code snippets and more. Write your postprocessor for SolidCAM like a pro.",
+  "version": "1.6.0",
   "preview": false,
   "license": "MIT",
   "publisher": "anzory",
   "author": "Andrey Zorin",
   "copyright": "Copyright (c) 2021 Andrey Zorin",
   "engines": {
-    "vscode": "^1.55.0"
+    "vscode": "^1.60.2"
   },
   "keywords": [
     "gpp",
-    "gpp",
+    "gppl",
     "SolidCAM",
+    "postprocessor",
     "syntax",
     "highlighter",
     "formatting"
@@ -41,21 +42,20 @@
     "Formatters"
   ],
   "activationEvents": [
-    "onLanguage:gpp",
-    "onView:gpp.ProceduresTree"
+    "onLanguage:gppl"
   ],
   "main": "./dist/main.js",
   "contributes": {
     "languages": [
       {
-        "id": "gpp",
+        "id": "gppl",
         "aliases": [
-          "GPP"
+          "GPPL"
         ],
         "extensions": [
           ".gpp"
         ],
-        "configuration": "./languages/gpp/gpp-language.json"
+        "configuration": "./languages/gppl/gppl-language.json"
       },
       {
         "id": "gcode",
@@ -70,9 +70,9 @@
     ],
     "grammars": [
       {
-        "language": "gpp",
-        "scopeName": "source.gpp",
-        "path": "./languages/gpp/gpp.tmLanguage.json"
+        "language": "gppl",
+        "scopeName": "source.gppl",
+        "path": "./languages/gppl/gppl.tmLanguage.json"
       },
       {
         "language": "gcode",
@@ -82,48 +82,54 @@
     ],
     "snippets": [
       {
-        "language": "gpp",
-        "path": "./languages/gpp/snippets.json"
+        "language": "gppl",
+        "path": "./languages/gppl/snippets.json"
       }
     ],
     "configuration": {
       "type": "object",
-      "title": "GPP",
+      "title": "GPPL",
       "properties": {
-        "gpp.files.encoding": {
+        "gppl.files.encoding": {
           "type": "string",
           "default": "windows1251",
           "description": "Default GPPL files encoding",
           "scope": "window"
         },
-        "gpp.editor.defaultFormatter": {
+        "gppl.editor.defaultFormatter": {
           "type": "string",
-          "default": "anzory.vscode-gpp-support",
+          "default": "anzory.vscode-gppl-support",
           "description": "Default GPPL files formatter",
           "scope": "window"
         },
-        "gpp.format.enable": {
+        "gppl.format.enable": {
           "type": "boolean",
           "default": true,
           "description": "Allows you to format GPPL documents",
           "scope": "window"
         },
-        "gpp.format.tabSize": {
+        "gppl.format.tabSize": {
           "type": "number",
           "default": 2,
           "description": "Size of a tab in spaces for the formatter",
           "scope": "window"
         },
-        "gpp.format.insertSpaces": {
+        "gppl.format.preferSpaces": {
           "type": "boolean",
           "default": true,
           "description": "Prefer spaces over tabs",
           "scope": "window"
         },
-        "gpp.format.insertSpacesAroundEqualSign": {
+        "gppl.format.insertSpacesAroundEqualSign": {
           "type": "boolean",
           "default": true,
           "description": "Determines whether spaces should be inserted before and after the `equal` sign",
+          "scope": "window"
+        },
+        "gppl.format.applyIndentsToRegions": {
+          "type": "boolean",
+          "default": true,
+          "description": "Determines whether indents should be applied to `#regions`",
           "scope": "window"
         }
       }
@@ -131,64 +137,64 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "gpp",
-          "title": "GPP",
+          "id": "gppl",
+          "title": "GPPL",
           "icon": "./images/new-logo.svg",
-          "when": "view == gpp.ProceduresTree"
+          "when": "view == gppl.ProceduresTree"
         }
       ]
     },
     "views": {
-      "gpp": [
+      "gppl": [
         {
-          "id": "gpp.ProceduresTree",
+          "id": "gppl.ProceduresTree",
           "name": "Procedures Tree",
           "contextualTitle": "GPPL Procedures Tree",
-          "when": "gppProceduresTreeViewEnabled !== true",
+          "when": "gpplProceduresTreeViewEnabled !== true",
           "type": "tree"
         }
       ]
     },
     "viewsWelcome": [
       {
-        "view": "gpp.ProceduresTree",
+        "view": "gppl.ProceduresTree",
         "contents": "GPPL Tree only available when viewing GPPL",
-        "when": "gppProceduresTreeViewEnabled !== true"
+        "when": "gpplProceduresTreeViewEnabled !== true"
       }
     ],
     "menus": {
       "view/title": [
         {
-          "command": "gpp.ProceduresTree.RefreshTree",
-          "when": "view == gpp.ProceduresTree",
+          "command": "gppl.ProceduresTree.RefreshTree",
+          "when": "view == gppl.ProceduresTree",
           "group": "navigation"
         },
         {
-          "command": "gpp.ProceduresTree.SortByAZ",
-          "when": "view == gpp.ProceduresTree",
+          "command": "gppl.ProceduresTree.SortByAZ",
+          "when": "view == gppl.ProceduresTree",
           "group": "navigation"
         },
         {
-          "command": "gpp.ProceduresTree.SortByZA",
-          "when": "view == gpp.ProceduresTree",
+          "command": "gppl.ProceduresTree.SortByZA",
+          "when": "view == gppl.ProceduresTree",
           "group": "navigation"
         },
         {
-          "command": "gpp.ProceduresTree.SortByDefault",
-          "when": "view == gpp.ProceduresTree",
+          "command": "gppl.ProceduresTree.SortByDefault",
+          "when": "view == gppl.ProceduresTree",
           "group": "navigation"
         }
       ],
       "editor/title/run": [
         {
-          "command": "gpp.Editor.Format",
+          "command": "gppl.editor.Format",
           "when": "editorHasDocumentFormattingProvider"
         }
       ]
     },
     "commands": [
       {
-        "command": "gpp.ProceduresTree.RefreshTree",
+        "command": "gppl.ProceduresTree.RefreshTree",
         "title": "Refresh Tree",
         "icon": {
           "light": "images/icons/arrow-clockwise.svg",
@@ -196,11 +202,11 @@
         }
       },
       {
-        "command": "gpp.ProceduresTree.Selection",
+        "command": "gppl.ProceduresTree.Selection",
         "title": "Procedure Selection"
       },
       {
-        "command": "gpp.ProceduresTree.SortByAZ",
+        "command": "gppl.ProceduresTree.SortByAZ",
         "title": "Sort By A-Z",
         "category": "sorting",
         "icon": {
@@ -209,7 +215,7 @@
         }
       },
       {
-        "command": "gpp.ProceduresTree.SortByZA",
+        "command": "gppl.ProceduresTree.SortByZA",
         "title": "Sort By Z-A",
         "category": "sorting",
         "icon": {
@@ -218,7 +224,7 @@
         }
       },
       {
-        "command": "gpp.ProceduresTree.SortByDefault",
+        "command": "gppl.ProceduresTree.SortByDefault",
         "title": "Sort By Default",
         "category": "sorting",
         "icon": {
@@ -227,7 +233,7 @@
         }
       },
       {
-        "command": "gpp.Editor.Format",
+        "command": "gppl.editor.Format",
         "title": "Format Document",
         "category": "formatting",
         "icon": {
@@ -238,42 +244,35 @@
     ]
   },
   "scripts": {
-    "default": "npm run compile",
-    "vsce-package": "npm run vscode:prepublish && cd dist && vsce package",
-    "vscode:prepublish": "npm run package",
-    "compile": "webpack --mode=development --devtool=eval-source-map",
-    "watch": "webpack --watch --mode=development --devtool=eval-source-map",
-    "package": "webpack --mode=production",
-    "test-compile": "tsc -p ./",
-    "test-watch": "tsc -watch -p ./",
-    "pretest": "npm run test-compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "vsce:package": "npm run vscode:prepublish && cd dist && vsce package",
+    "clean": "rimraf dist src/out out",
+    "webpack:dev": "webpack --mode=development --devtool=eval-source-map",
+    "webpack:prod": "webpack --mode=production",
+    "vscode:prepublish": "npm run lint && npm run clean && npm run webpack:prod",
+    "tsc:compile": "tsc -b",
+    "tsc:watch": "tsc -b -w",
+    "lint": "eslint src --ext .ts,.tsx",
+    "prelaunch": "npm run clean && npm run webpack:dev"
   },
   "devDependencies": {
-    "@types/clean-webpack-plugin": "^0.1.3",
-    "@types/copy-webpack-plugin": "^6.4.1",
-    "@types/glob": "^7.1.3",
-    "@types/mocha": "^8.2.2",
-    "@types/node": "^14.14.41",
-    "@types/vscode": "^1.55.0",
+    "@types/glob": "^7.1.4",
+    "@types/mocha": "^9.0.0",
+    "@types/node": "^16.9.6",
+    "@types/vscode": "^1.60.0",
     "@types/webpack": "^5.28.0",
-    "@typescript-eslint/eslint-plugin": "^4.22.0",
-    "@typescript-eslint/parser": "^4.22.0",
-    "clean-webpack-plugin": "^3.0.0",
-    "copy-webpack-plugin": "^8.1.1",
-    "eslint": "^7.24.0",
+    "@typescript-eslint/eslint-plugin": "^4.31.2",
+    "@typescript-eslint/parser": "^4.31.2",
+    "copy-webpack-plugin": "^9.0.1",
+    "eslint": "^7.32.0",
     "fs": "^0.0.1-security",
-    "glob": "^7.1.6",
-    "json-minimizer-webpack-plugin": "^2.1.0",
-    "mocha": "^8.3.2",
-    "rxjs": "^6.6.7",
-    "ts-loader": "^8.1.0",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.4",
-    "vsce": "^1.87.1",
-    "vscode-test": "^1.5.2",
-    "webpack": "^5.33.2",
+    "glob": "^7.2.0",
+    "mocha": "^9.1.1",
+    "ts-loader": "^9.2.6",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3",
+    "vsce": "^1.100.0",
+    "vscode-test": "^1.6.1",
+    "webpack": "^5.53.0",
     "webpack-cli": "^4.8.0"
   }
 }

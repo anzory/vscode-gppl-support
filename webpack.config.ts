@@ -1,13 +1,11 @@
 // @ts-ignore
 'use strict';
-import * as fs from 'fs';
+// import * as fs from 'fs';
 import { resolve } from 'path';
 import { Compiler, Configuration } from 'webpack';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const copyPlugin = require('copy-webpack-plugin');
-// eslint-disable-next-line @typescript-eslint/naming-convention
-const JsonMinimizerPlugin = require('json-minimizer-webpack-plugin');
+const fs = require('fs');
+const cp = require('copy-webpack-plugin');
 
 let dist = 'dist';
 const config: Configuration = {
@@ -19,42 +17,21 @@ const config: Configuration = {
   }, // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
   output: {
     // the bundle is stored in the 'dist' folder (check package.json), 📖 -> https://webpack.js.org/configuration/output/
-    path: resolve(__dirname, 'dist'),
+    path: resolve(__dirname, dist),
     filename: '[name].js',
     libraryTarget: 'commonjs2',
     clean: true,
   },
   // devtool: 'nosources-source-map',
   plugins: [
-    new copyPlugin({
+    new cp({
       patterns: [
-        {
-          from: './languages',
-          to: 'languages',
-        },
-        {
-          from: './images/icons/**.*',
-          to: './',
-        },
-        {
-          from: './images/**.png',
-          to: './',
-        },
-        {
-          from: './images/**.ico',
-          to: './',
-        },
-        {
-          from: './images/**.svg',
-          to: './',
-        },
-        {
-          from: './**.md',
-          to: './',
-          globOptions: {
-            // ignore: ['./README.md'],
-          },
-        },
+        { from: './languages', to: 'languages' },
+        { from: './images/icons/**.*', to: './' },
+        { from: './images/**.png', to: './' },
+        { from: './images/**.ico', to: './' },
+        { from: './images/**.svg', to: './' },
+        { from: './**.md', to: './' },
       ],
     }),
     {
@@ -79,13 +56,15 @@ const config: Configuration = {
   optimization: {
     minimize: true,
     minimizer: [
-      // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
+      // For webpack@5 you can use the `...` syntax to extend existing minimizers
+      // (i.e. `terser-webpack-plugin`), uncomment the next line
       `...`,
-      // new JsonMinimizerPlugin(),
     ],
   },
   externals: {
-    vscode: 'commonjs vscode', // the vscode-module is created on-the-fly and must be excluded. Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
+    // the vscode-module is created on-the-fly and must be excluded.
+    // Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
+    vscode: 'commonjs vscode',
   },
   resolve: {
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader

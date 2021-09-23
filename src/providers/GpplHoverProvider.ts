@@ -10,7 +10,7 @@ import {
 } from 'vscode';
 import { IGppVariable, semanticHelper } from '../util/semanticHelper';
 
-class GppHoverProvider implements HoverProvider {
+class GpplHoverProvider implements HoverProvider {
   constructor() {}
   provideHover(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<Hover> {
     let hoverContent: MarkdownString = new MarkdownString();
@@ -59,4 +59,4 @@ class GppHoverProvider implements HoverProvider {
   }
 }
 
-export const gppHoverProvider: GppHoverProvider = new GppHoverProvider();
+export const gpplHoverProvider: GpplHoverProvider = new GpplHoverProvider();

@@ -86,17 +86,20 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
-### 1.5.5
+### 1.6.0
 
-- The list of SolidCAM GPPL global system variables has been updated and completed to highlight.
+- Added support for `#region` in the procedures tree.
 
 ---
 
 ## Plan to implement:
 
-- Add code and variable highlighting in tracing mode
+It is a good text editor with GPPL language support for SolidCAM postprocessor editing at the moment. But I want even better. The next version will be 2.0.0, and I'll implement in it:
 
-- Add support for `#region` in the procedures tree
+- [LSP](https://code.visualstudio.com/api/language-extensions/overview#language-server-protocol) functionality to improve performance
+- a semantic analyzer for the GPPL
+- here should be a complete project with a settings file, parsing of all dependent files, deploy functionality and packaging into an archive
+- and more ...
 
 ---
 

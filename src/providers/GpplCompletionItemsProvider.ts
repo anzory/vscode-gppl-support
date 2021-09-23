@@ -9,14 +9,8 @@ import {
 import { gpplComletionsItemsList } from '../util/comletionsItemsList';
 import { semanticHelper } from '../util/semanticHelper';
 
-class GppCompletionItemsProvider
-  implements CompletionItemProvider<CompletionItem> {
-  provideCompletionItems(
-    document: any,
-    position: any,
-    token: any,
-    context: any
-  ): ProviderResult<CompletionItem[]> {
+class GpplCompletionItemsProvider implements CompletionItemProvider<CompletionItem> {
+  provideCompletionItems(document: any, position: any, token: any, context: any): ProviderResult<CompletionItem[]> {
     let _gpplComletionsItems: CompletionItem[] = [];
     gpplComletionsItemsList.forEach((item) => {
       let _item: CompletionItem = new CompletionItem(item.label);
@@ -41,4 +35,4 @@ class GppCompletionItemsProvider
     return _gpplComletionsItems;
   }
 }
-export const gppCompletionItemsProvider = new GppCompletionItemsProvider();
+export const gpplCompletionItemsProvider = new GpplCompletionItemsProvider();

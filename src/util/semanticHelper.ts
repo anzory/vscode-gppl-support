@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Location, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
+import { constants } from './constants';
 import { textParser } from './textParser';
 
 export interface IGppVariable {
@@ -27,12 +28,6 @@ class SemanticHelper {
     this.onDocumentChanged(undefined);
   }
 
-  getSystemVariables(): string[] {
-    return this._systemVariables;
-  }
-  getGppSystemVariables(): IGppVariable[] {
-    return this._systemGppVariables;
-  }
   getGppSystemVariable(name: string): IGppVariable | undefined {
     let res: IGppVariable | undefined = undefined;
     if (
@@ -47,12 +42,6 @@ class SemanticHelper {
     }
   }
 
-  getGlobalUserVariables(): string[] {
-    return this._globalUserVariables;
-  }
-  getGlobalGppUserVariables(): IGppVariable[] {
-    return this._globalGppUserVariables;
-  }
   getGlobalGppUserVariable(name: string): IGppVariable | undefined {
     let res: IGppVariable | undefined = undefined;
     if (
@@ -65,6 +54,18 @@ class SemanticHelper {
     } else {
       return undefined;
     }
+  }
+  getSystemVariables(): string[] {
+    return this._systemVariables;
+  }
+  getGppSystemVariables(): IGppVariable[] {
+    return this._systemGppVariables;
+  }
+  getGlobalUserVariables(): string[] {
+    return this._globalUserVariables;
+  }
+  getGlobalGppUserVariables(): IGppVariable[] {
+    return this._globalGppUserVariables;
   }
   getLocalUserVariables(): string[] {
     return this._localUserVariables;
@@ -88,7 +89,7 @@ class SemanticHelper {
 
   private parseSystemVariables() {
     this._systemVariables = JSON.parse(
-      readFileSync(resolve(__dirname, 'languages', 'gpp', 'gpp.tmLanguage.json')).toString()
+      readFileSync(resolve(__dirname, 'languages', constants.languageId, 'gppl.tmLanguage.json')).toString()
     )
       .repository.keywords.patterns[12].match.replace('(?i)\\b(', '')
       .replace(')\\b', '')

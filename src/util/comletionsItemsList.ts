@@ -30,7 +30,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     label: 'if endif',
     commitCharacters: ['i'],
     detail: '(snippet)',
-    insertText: 'if ${0}\nendif',
+    insertText: 'if ${0} then\nendif',
     documentation: '`if endif` statment',
     kind: CompletionItemKind.Snippet,
   },
@@ -38,7 +38,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     label: 'if else endif',
     commitCharacters: ['i'],
     detail: '(snippet)',
-    insertText: 'if ${0}\nelse\nendif',
+    insertText: 'if ${0} then\nelse\nendif',
     documentation: '`if else endif` statment',
     kind: CompletionItemKind.Snippet,
   },
@@ -207,8 +207,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['n'],
     detail: '(operator)',
     insertText: 'ne ${0}',
-    documentation:
-      "`ne (or '<>')` return `true` if both operands are different",
+    documentation: "`ne (or '<>')` return `true` if both operands are different",
     kind: CompletionItemKind.Operator,
   },
   {
@@ -216,8 +215,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['l'],
     detail: '(operator)',
     insertText: 'le ${0}',
-    documentation:
-      "`le (or '<=')` return `true` if first operand is less than or equal to the second",
+    documentation: "`le (or '<=')` return `true` if first operand is less than or equal to the second",
     kind: CompletionItemKind.Operator,
   },
   {
@@ -225,8 +223,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['l'],
     detail: '(operator)',
     insertText: 'lt ${0}',
-    documentation:
-      "`lt (or '<' )` return `true` if first operand is less than the second",
+    documentation: "`lt (or '<' )` return `true` if first operand is less than the second",
     kind: CompletionItemKind.Operator,
   },
   {
@@ -234,8 +231,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['g'],
     detail: '(operator)',
     insertText: 'ge ${0}',
-    documentation:
-      "`ge (or '>=')` return `true` if first operand is greater than or equal to the second",
+    documentation: "`ge (or '>=')` return `true` if first operand is greater than or equal to the second",
     kind: CompletionItemKind.Operator,
   },
   {
@@ -243,8 +239,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['g'],
     detail: '(operator)',
     insertText: 'gt ${0}',
-    documentation:
-      "`gt (or '>' )` return `true` if first operand is greater than the second",
+    documentation: "`gt (or '>' )` return `true` if first operand is greater than the second",
     kind: CompletionItemKind.Operator,
   },
   {
@@ -300,8 +295,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['a'],
     detail: '(function)',
     insertText: 'active($TM_SELECTED_TEXT)',
-    documentation:
-      '`active(variable)` returns `true/false (1/0)` if variable is *active*',
+    documentation: '`active(variable)` returns `true/false (1/0)` if variable is *active*',
     kind: CompletionItemKind.Function,
   },
   {
@@ -309,8 +303,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['c'],
     detail: '(function)',
     insertText: 'change($TM_SELECTED_TEXT)',
-    documentation:
-      '`change(variable)` returns `true/false (1/0)` if variable *was change*',
+    documentation: '`change(variable)` returns `true/false (1/0)` if variable *was change*',
     kind: CompletionItemKind.Function,
   },
   {
@@ -334,8 +327,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['d'],
     detail: '(function)',
     insertText: 'date',
-    documentation:
-      '`date` returns the string value of the current date in the format `DD-MM-YYYY`',
+    documentation: '`date` returns the string value of the current date in the format `DD-MM-YYYY`',
     kind: CompletionItemKind.Function,
   },
   {
@@ -361,8 +353,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['l'],
     detail: '(function)',
     insertText: 'left($TM_SELECTED_TEXT, ${0})',
-    documentation:
-      '`left(str, num)` returns the sub-string which consists of `num` left characters of `str`',
+    documentation: '`left(str, num)` returns the sub-string which consists of `num` left characters of `str`',
     kind: CompletionItemKind.Function,
   },
   {
@@ -388,8 +379,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['r'],
     detail: '(function)',
     insertText: 'rev($TM_SELECTED_TEXT)',
-    documentation:
-      '`rev(string)` returns the same `string` while reversing the order of its characters',
+    documentation: '`rev(string)` returns the same `string` while reversing the order of its characters',
     kind: CompletionItemKind.Function,
   },
   {
@@ -397,8 +387,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['r'],
     detail: '(function)',
     insertText: 'right($TM_SELECTED_TEXT, ${0})',
-    documentation:
-      '`right(str, num)` returns the sub-string which consists of the `num` right characters of `str`',
+    documentation: '`right(str, num)` returns the sub-string which consists of the `num` right characters of `str`',
     kind: CompletionItemKind.Function,
   },
   {
@@ -406,8 +395,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['s'],
     detail: '(function)',
     insertText: 'space(${0})',
-    documentation:
-      '`space(len)` returns a string of blanks (spaces) of length `len`',
+    documentation: '`space(len)` returns a string of blanks (spaces) of length `len`',
     kind: CompletionItemKind.Function,
   },
   {
@@ -415,8 +403,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['s'],
     detail: '(function)',
     insertText: 'strlen($TM_SELECTED_TEXT)',
-    documentation:
-      '`strlen(string)` returns the length of the `string`, i.e. The number of characters in the string',
+    documentation: '`strlen(string)` returns the length of the `string`, i.e. The number of characters in the string',
     kind: CompletionItemKind.Function,
   },
   {
@@ -433,8 +420,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['t'],
     detail: '(function)',
     insertText: 'time',
-    documentation:
-      "`time` returns the string value of the current time in the format 'HH:MM:SS'",
+    documentation: "`time` returns the string value of the current time in the format 'HH:MM:SS'",
     kind: CompletionItemKind.Function,
   },
   {
@@ -460,8 +446,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['t'],
     detail: '(function)',
     insertText: 'trim($TM_SELECTED_TEXT)',
-    documentation:
-      '`trim(string)` returns the same string as in the `string`, but removes all its trailing blanks',
+    documentation: '`trim(string)` returns the same string as in the `string`, but removes all its trailing blanks',
     kind: CompletionItemKind.Function,
   },
   {
@@ -496,8 +481,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['a'],
     detail: '(function)',
     insertText: 'adims($TM_SELECTED_TEXT)',
-    documentation:
-      '`adims(array)` returns the number of dimensions of the array',
+    documentation: '`adims(array)` returns the number of dimensions of the array',
     kind: CompletionItemKind.Function,
   },
   {
@@ -505,8 +489,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['a'],
     detail: '(function)',
     insertText: 'alen($TM_SELECTED_TEXT, ${0})',
-    documentation:
-      '`alen(array, dim)` returns the number of elements in the required dimension of the `array`',
+    documentation: '`alen(array, dim)` returns the number of elements in the required dimension of the `array`',
     kind: CompletionItemKind.Function,
   },
   {
@@ -549,8 +532,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['a'],
     detail: '(function)',
     insertText: 'atan2(${0:y}, ${1:x})',
-    documentation:
-      '`atan2(y, x)` returns the angle defined by the point and the positive direction of the `X axis`',
+    documentation: '`atan2(y, x)` returns the angle defined by the point and the positive direction of the `X axis`',
     kind: CompletionItemKind.Function,
   },
   {
@@ -575,8 +557,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['e'],
     detail: '(function)',
     insertText: 'exp($TM_SELECTED_TEXT)',
-    documentation:
-      '`exp(number)` returns the value of e (the base of natural logarithms) to the power of `number`',
+    documentation: '`exp(number)` returns the value of e (the base of natural logarithms) to the power of `number`',
     kind: CompletionItemKind.Function,
   },
   {
@@ -592,8 +573,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['i'],
     detail: '(function)',
     insertText: 'int($TM_SELECTED_TEXT)',
-    documentation:
-      '`int(number)` returns the integer part of the `number`. The value is truncated, not rounded',
+    documentation: '`int(number)` returns the integer part of the `number`. The value is truncated, not rounded',
     kind: CompletionItemKind.Function,
   },
   {
@@ -601,8 +581,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['l'],
     detail: '(function)',
     insertText: 'log($TM_SELECTED_TEXT)',
-    documentation:
-      '`log(number)` returns the value of the natural logarithm of the `number`',
+    documentation: '`log(number)` returns the value of the natural logarithm of the `number`',
     kind: CompletionItemKind.Function,
   },
   {
@@ -610,8 +589,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['l'],
     detail: '(function)',
     insertText: 'log10($TM_SELECTED_TEXT)',
-    documentation:
-      '`log10(number)` returns the value of the base 10 logarithm of the `number`',
+    documentation: '`log10(number)` returns the value of the base 10 logarithm of the `number`',
     kind: CompletionItemKind.Function,
   },
   {
@@ -627,8 +605,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['n'],
     detail: '(function)',
     insertText: 'norm360($TM_SELECTED_TEXT)',
-    documentation:
-      '`norm360(number)` returns the normalized angle of the parameter in the range (0,360)',
+    documentation: '`norm360(number)` returns the normalized angle of the parameter in the range (0,360)',
     kind: CompletionItemKind.Function,
   },
   {
@@ -653,8 +630,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['r'],
     detail: '(function)',
     insertText: 'round2val($TM_SELECTED_TEXT, ${1})',
-    documentation:
-      '`round2val(c, d)` returns `c` rounded to smallest multiple of `d`',
+    documentation: '`round2val(c, d)` returns `c` rounded to smallest multiple of `d`',
     kind: CompletionItemKind.Function,
   },
   {
@@ -662,8 +638,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['s'],
     detail: '(function)',
     insertText: 'sign($TM_SELECTED_TEXT)',
-    documentation:
-      '`sign(number)` returns an integer number, representing the `sign` of the `number`',
+    documentation: '`sign(number)` returns an integer number, representing the `sign` of the `number`',
     kind: CompletionItemKind.Function,
   },
   {
@@ -679,8 +654,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['s'],
     detail: '(function)',
     insertText: 'sqrt($TM_SELECTED_TEXT)',
-    documentation:
-      '`sqrt(number)` returns the square root of the `number` is equivalent to `pow(number, 0.5)`',
+    documentation: '`sqrt(number)` returns the square root of the `number` is equivalent to `pow(number, 0.5)`',
     kind: CompletionItemKind.Function,
   },
   {
@@ -688,8 +662,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['s'],
     detail: '(function)',
     insertText: 'square($TM_SELECTED_TEXT)',
-    documentation:
-      '`square(number)` returns the value of the `number` squared. it is equivalent to `pow(number, 2)`',
+    documentation: '`square(number)` returns the value of the `number` squared. it is equivalent to `pow(number, 2)`',
     kind: CompletionItemKind.Function,
   },
   {
@@ -705,8 +678,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['t'],
     detail: '(function)',
     insertText: 'todeg($TM_SELECTED_TEXT)',
-    documentation:
-      '`todeg(angle)` returns the `angle` (given in radians) into its equivalent in degrees',
+    documentation: '`todeg(angle)` returns the `angle` (given in radians) into its equivalent in degrees',
     kind: CompletionItemKind.Function,
   },
   {
@@ -714,8 +686,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['t'],
     detail: '(function)',
     insertText: 'torad($TM_SELECTED_TEXT)',
-    documentation:
-      '`torad(angle)` returns the `angle` (given in degrees) into its equivalent in radians',
+    documentation: '`torad(angle)` returns the `angle` (given in degrees) into its equivalent in radians',
     kind: CompletionItemKind.Function,
   },
   {

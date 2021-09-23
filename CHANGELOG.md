@@ -1,78 +1,46 @@
 # Change Log
 
-All notable changes to the "vscode-gppl-support" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
 ## [Unreleased]
 
-- Initial release
+- rewrite the extension code using the [LSP](https://code.visualstudio.com/api/language-extensions/overview#language-server-protocol)
 
-## [1.0.0] - 2021-01-28
+- implement the semantic analyzer of the `GPP Language` on the Language Server
 
-### Added
+- and more ...
 
-- Syntax highlighting
-- Autocomplete code
-- Sidebar with procedure tree view
+---
 
-## [1.0.1] - 2021-01-29
-
-### Fixed
-
-- some improvements in the project structure and README file
-
-## [1.0.3] - 2021-03-18
-
-### Fixed
-
-- color scheme of syntax highlighting.
-- comment highlighting.
-- auto-indentation.
-
-## [1.1.0] - 2021-03-20
+## [1.6.0] - 2021-09-24
 
 ### Added
 
-- New auto-complete code functionality.
+- grouping procedures in the Tree View using a comment of a special type `;#region REGION_NAME` ... `;#endregion`. Nested regions and sorting are supported.
 
-## [1.1.1] - 2021-03-20
+---
 
-### Added
-
-- Sort feature to the procedures tree.
-
-## [1.2.1] - 2021-03-21
+## [1.5.5] - 2021-09-04
 
 ### Added
 
-- "`Goto Definition`" functionality for procedures.
+- The list of SolidCAM GPPL global system variables has been updated and completed to highlight.
 
-## [1.2.2] - 2021-03-22
+---
+
+## [1.5.3] - 2021-09-02
 
 ### Fixed
 
-- a bug when the `Go To Definition` opened a new tab every time
+- bug: The information section is not updated when cursor is pointing
 
-## [1.3.0] - 2021-03-23
+---
+
+## [1.5.0] - 2021-04-13
 
 ### Added
 
-- simple `Document Formatting` functionality
-- several settings for extension
+- hints on hovering
 
-## [1.3.1] - 2021-03-25
-
-### Fixed
-
-- bug: the last line of the gppl-file is not formatted
-- bug: comments shouldn't be involved in formatting
-
-## [1.3.2] - 2021-03-29
-
-### Fixed
-
-- bug: formatting does not work when capital letters are used
+---
 
 ## [1.4.2] - 2021-04-11
 
@@ -86,20 +54,88 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - full compatibility with `SolidCAM debugger`
 
-## [1.5.0] - 2021-04-13
+---
 
-### Added
-
-- hints on hovering
-
-## [1.5.3] - 2021-09-02
+## [1.3.2] - 2021-03-29
 
 ### Fixed
 
-- bug: The information section is not updated when cursor is pointing
+- bug: formatting does not work when capital letters are used
 
-## [1.5.5] - 2021-09-04
+---
+
+## [1.3.1] - 2021-03-25
+
+### Fixed
+
+- bug: the last line of the gppl-file is not formatted
+- bug: comments shouldn't be involved in formatting
+
+---
+
+## [1.3.0] - 2021-03-23
 
 ### Added
 
-- The list of SolidCAM GPPL global system variables has been updated and completed to highlight.
+- simple `Document Formatting` functionality
+- several settings for extension
+
+---
+
+## [1.2.2] - 2021-03-22
+
+### Fixed
+
+- a bug when the `Go To Definition` opened a new tab every time
+
+---
+
+## [1.2.1] - 2021-03-21
+
+### Added
+
+- "`Goto Definition`" functionality for procedures.
+
+---
+
+## [1.1.1] - 2021-03-20
+
+### Added
+
+- Sort feature to the procedures tree.
+
+---
+
+## [1.1.0] - 2021-03-20
+
+### Added
+
+- New auto-complete code functionality.
+
+---
+
+## [1.0.3] - 2021-03-18
+
+### Fixed
+
+- color scheme of syntax highlighting.
+- comment highlighting.
+- auto-indentation.
+
+---
+
+## [1.0.1] - 2021-01-29
+
+### Fixed
+
+- some improvements in the project structure and README file
+
+---
+
+## [1.0.0] - 2021-01-28
+
+### Added
+
+- Syntax highlighting
+- Autocomplete code
+- Sidebar with procedure tree view

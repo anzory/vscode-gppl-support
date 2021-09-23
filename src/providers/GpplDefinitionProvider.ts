@@ -11,7 +11,7 @@ import {
 import { semanticHelper } from '../util/semanticHelper';
 import { textParser } from '../util/textParser';
 
-class GppDefinitionProvider implements DefinitionProvider {
+class GpplDefinitionProvider implements DefinitionProvider {
   provideDefinition(
     document: TextDocument,
     position: Position,
@@ -34,4 +34,4 @@ class GppDefinitionProvider implements DefinitionProvider {
     return Promise.resolve(res);
   }
 }
-export const gppDefinitionProvider = new GppDefinitionProvider();
+export const gpplDefinitionProvider = new GpplDefinitionProvider();
