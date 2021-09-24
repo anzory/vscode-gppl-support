@@ -23,10 +23,10 @@ class GpplReferenceProvider implements ReferenceProvider {
     let word = document.getText(wordRange);
     let locations: Location[];
     if (semanticHelper.isThisUserVariable(word)) {
-      locations = textParser.getWordLocations(document, '\\b' + word);
+      locations = textParser.getWordLocationsInDoc(document, '\\b' + word);
       res = locations;
     } else if (semanticHelper.isThisProcedureDeclaration(word)) {
-      locations = textParser.getWordLocations(document, /*'\\b' +*/ word);
+      locations = textParser.getWordLocationsInDoc(document, word);
       res = locations;
     }
     return Promise.resolve(res);

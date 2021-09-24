@@ -8,7 +8,8 @@ import {
   Range,
   TextDocument,
 } from 'vscode';
-import { IGppVariable, semanticHelper } from '../util/semanticHelper';
+import { constants } from '../util/constants';
+import { IGpplVariable, semanticHelper } from '../util/semanticHelper';
 
 class GpplHoverProvider implements HoverProvider {
   constructor() {}
@@ -18,11 +19,11 @@ class GpplHoverProvider implements HoverProvider {
     let word: string = document.getText(wordRange);
 
     if (semanticHelper.isThisGlobalUserVariable(word)) {
-      let gppVar: IGppVariable | undefined = semanticHelper.getGlobalGppUserVariable(word);
+      let gppVar: IGpplVariable | undefined = semanticHelper.getGlobalUserVariable(word);
       if (gppVar) {
         hoverContent.appendCodeblock(
           gppVar.scope + ' ' + gppVar.type + ' ' + gppVar.name + ' ; (user variable)',
-          'gpp'
+          constants.languageId
         );
       }
       if (gppVar?.references) {
@@ -35,11 +36,11 @@ class GpplHoverProvider implements HoverProvider {
       }
     }
     if (semanticHelper.isThisLocalUserVariable(word)) {
-      let gppVar = semanticHelper.getLocalGppUserVariable(word);
+      let gppVar = semanticHelper.getLocalUserVariable(word);
       if (gppVar) {
         hoverContent.appendCodeblock(
           gppVar.scope + ' ' + gppVar.type + ' ' + gppVar.name + ' ; (user variable)',
-          'gpp'
+          constants.languageId
         );
       }
       if (gppVar?.references) {
@@ -50,10 +51,10 @@ class GpplHoverProvider implements HoverProvider {
       }
     }
     if (semanticHelper.isThisSystemVariable(word)) {
-      hoverContent.appendCodeblock('global system variable: ' + word, 'gpp');
+      hoverContent.appendCodeblock('global system variable: ' + word, constants.languageId);
     }
     if (semanticHelper.isThisProcedureDeclaration(word)) {
-      hoverContent.appendCodeblock('Procedure: ' + word, 'gpp');
+      hoverContent.appendCodeblock('Procedure: ' + word, constants.languageId);
     }
     return Promise.resolve(new Hover(hoverContent, wordRange));
   }

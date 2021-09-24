@@ -38,8 +38,8 @@ class GpplConstants {
   };
 }
 
+export let constants = new GpplConstants().constants;
+
 workspace.onDidChangeConfiguration(() => {
   constants = new GpplConstants().constants;
 });
-
-export let constants = new GpplConstants().constants;

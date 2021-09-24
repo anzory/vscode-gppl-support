@@ -33,12 +33,12 @@ interface GpplElement {
   label: string;
 }
 
-export class GpplProceduresTreeProvider implements TreeDataProvider<GpplElement> {
-  private _onDidChangeTreeData: EventEmitter<GpplElement | undefined> = new EventEmitter<GpplElement | undefined>();
-  readonly onDidChangeTreeData: Event<GpplElement | undefined> = this._onDidChangeTreeData.event;
+export class GpplProceduresTreeProvider implements TreeDataProvider<TreeItem> {
+  private _onDidChangeTreeData: EventEmitter<TreeItem | undefined> = new EventEmitter<TreeItem | undefined>();
+  readonly onDidChangeTreeData: Event<TreeItem | undefined> = this._onDidChangeTreeData.event;
   private editor: TextEditor | undefined = window.activeTextEditor;
-  private sorting = Sort.byDefault;
   private doc: TextDocument | undefined = this.editor?.document;
+  private sorting = Sort.byDefault;
 
   constructor(private context: ExtensionContext) {
     window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
@@ -97,7 +97,7 @@ export class GpplProceduresTreeProvider implements TreeDataProvider<GpplElement>
         if (findProcedure.test(text)) {
           let fp = findProcedure.exec(text);
           label = fp ? fp[0] : 'empty_name_function?';
-          range = textParser.getWordLocations(this.doc, label)[0].range;
+          range = textParser.getWordLocationsInDoc(this.doc, label)[0].range;
           children.push({
             label: label,
             range: range,
@@ -107,7 +107,7 @@ export class GpplProceduresTreeProvider implements TreeDataProvider<GpplElement>
           const nor = findNameOfRegion.exec(text);
           if (nor) {
             label = nor[0];
-            range = textParser.getWordLocations(this.doc, label)[0].range;
+            range = textParser.getWordLocationsInDoc(this.doc, label)[0].range;
           } else {
             label = 'UNNAMED_REGION';
             range = new Range(new Position(start, 0), new Position(start, text.length));
@@ -144,6 +144,8 @@ export class GpplProceduresTreeProvider implements TreeDataProvider<GpplElement>
 
   private onActiveEditorChanged(): void {
     StatusBar.update('Tree needs to be updated');
+    this.editor = window.activeTextEditor;
+    this.doc = this.editor?.document;
     if (window.activeTextEditor) {
       if (window.activeTextEditor.document.languageId === constants.languageId) {
         this.refresh(true);
@@ -175,7 +177,6 @@ export class GpplProceduresTreeProvider implements TreeDataProvider<GpplElement>
   refresh(viewEnable?: boolean): void {
     this._onDidChangeTreeData.fire(undefined);
     StatusBar.update('Tree successfully updated');
-    this.editor = window.activeTextEditor;
     if (viewEnable) {
       commands.executeCommand('setContext', 'gpplProceduresTreeViewEnabled', viewEnable);
     }

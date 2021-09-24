@@ -59,11 +59,35 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     kind: CompletionItemKind.Snippet,
   },
   {
+    label: 'new region',
+    commitCharacters: ['n', 'r'],
+    detail: '(snippet)',
+    insertText: ';#region ${0}\n$TM_SELECTED_TEXT\n;#endregion',
+    documentation: 'define `new #region`. The selected text can be wrapped.',
+    kind: CompletionItemKind.Snippet,
+  },
+  {
+    label: ';#region',
+    commitCharacters: ['r'],
+    detail: '(keyword)',
+    insertText: ';#region',
+    documentation: 'keyword for start of #region',
+    kind: CompletionItemKind.Keyword,
+  },
+  {
+    label: ';#endregion',
+    commitCharacters: ['e'],
+    detail: '(keyword)',
+    insertText: ';#endregion',
+    documentation: 'keyword for end of #region',
+    kind: CompletionItemKind.Keyword,
+  },
+  {
     label: 'end of procedure',
     commitCharacters: ['e'],
     detail: '(keyword)',
     insertText: 'endp',
-    documentation: 'keyword for end of procedure',
+    documentation: 'keyword for end of `procedure`',
     kind: CompletionItemKind.Keyword,
   },
   {
@@ -295,7 +319,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['a'],
     detail: '(function)',
     insertText: 'active($TM_SELECTED_TEXT)',
-    documentation: '`active(variable)` returns `true/false (1/0)` if variable is *active*',
+    documentation:
+      '`active(variable)` returns `true/false (1/0)` if variable is *active*. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -303,7 +328,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['c'],
     detail: '(function)',
     insertText: 'change($TM_SELECTED_TEXT)',
-    documentation: '`change(variable)` returns `true/false (1/0)` if variable *was change*',
+    documentation:
+      '`change(variable)` returns `true/false (1/0)` if variable *was change*. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -311,7 +337,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['e'],
     detail: '(function)',
     insertText: 'even($TM_SELECTED_TEXT)',
-    documentation: '`even(number)` is `true` only if the `number` *is even*',
+    documentation: '`even(number)` is `true` only if the `number` *is even*. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -319,7 +345,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['o'],
     detail: '(function)',
     insertText: 'odd($TM_SELECTED_TEXT)',
-    documentation: '`odd(number)` is true only if the `number` *is odd*',
+    documentation: '`odd(number)` is true only if the `number` *is odd*. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -336,7 +362,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     detail: '(function)',
     insertText: 'dup($TM_SELECTED_TEXT, ${0})',
     documentation:
-      '`dup(string, count)` returns a string value, consisting of the string `string` duplicated `count` times',
+      '`dup(string, count)` returns a string value, consisting of the string `string` duplicated `count` times. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -345,7 +371,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     detail: '(function)',
     insertText: 'instr($TM_SELECTED_TEXT, ${0})',
     documentation:
-      '`instr(str, substr, val)` searches for the appearance of the `substr` in `str` from the `val` column and returns its position from the beginning of `str`',
+      '`instr(str, substr, val)` searches for the appearance of the `substr` in `str` from the `val` column and returns its position from the beginning of `str`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -353,7 +379,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['l'],
     detail: '(function)',
     insertText: 'left($TM_SELECTED_TEXT, ${0})',
-    documentation: '`left(str, num)` returns the sub-string which consists of `num` left characters of `str`',
+    documentation:
+      '`left(str, num)` returns the sub-string which consists of `num` left characters of `str`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -362,7 +389,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     detail: '(function)',
     insertText: 'lower($TM_SELECTED_TEXT)',
     documentation:
-      '`lower(string)` returns the same `string`, where all upper case (capital) letters (a-z) are replaced by their lower case equivalent (a-z)',
+      '`lower(string)` returns the same `string`, where all upper case (capital) letters (a-z) are replaced by their lower case equivalent (a-z). The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -371,7 +398,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     detail: '(function)',
     insertText: 'replace($TM_SELECTED_TEXT, ${0})',
     documentation:
-      '`replace(str, oldstr, newstr , k)` replace the `k` appearance of the `oldstr` in `str` with `newstr` and returns the `str`',
+      '`replace(str, oldstr, newstr , k)` replace the `k` appearance of the `oldstr` in `str` with `newstr` and returns the `str`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -379,7 +406,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['r'],
     detail: '(function)',
     insertText: 'rev($TM_SELECTED_TEXT)',
-    documentation: '`rev(string)` returns the same `string` while reversing the order of its characters',
+    documentation:
+      '`rev(string)` returns the same `string` while reversing the order of its characters. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -387,7 +415,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['r'],
     detail: '(function)',
     insertText: 'right($TM_SELECTED_TEXT, ${0})',
-    documentation: '`right(str, num)` returns the sub-string which consists of the `num` right characters of `str`',
+    documentation:
+      '`right(str, num)` returns the sub-string which consists of the `num` right characters of `str`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -403,7 +432,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['s'],
     detail: '(function)',
     insertText: 'strlen($TM_SELECTED_TEXT)',
-    documentation: '`strlen(string)` returns the length of the `string`, i.e. The number of characters in the string',
+    documentation:
+      '`strlen(string)` returns the length of the `string`, i.e. The number of characters in the string. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -412,7 +442,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     detail: '(function)',
     insertText: 'substr($TM_SELECTED_TEXT, ${0})',
     documentation:
-      '`substr(string, from, len)` returns the sub-string starting in the `string` from position `from`, and with length `len`',
+      '`substr(string, from, len)` returns the sub-string starting in the `string` from position `from`, and with length `len`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -429,7 +459,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     detail: '(function)',
     insertText: 'tonum($TM_SELECTED_TEXT)',
     documentation:
-      '`tonum(string)` converts the number represented in the `string` from string format to a numeric format',
+      '`tonum(string)` converts the number represented in the `string` from string format to a numeric format. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -438,7 +468,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     detail: '(function)',
     insertText: "tostr($TM_SELECTED_TEXT:'${0}')",
     documentation:
-      '`tostr(number:format)` converts the `number` into string notation according to the format specification `format`',
+      '`tostr(number:format)` converts the `number` into string notation according to the format specification `format`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -446,7 +476,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['t'],
     detail: '(function)',
     insertText: 'trim($TM_SELECTED_TEXT)',
-    documentation: '`trim(string)` returns the same string as in the `string`, but removes all its trailing blanks',
+    documentation:
+      '`trim(string)` returns the same string as in the `string`, but removes all its trailing blanks. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -455,7 +486,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     detail: '(function)',
     insertText: 'upper($TM_SELECTED_TEXT)',
     documentation:
-      '`upper(string)` returns the same `string`, where all the lower case letters (a-z) are replaced by their upper case (capital) equivalent (A-Z)',
+      '`upper(string)` returns the same `string`, where all the lower case letters (a-z) are replaced by their upper case (capital) equivalent (A-Z). The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -464,7 +495,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     detail: '(function)',
     insertText: 'abs($TM_SELECTED_TEXT)',
     documentation:
-      '`abs(number)` returns the arc cosine of the `number`. The angle returned is in degrees in the range (0, 180)',
+      '`abs(number)` returns the arc cosine of the `number`. The angle returned is in degrees in the range (0, 180). The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -473,7 +504,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     detail: '(function)',
     insertText: 'acos($TM_SELECTED_TEXT)',
     documentation:
-      '`acos(number)` returns the arc cosine of the `number`. The angle returned is in degrees in the range (0, 180)',
+      '`acos(number)` returns the arc cosine of the `number`. The angle returned is in degrees in the range (0, 180). The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -481,7 +512,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['a'],
     detail: '(function)',
     insertText: 'adims($TM_SELECTED_TEXT)',
-    documentation: '`adims(array)` returns the number of dimensions of the array',
+    documentation: '`adims(array)` returns the number of dimensions of the array. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -489,7 +520,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['a'],
     detail: '(function)',
     insertText: 'alen($TM_SELECTED_TEXT, ${0})',
-    documentation: '`alen(array, dim)` returns the number of elements in the required dimension of the `array`',
+    documentation:
+      '`alen(array, dim)` returns the number of elements in the required dimension of the `array`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -498,7 +530,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     detail: '(function)',
     insertText: 'ang($TM_SELECTED_TEXT, ${0:y})',
     documentation:
-      '`ang(x, y)` returns the angle between vector to the point and the positive direction of the `X axis`',
+      '`ang(x, y)` returns the angle between vector to the point and the positive direction of the `X axis`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -507,7 +539,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     detail: '(function)',
     insertText: 'asin($TM_SELECTED_TEXT)',
     documentation:
-      '`asin(number)` returns the arc sine of the `number`. The angle returned is in degrees in the range (-90, 90)',
+      '`asin(number)` returns the arc sine of the `number`. The angle returned is in degrees in the range (-90, 90). The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -515,7 +547,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['a'],
     detail: '(function)',
     insertText: 'asize($TM_SELECTED_TEXT)',
-    documentation: '`asize(array)` returns the number of elements in the array',
+    documentation: '`asize(array)` returns the number of elements in the array. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -524,7 +556,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     detail: '(function)',
     insertText: 'atan($TM_SELECTED_TEXT)',
     documentation:
-      '`atan(number)` returns the arc tangent of the `number`. The angle returned is in degrees in the range (-90, 90)',
+      '`atan(number)` returns the arc tangent of the `number`. The angle returned is in degrees in the range (-90, 90). The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -540,7 +572,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['c'],
     detail: '(function)',
     insertText: 'cos($TM_SELECTED_TEXT)',
-    documentation: '`cos(angle)` returns the cosine value of the `angle`',
+    documentation: '`cos(angle)` returns the cosine value of the `angle`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -557,7 +589,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['e'],
     detail: '(function)',
     insertText: 'exp($TM_SELECTED_TEXT)',
-    documentation: '`exp(number)` returns the value of e (the base of natural logarithms) to the power of `number`',
+    documentation:
+      '`exp(number)` returns the value of e (the base of natural logarithms) to the power of `number`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -565,7 +598,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['f'],
     detail: '(function)',
     insertText: 'frac($TM_SELECTED_TEXT)',
-    documentation: '`frac(number)` returns the fraction part of the `number`',
+    documentation: '`frac(number)` returns the fraction part of the `number`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -573,7 +606,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['i'],
     detail: '(function)',
     insertText: 'int($TM_SELECTED_TEXT)',
-    documentation: '`int(number)` returns the integer part of the `number`. The value is truncated, not rounded',
+    documentation:
+      '`int(number)` returns the integer part of the `number`. The value is truncated, not rounded. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -581,7 +615,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['l'],
     detail: '(function)',
     insertText: 'log($TM_SELECTED_TEXT)',
-    documentation: '`log(number)` returns the value of the natural logarithm of the `number`',
+    documentation:
+      '`log(number)` returns the value of the natural logarithm of the `number`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -589,7 +624,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['l'],
     detail: '(function)',
     insertText: 'log10($TM_SELECTED_TEXT)',
-    documentation: '`log10(number)` returns the value of the base 10 logarithm of the `number`',
+    documentation:
+      '`log10(number)` returns the value of the base 10 logarithm of the `number`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -605,7 +641,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['n'],
     detail: '(function)',
     insertText: 'norm360($TM_SELECTED_TEXT)',
-    documentation: '`norm360(number)` returns the normalized angle of the parameter in the range (0,360)',
+    documentation:
+      '`norm360(number)` returns the normalized angle of the parameter in the range (0,360). The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -622,7 +659,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     detail: '(function)',
     insertText: 'round($TM_SELECTED_TEXT, ${1})',
     documentation:
-      '`round(number, dig)` returns the number rounded to the required number of digits either after or before the decimal point',
+      '`round(number, dig)` returns the number rounded to the required number of digits either after or before the decimal point. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -630,7 +667,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['r'],
     detail: '(function)',
     insertText: 'round2val($TM_SELECTED_TEXT, ${1})',
-    documentation: '`round2val(c, d)` returns `c` rounded to smallest multiple of `d`',
+    documentation:
+      '`round2val(c, d)` returns `c` rounded to smallest multiple of `d`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -638,7 +676,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['s'],
     detail: '(function)',
     insertText: 'sign($TM_SELECTED_TEXT)',
-    documentation: '`sign(number)` returns an integer number, representing the `sign` of the `number`',
+    documentation:
+      '`sign(number)` returns an integer number, representing the `sign` of the `number`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -646,7 +685,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['s'],
     detail: '(function)',
     insertText: 'sin($TM_SELECTED_TEXT)',
-    documentation: '`sin(angle)` returns the sine value of the `angle`',
+    documentation: '`sin(angle)` returns the sine value of the `angle`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -654,7 +693,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['s'],
     detail: '(function)',
     insertText: 'sqrt($TM_SELECTED_TEXT)',
-    documentation: '`sqrt(number)` returns the square root of the `number` is equivalent to `pow(number, 0.5)`',
+    documentation:
+      '`sqrt(number)` returns the square root of the `number` is equivalent to `pow(number, 0.5)`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -662,7 +702,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['s'],
     detail: '(function)',
     insertText: 'square($TM_SELECTED_TEXT)',
-    documentation: '`square(number)` returns the value of the `number` squared. it is equivalent to `pow(number, 2)`',
+    documentation:
+      '`square(number)` returns the value of the `number` squared. it is equivalent to `pow(number, 2)`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -670,7 +711,7 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['t'],
     detail: '(function)',
     insertText: 'tan($TM_SELECTED_TEXT)',
-    documentation: '`tan(angle)` returns the tangent value of the `angle`',
+    documentation: '`tan(angle)` returns the tangent value of the `angle`. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -678,7 +719,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['t'],
     detail: '(function)',
     insertText: 'todeg($TM_SELECTED_TEXT)',
-    documentation: '`todeg(angle)` returns the `angle` (given in radians) into its equivalent in degrees',
+    documentation:
+      '`todeg(angle)` returns the `angle` (given in radians) into its equivalent in degrees. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
@@ -686,7 +728,8 @@ export const gpplComletionsItemsList: CompletionItem[] = [
     commitCharacters: ['t'],
     detail: '(function)',
     insertText: 'torad($TM_SELECTED_TEXT)',
-    documentation: '`torad(angle)` returns the `angle` (given in degrees) into its equivalent in radians',
+    documentation:
+      '`torad(angle)` returns the `angle` (given in degrees) into its equivalent in radians. The selected text can be wrapped.',
     kind: CompletionItemKind.Function,
   },
   {
