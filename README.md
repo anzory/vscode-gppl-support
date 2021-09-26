@@ -28,7 +28,7 @@ Sidebar with procedures tree view & sorting capability:
 
 ---
 
-"`Go to Definition`" functionality for procedures
+`Go To Definition` and `Go To References` functionality for procedures:
 
 (by `Ctrl+Click`, or `RightClick -> Go to Definition`, or `F12`)
 
