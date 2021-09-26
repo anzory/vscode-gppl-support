@@ -88,7 +88,7 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
-### 1.6.1
+### 1.6.2
 
 - Added support for `#region` in the procedures tree.
 
