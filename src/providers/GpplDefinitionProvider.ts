@@ -15,6 +15,8 @@ import { semanticHelper } from '../util/semanticHelper';
 import { textParser } from '../util/textParser';
 
 class GpplDefinitionProvider implements DefinitionProvider {
+  private definition: Location | undefined = undefined;
+
   private editor: TextEditor | undefined = window.activeTextEditor;
   private doc: TextDocument | undefined = this.editor?.document;
 
@@ -34,21 +36,20 @@ class GpplDefinitionProvider implements DefinitionProvider {
   ): ProviderResult<Definition | DefinitionLink[]> {
     if (this.doc) {
       let word = this.doc.getText(this.doc.getWordRangeAtPosition(position));
-      let definition: Location | undefined = undefined;
       let locations: Location[];
       if (semanticHelper.isThisUserVariable(word)) {
         locations = textParser.getWordLocationsInDoc(this.doc, '\\b' + word);
-        definition = locations[0];
+        this.definition = locations[0];
       } else if (semanticHelper.isThisProcedureDeclaration(word)) {
         locations = textParser.getWordLocationsInDoc(this.doc, word);
         locations.forEach((location: Location) => {
           let line = this.doc?.lineAt(location.range.start.line).text;
           if (line && !/;|(\bcall\b)/.test(line)) {
-            definition = location;
+            this.definition = location;
           }
         });
       }
-      return Promise.resolve(definition);
+      return Promise.resolve(this.definition);
     } else {
       return Promise.resolve(undefined);
     }

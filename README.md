@@ -34,6 +34,8 @@ Sidebar with procedures tree view & sorting capability:
 
 ![Go to Definition](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/goto-definition.gif?raw=true)
 
+> **Tip:** You can open the definition to the side with `Ctrl+Alt+Click`.
+
 ---
 
 Displays information about variables when the cursor is pointing
