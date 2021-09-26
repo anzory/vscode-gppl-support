@@ -12,18 +12,17 @@ type IgpplSettings = {
 };
 export class Config {
   private config: WorkspaceConfiguration;
-  //private settings: IgpplSettings;
+
+  constructor() {
+    this.config = workspace.getConfiguration(constants.configId);
+    workspace.getConfiguration('[gppl]').update('editor.defaultFormatter', 'anzory.vscode-gppl-support');
+    this.addColorizationSettings();
+  }
 
   configure(context: ExtensionContext) {
     context.subscriptions.push(workspace.onDidChangeConfiguration(configuration.onConfigurationChanged, configuration));
   }
 
-  constructor() {
-    // Static reference to configuration
-    this.config = workspace.getConfiguration(constants.configId);
-    this.addColorizationSettings();
-    // Initialize
-  }
   private onConfigurationChanged(e: ConfigurationChangeEvent) {
     if (!e.affectsConfiguration(constants.configId)) {
       this.reloadConfig();

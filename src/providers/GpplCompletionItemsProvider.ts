@@ -10,8 +10,8 @@ import { gpplComletionsItemsList } from '../util/comletionsItemsList';
 import { IGpplVariable, semanticHelper } from '../util/semanticHelper';
 
 class GpplCompletionItemsProvider implements CompletionItemProvider<CompletionItem> {
-  provideCompletionItems(document: any, position: any, token: any, context: any): ProviderResult<CompletionItem[]> {
-    let _gpplComletionsItems: CompletionItem[] = [];
+  private _gpplComletionsItems: CompletionItem[] = [];
+  constructor() {
     gpplComletionsItemsList.forEach((item) => {
       let _item: CompletionItem = new CompletionItem(item.label);
       _item.insertText = new SnippetString(item.insertText?.toString());
@@ -20,7 +20,7 @@ class GpplCompletionItemsProvider implements CompletionItemProvider<CompletionIt
       _item.detail = item.detail;
       _item.kind = item.kind;
 
-      _gpplComletionsItems.push(_item);
+      this._gpplComletionsItems.push(_item);
     });
     semanticHelper.getGpplSystemVariables().forEach((sv: IGpplVariable) => {
       let _item: CompletionItem = new CompletionItem(sv.name);
@@ -30,9 +30,11 @@ class GpplCompletionItemsProvider implements CompletionItemProvider<CompletionIt
       _item.detail = '(system variable)';
       _item.kind = CompletionItemKind.Variable;
 
-      _gpplComletionsItems.push(_item);
+      this._gpplComletionsItems.push(_item);
     });
-    return _gpplComletionsItems;
+  }
+  provideCompletionItems(document: any, position: any, token: any, context: any): ProviderResult<CompletionItem[]> {
+    return this._gpplComletionsItems;
   }
 }
 export const gpplCompletionItemsProvider = new GpplCompletionItemsProvider();

@@ -97,7 +97,9 @@ export class GpplProceduresTreeProvider implements TreeDataProvider<TreeItem> {
         if (findProcedure.test(text)) {
           let fp = findProcedure.exec(text);
           label = fp ? fp[0] : 'empty_name_function?';
-          range = textParser.getWordLocationsInDoc(this.doc, label)[0].range;
+          // range = textParser.getWordLocationsInDoc(this.doc, label)[0].range;
+          const rgx = new RegExp('(?<=^[\\s]{0,})' + label, 'gm');
+          range = textParser.getRegExpRangesInDoc(this.doc, rgx)[0];
           children.push({
             label: label,
             range: range,

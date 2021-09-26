@@ -60,7 +60,12 @@ export async function activate(context: ExtensionContext) {
   );
 }
 workspace.onDidChangeConfiguration(() => {
-  commands.executeCommand(constants.commands.formatDocument);
+  window.visibleTextEditors.forEach((editor: TextEditor) => {
+    editor.document.languageId === constants.languageId
+      ? (commands.executeCommand(constants.commands.formatDocument),
+        commands.executeCommand('editor.action.formatDocument'))
+      : null;
+  });
 });
 export function deactivate() {
   StatusBar.dispose();

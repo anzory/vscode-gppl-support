@@ -1,47 +1,20 @@
 import {
   CancellationToken,
   DocumentFormattingEditProvider,
-  Event,
-  EventEmitter,
   FormattingOptions,
   TextDocument,
-  TextDocumentChangeEvent,
   TextEdit,
-  TextEditor,
-  window,
   workspace,
 } from 'vscode';
 import { constants } from '../util/constants';
 
 class GpplDocumentFormattingEditProvider implements DocumentFormattingEditProvider {
   indentLevel = 0;
-  indent: string = this.getIndentLetter();
-  private _onDidChangeDocument: EventEmitter<any | undefined> = new EventEmitter<any | undefined>();
-  readonly onDidChangeDocument: Event<any | undefined> = this._onDidChangeDocument.event;
-  private editor: TextEditor | undefined = window.activeTextEditor;
-  private doc: TextDocument | undefined = this.editor?.document;
+  indent: string;
 
   constructor() {
-    window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
-    workspace.onDidChangeTextDocument((e) => this.onDocumentChanged(e));
-  }
-  refresh(viewEnable?: boolean): void {
-    this._onDidChangeDocument.fire(undefined);
-  }
-
-  private onActiveEditorChanged(): void {
-    this.editor = window.activeTextEditor;
-    this.doc = this.editor?.document;
-  }
-
-  private onDocumentChanged(changeEvent: TextDocumentChangeEvent): void {
-    if (window.activeTextEditor) {
-      if (window.activeTextEditor.document.languageId === constants.languageId) {
-        this.refresh(true);
-      } else {
-        this.refresh(false);
-      }
-    }
+    const indentSize = constants.format.tabSize ? constants.format.tabSize : 2;
+    this.indent = constants.format.preferSpace ? ' '.repeat(indentSize) : '\t'.repeat(indentSize);
   }
 
   provideDocumentFormattingEdits(
@@ -53,7 +26,7 @@ class GpplDocumentFormattingEditProvider implements DocumentFormattingEditProvid
       const textEditList: TextEdit[] = [];
       for (let i = 0; i < document.lineCount; i++) {
         textEditList.push(
-          new TextEdit(document.lineAt(i).range, this.formatLineWithIndentation(document.lineAt(i).text?.trimLeft()))
+          new TextEdit(document.lineAt(i).range, this.formatLineWithIndentation(document.lineAt(i).text.trimLeft()))
         );
       }
       this.indentLevel = 0;
@@ -93,14 +66,10 @@ class GpplDocumentFormattingEditProvider implements DocumentFormattingEditProvid
     }
     return _formattedText.trimRight();
   }
-  getIndentLetter(): string {
-    const indentSize = constants.format.tabSize ? constants.format.tabSize : 2;
-    if (constants.format.preferSpace) {
-      return ' '.repeat(indentSize);
-    } else {
-      return '\t'.repeat(indentSize);
-    }
-  }
 }
 
-export const gpplDocumentFormattingEditProvider = new GpplDocumentFormattingEditProvider();
+export let gpplDocumentFormattingEditProvider = new GpplDocumentFormattingEditProvider();
+
+workspace.onDidChangeConfiguration(() => {
+  gpplDocumentFormattingEditProvider = new GpplDocumentFormattingEditProvider();
+});

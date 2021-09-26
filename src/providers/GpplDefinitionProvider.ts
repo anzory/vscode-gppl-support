@@ -34,21 +34,21 @@ class GpplDefinitionProvider implements DefinitionProvider {
   ): ProviderResult<Definition | DefinitionLink[]> {
     if (this.doc) {
       let word = this.doc.getText(this.doc.getWordRangeAtPosition(position));
-      let res: Location | undefined = undefined;
+      let definition: Location | undefined = undefined;
       let locations: Location[];
       if (semanticHelper.isThisUserVariable(word)) {
         locations = textParser.getWordLocationsInDoc(this.doc, '\\b' + word);
-        res = locations[0];
+        definition = locations[0];
       } else if (semanticHelper.isThisProcedureDeclaration(word)) {
         locations = textParser.getWordLocationsInDoc(this.doc, word);
         locations.forEach((location: Location) => {
           let line = this.doc?.lineAt(location.range.start.line).text;
           if (line && !/;|(\bcall\b)/.test(line)) {
-            res = location;
+            definition = location;
           }
         });
       }
-      return Promise.resolve(res);
+      return Promise.resolve(definition);
     } else {
       return Promise.resolve(undefined);
     }
