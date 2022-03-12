@@ -88,13 +88,13 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
-### 1.6.2
+### 1.6.3
 
-- Added support for `#region` in the procedures tree.
+- SolidCAM `GPP Debugger` compatibility recovered.
 
 ---
 
-## Plan to implement:
+## Plan to implement
 
 It is a good text editor with GPPL language support for SolidCAM postprocessor editing at the moment. But I want even better. The next version will be 2.0.0, and I'll implement in it:
 

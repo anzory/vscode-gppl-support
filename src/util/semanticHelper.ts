@@ -76,7 +76,7 @@ class SemanticHelper {
   }
 
   private parseSystemVariables() {
-    JSON.parse(readFileSync(resolve(__dirname, 'languages', constants.languageId, 'gppl.tmLanguage.json')).toString())
+    JSON.parse(readFileSync(resolve(__dirname, 'languages', constants.languageId, 'gpp.tmLanguage.json')).toString())
       .repository.keywords.patterns[12].match.replace('(?i)\\b(', '')
       .replace(')\\b', '')
       .split('|')

@@ -58,9 +58,9 @@ class GpplDefinitionProvider implements DefinitionProvider {
 
 export let gpplDefinitionProvider = new GpplDefinitionProvider();
 
-workspace.onDidChangeTextDocument(() => {
-  gpplDefinitionProvider = new GpplDefinitionProvider();
-});
-window.onDidChangeActiveTextEditor(() => {
-  gpplDefinitionProvider = new GpplDefinitionProvider();
-});
+// workspace.onDidChangeTextDocument(() => {
+//   gpplDefinitionProvider = new GpplDefinitionProvider();
+// });
+// window.onDidChangeActiveTextEditor(() => {
+//   gpplDefinitionProvider = new GpplDefinitionProvider();
+// });

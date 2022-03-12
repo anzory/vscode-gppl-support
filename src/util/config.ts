@@ -15,7 +15,7 @@ export class Config {
 
   constructor() {
     this.config = workspace.getConfiguration(constants.configId);
-    workspace.getConfiguration('[gppl]').update('editor.defaultFormatter', 'anzory.vscode-gppl-support');
+    workspace.getConfiguration('[gpp]').update('editor.defaultFormatter', 'anzory.vscode-gppl-support');
     this.addColorizationSettings();
   }
 
