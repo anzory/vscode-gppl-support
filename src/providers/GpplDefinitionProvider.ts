@@ -12,11 +12,11 @@ import {
   workspace,
 } from 'vscode';
 import { semanticHelper } from '../util/semanticHelper';
-import { textParser } from '../util/textParser';
+import TextParser from '../util/textParser';
 
-class GpplDefinitionProvider implements DefinitionProvider {
+export default class GpplDefinitionProvider implements DefinitionProvider {
   private definition: Location | undefined = undefined;
-
+  private textParser = new TextParser();
   private editor: TextEditor | undefined = window.activeTextEditor;
   private doc: TextDocument | undefined = this.editor?.document;
 
@@ -37,11 +37,14 @@ class GpplDefinitionProvider implements DefinitionProvider {
     if (this.doc) {
       let word = this.doc.getText(this.doc.getWordRangeAtPosition(position));
       let locations: Location[];
-      if (semanticHelper.isThisUserVariable(word)) {
-        locations = textParser.getWordLocationsInDoc(this.doc, '\\b' + word);
+      if (semanticHelper.isThisUserVariableOrArray(word)) {
+        locations = this.textParser.getWordLocationsInDoc(
+          this.doc,
+          '\\b' + word
+        );
         this.definition = locations[0];
       } else if (semanticHelper.isThisProcedureDeclaration(word)) {
-        locations = textParser.getWordLocationsInDoc(this.doc, word);
+        locations = this.textParser.getWordLocationsInDoc(this.doc, word);
         locations.forEach((location: Location) => {
           let line = this.doc?.lineAt(location.range.start.line).text;
           if (line && !/;|(\bcall\b)/.test(line)) {
@@ -55,12 +58,3 @@ class GpplDefinitionProvider implements DefinitionProvider {
     }
   }
 }
-
-export let gpplDefinitionProvider = new GpplDefinitionProvider();
-
-// workspace.onDidChangeTextDocument(() => {
-//   gpplDefinitionProvider = new GpplDefinitionProvider();
-// });
-// window.onDidChangeActiveTextEditor(() => {
-//   gpplDefinitionProvider = new GpplDefinitionProvider();
-// });

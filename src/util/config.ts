@@ -1,7 +1,12 @@
 'use strict';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { ConfigurationChangeEvent, ExtensionContext, workspace, WorkspaceConfiguration } from 'vscode';
+import {
+  ConfigurationChangeEvent,
+  ExtensionContext,
+  workspace,
+  WorkspaceConfiguration,
+} from 'vscode';
 import { constants } from './constants';
 
 type IgpplSettings = {
@@ -10,17 +15,21 @@ type IgpplSettings = {
   trAutoRef: boolean;
   statusEnabled: boolean;
 };
-export class Config {
+export default class Config {
   private config: WorkspaceConfiguration;
 
   constructor() {
     this.config = workspace.getConfiguration(constants.configId);
-    workspace.getConfiguration('[gpp]').update('editor.defaultFormatter', 'anzory.vscode-gppl-support');
+    workspace
+      .getConfiguration('[gpp]')
+      .update('editor.defaultFormatter', 'anzory.vscode-gppl-support');
     this.addColorizationSettings();
   }
 
   configure(context: ExtensionContext) {
-    context.subscriptions.push(workspace.onDidChangeConfiguration(configuration.onConfigurationChanged, configuration));
+    context.subscriptions.push(
+      workspace.onDidChangeConfiguration(this.onConfigurationChanged)
+    );
   }
 
   private onConfigurationChanged(e: ConfigurationChangeEvent) {
@@ -55,22 +64,43 @@ export class Config {
   }
 
   private addColorizationSettings() {
-    let workspaceTokenColorCustomizations = workspace.getConfiguration('editor.tokenColorCustomizations');
+    let workspaceTokenColorCustomizations = workspace.getConfiguration(
+      'editor.tokenColorCustomizations'
+    );
     let customTokenColorCustomizations: any = {};
-    Object.assign(customTokenColorCustomizations, workspaceTokenColorCustomizations);
+    Object.assign(
+      customTokenColorCustomizations,
+      workspaceTokenColorCustomizations
+    );
 
     let colorsDefaultDark = JSON.parse(
-      readFileSync(resolve(__dirname, 'languages', constants.languageId, 'colorsDefaultDark.json')).toString()
+      readFileSync(
+        resolve(
+          __dirname,
+          'languages',
+          constants.languageId,
+          'colorsDefaultDark.json'
+        )
+      ).toString()
     );
     let colorsDefaultLight = JSON.parse(
-      readFileSync(resolve(__dirname, 'languages', constants.languageId, 'colorsDefaultLight.json')).toString()
+      readFileSync(
+        resolve(
+          __dirname,
+          'languages',
+          constants.languageId,
+          'colorsDefaultLight.json'
+        )
+      ).toString()
     );
 
     if (!customTokenColorCustomizations['[Default Dark+]']) {
       Object.assign(customTokenColorCustomizations, colorsDefaultDark);
     } else {
-      let wpDarkRules: any[] = customTokenColorCustomizations['[Default Dark+]'].textMateRules;
-      let gppDarkRules: any[] = colorsDefaultDark['[Default Dark+]'].textMateRules;
+      let wpDarkRules: any[] =
+        customTokenColorCustomizations['[Default Dark+]'].textMateRules;
+      let gppDarkRules: any[] =
+        colorsDefaultDark['[Default Dark+]'].textMateRules;
 
       gppDarkRules.forEach((set) => {
         let exist: boolean = false;
@@ -78,7 +108,9 @@ export class Config {
           return set.scope === wpSet.scope;
         });
         if (!exist) {
-          customTokenColorCustomizations['[Default Dark+]'].textMateRules.push(set);
+          customTokenColorCustomizations['[Default Dark+]'].textMateRules.push(
+            set
+          );
         }
       });
     }
@@ -86,8 +118,10 @@ export class Config {
     if (!customTokenColorCustomizations['[Default Light+]']) {
       Object.assign(customTokenColorCustomizations, colorsDefaultLight);
     } else {
-      let wpLightRules: any[] = customTokenColorCustomizations['[Default Light+]'].textMateRules;
-      let gppLightRules: any[] = colorsDefaultLight['[Default Light+]'].textMateRules;
+      let wpLightRules: any[] =
+        customTokenColorCustomizations['[Default Light+]'].textMateRules;
+      let gppLightRules: any[] =
+        colorsDefaultLight['[Default Light+]'].textMateRules;
 
       gppLightRules.forEach((set) => {
         let exist: boolean = false;
@@ -95,13 +129,15 @@ export class Config {
           return set.scope === wpSet.scope;
         });
         if (!exist) {
-          customTokenColorCustomizations['[Default Light+]'].textMateRules.push(set);
+          customTokenColorCustomizations['[Default Light+]'].textMateRules.push(
+            set
+          );
         }
       });
     }
 
-    workspace.getConfiguration('editor').update('tokenColorCustomizations', customTokenColorCustomizations, true);
+    workspace
+      .getConfiguration('editor')
+      .update('tokenColorCustomizations', customTokenColorCustomizations, true);
   }
 }
-
-export const configuration = new Config();

@@ -8,9 +8,9 @@ import {
   TextDocument,
 } from 'vscode';
 import { semanticHelper } from '../util/semanticHelper';
-import { textParser } from '../util/textParser';
+import TextParser from '../util/textParser';
 
-class GpplReferenceProvider implements ReferenceProvider {
+export default class GpplReferenceProvider implements ReferenceProvider {
   provideReferences(
     document: TextDocument,
     position: Position,
@@ -18,11 +18,11 @@ class GpplReferenceProvider implements ReferenceProvider {
     token: CancellationToken
   ): ProviderResult<Location[]> {
     let res: Location[] | undefined = undefined;
-
+    const textParser = new TextParser();
     let wordRange = document.getWordRangeAtPosition(position);
     let word = document.getText(wordRange);
     let locations: Location[];
-    if (semanticHelper.isThisUserVariable(word)) {
+    if (semanticHelper.isThisUserVariableOrArray(word)) {
       locations = textParser.getWordLocationsInDoc(document, '\\b' + word);
       res = locations;
     } else if (semanticHelper.isThisProcedureDeclaration(word)) {
@@ -32,5 +32,3 @@ class GpplReferenceProvider implements ReferenceProvider {
     return Promise.resolve(res);
   }
 }
-
-export const gpplReferenceProvider = new GpplReferenceProvider();

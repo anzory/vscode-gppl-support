@@ -9,7 +9,9 @@ import {
 import { gpplComletionsItemsList } from '../util/comletionsItemsList';
 import { IGpplVariable, semanticHelper } from '../util/semanticHelper';
 
-class GpplCompletionItemsProvider implements CompletionItemProvider<CompletionItem> {
+export default class GpplCompletionItemsProvider
+  implements CompletionItemProvider<CompletionItem>
+{
   private _gpplComletionsItems: CompletionItem[] = [];
   constructor() {
     gpplComletionsItemsList.forEach((item) => {
@@ -33,8 +35,13 @@ class GpplCompletionItemsProvider implements CompletionItemProvider<CompletionIt
       this._gpplComletionsItems.push(_item);
     });
   }
-  provideCompletionItems(document: any, position: any, token: any, context: any): ProviderResult<CompletionItem[]> {
+  provideCompletionItems(
+    document: any,
+    position: any,
+    token: any,
+    context: any
+  ): ProviderResult<CompletionItem[]> {
     return this._gpplComletionsItems;
   }
 }
-export const gpplCompletionItemsProvider = new GpplCompletionItemsProvider();
+// export const gpplCompletionItemsProvider = new GpplCompletionItemsProvider();

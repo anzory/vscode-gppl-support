@@ -1,8 +1,16 @@
+import { log } from 'console';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { Range, Location, TextDocumentChangeEvent, TextEditor, window, workspace } from 'vscode';
+import {
+  Range,
+  Location,
+  TextDocumentChangeEvent,
+  TextEditor,
+  window,
+  workspace,
+} from 'vscode';
 import { constants } from './constants';
-import { textParser } from './textParser';
+import TextParser from './textParser';
 
 export interface IGpplVariable {
   name: string;
@@ -15,8 +23,11 @@ export interface IGpplVariable {
 class SemanticHelper {
   private editor: TextEditor | undefined;
   private _globalUserVariables: IGpplVariable[] = [];
+  private _globalUserArrays: IGpplVariable[] = [];
   private _localUserVariables: IGpplVariable[] = [];
+  private _localUserArrays: IGpplVariable[] = [];
   private _systemGppVariables: IGpplVariable[] = [];
+  private textParser = new TextParser();
 
   constructor() {
     workspace.onDidChangeTextDocument((e) => this.onDocumentChanged(e));
@@ -25,10 +36,25 @@ class SemanticHelper {
     this.onDocumentChanged(undefined);
   }
 
-  getGpplSystemVariable(name: string): IGpplVariable | undefined {
+  getGpplSystemVariables(): IGpplVariable[] {
+    return this._systemGppVariables;
+  }
+  getGlobalUserVariables(): IGpplVariable[] {
+    return this._globalUserVariables;
+  }
+  getGlobalUserArrays(): IGpplVariable[] {
+    return this._globalUserArrays;
+  }
+  getLocalUserVariables(): IGpplVariable[] {
+    return this._localUserVariables;
+  }
+  getLocalUserArrays(): IGpplVariable[] {
+    return this._localUserArrays;
+  }
+  getGlobalUserArray(name: string): IGpplVariable | undefined {
     let res: IGpplVariable | undefined = undefined;
     if (
-      this._systemGppVariables.some((gppVar) => {
+      this._globalUserArrays.some((gppVar) => {
         res = gppVar;
         return gppVar.name === name;
       })
@@ -38,7 +64,6 @@ class SemanticHelper {
       return undefined;
     }
   }
-
   getGlobalUserVariable(name: string): IGpplVariable | undefined {
     let res: IGpplVariable | undefined = undefined;
     if (
@@ -52,14 +77,18 @@ class SemanticHelper {
       return undefined;
     }
   }
-  getGpplSystemVariables(): IGpplVariable[] {
-    return this._systemGppVariables;
-  }
-  getGlobalUserVariables(): IGpplVariable[] {
-    return this._globalUserVariables;
-  }
-  getLocalUserVariables(): IGpplVariable[] {
-    return this._localUserVariables;
+  getLocalUserArray(name: string): IGpplVariable | undefined {
+    let res: IGpplVariable | undefined = undefined;
+    if (
+      this._localUserArrays.some((gppVar) => {
+        res = gppVar;
+        return gppVar.name === name;
+      })
+    ) {
+      return res;
+    } else {
+      return undefined;
+    }
   }
   getLocalUserVariable(name: string): IGpplVariable | undefined {
     let res: IGpplVariable | undefined = undefined;
@@ -74,9 +103,31 @@ class SemanticHelper {
       return undefined;
     }
   }
+  getGpplSystemVariable(name: string): IGpplVariable | undefined {
+    let res: IGpplVariable | undefined = undefined;
+    if (
+      this._systemGppVariables.some((gppVar) => {
+        res = gppVar;
+        return gppVar.name === name;
+      })
+    ) {
+      return res;
+    } else {
+      return undefined;
+    }
+  }
 
   private parseSystemVariables() {
-    JSON.parse(readFileSync(resolve(__dirname, 'languages', constants.languageId, 'gpp.tmLanguage.json')).toString())
+    JSON.parse(
+      readFileSync(
+        resolve(
+          __dirname,
+          'languages',
+          constants.languageId,
+          'gpp.tmLanguage.json'
+        )
+      ).toString()
+    )
       .repository.keywords.patterns[12].match.replace('(?i)\\b(', '')
       .replace(')\\b', '')
       .split('|')
@@ -85,7 +136,10 @@ class SemanticHelper {
           name: sv,
           scope: 'global',
           type: '',
-          references: textParser.getWordLocationsInDoc(this.editor?.document, '\\b' + sv),
+          references: this.textParser.getWordLocationsInDoc(
+            this.editor?.document,
+            '\\b' + sv
+          ),
           info: undefined,
         });
       });
@@ -93,12 +147,17 @@ class SemanticHelper {
 
   private parseUserVariables() {
     this._globalUserVariables = [];
+    this._globalUserArrays = [];
     this._localUserVariables = [];
+    this._localUserArrays = [];
 
     this.editor = window.activeTextEditor;
     const doc = this.editor?.document;
     if (doc) {
-      let ranges: Range[] = textParser.getRegExpRangesInDoc(doc, /\bglobal\b.*$/gm);
+      let ranges: Range[] = this.textParser.getRegExpRangesInDoc(
+        doc,
+        /\bglobal\b.*$/gm
+      );
       ranges.forEach((range) => {
         const line = doc?.getText(range);
         if (line) {
@@ -107,20 +166,37 @@ class SemanticHelper {
           const gppScope = line.trim().split(' ')[0];
           const gppType = line.trim().split(' ')[1];
           this.getVariables(line).forEach((ugv) => {
-            this._globalUserVariables.push({
-              name: ugv,
-              scope: gppScope,
-              type: gppType,
-              references: textParser.getWordLocationsInDoc(doc, '\\b' + ugv),
-              info: gppInfo,
-            });
+            if (ugv.match(/<<.*>>/g)) {
+              const uga = ugv.replace(/<<.*>>/g, '');
+              this._globalUserArrays.push({
+                name: uga /*.replace(/<<.*>>/g, '')*/,
+                scope: gppScope,
+                type: gppType + ' array',
+                references: this.textParser.getWordLocationsInDoc(
+                  doc,
+                  '\\b' + uga
+                ),
+                info: gppInfo,
+              });
+            } else {
+              this._globalUserVariables.push({
+                name: ugv,
+                scope: gppScope,
+                type: gppType,
+                references: this.textParser.getWordLocationsInDoc(
+                  doc,
+                  '\\b' + ugv
+                ),
+                info: gppInfo,
+              });
+            }
           });
         }
       });
 
       //
 
-      ranges = textParser.getRegExpRangesInDoc(doc, /\blocal\b.*$/gm);
+      ranges = this.textParser.getRegExpRangesInDoc(doc, /\blocal\b.*$/gm);
       ranges.forEach((range) => {
         const line = doc?.getText(range);
         if (line) {
@@ -129,13 +205,30 @@ class SemanticHelper {
           const gppScope = line.split(' ')[0];
           const gppType = line.split(' ')[1];
           this.getVariables(line).forEach((ulv) => {
-            this._localUserVariables.push({
-              name: ulv,
-              scope: gppScope,
-              type: gppType,
-              references: textParser.getWordLocationsInDoc(doc, '\\b' + ulv),
-              info: gppInfo,
-            });
+            if (ulv.match(/<<.*>>/g)) {
+              const ula = ulv.replace(/<<.*>>/, '');
+              this._localUserArrays.push({
+                name: ula,
+                scope: gppScope,
+                type: gppType + ' array',
+                references: this.textParser.getWordLocationsInDoc(
+                  doc,
+                  '\\b' + ula
+                ),
+                info: gppInfo,
+              });
+            } else {
+              this._localUserVariables.push({
+                name: ulv,
+                scope: gppScope,
+                type: gppType,
+                references: this.textParser.getWordLocationsInDoc(
+                  doc,
+                  '\\b' + ulv
+                ),
+                info: gppInfo,
+              });
+            }
           });
         }
       });
@@ -175,16 +268,31 @@ class SemanticHelper {
     return this._systemGppVariables.find((x) => x.name === name) ? true : false;
   }
 
-  isThisUserVariable(name: string): boolean {
-    return this.isThisLocalUserVariable(name) || this.isThisGlobalUserVariable(name);
+  isThisUserVariableOrArray(name: string): boolean {
+    return (
+      this.isThisLocalUserVariable(name) ||
+      this.isThisGlobalUserVariable(name) ||
+      this.isThisGloballUserArray(name) ||
+      this.isThisLocalUserArray(name)
+    );
   }
 
   isThisGlobalUserVariable(name: string): boolean {
-    return this._globalUserVariables.find((x) => x.name === name) ? true : false;
+    return this._globalUserVariables.find((x) => x.name === name)
+      ? true
+      : false;
   }
 
   isThisLocalUserVariable(name: string): boolean {
     return this._localUserVariables.find((x) => x.name === name) ? true : false;
+  }
+
+  isThisGloballUserArray(name: string): boolean {
+    return this._globalUserArrays.find((x) => x.name === name) ? true : false;
+  }
+
+  isThisLocalUserArray(name: string): boolean {
+    return this._localUserArrays.find((x) => x.name === name) ? true : false;
   }
 
   isThisProcedureDeclaration(name: string): boolean {

@@ -20,7 +20,7 @@ import {
 } from 'vscode';
 import { constants } from '../util/constants';
 import { StatusBar } from '../util/statusBar';
-import { textParser } from '../util/textParser';
+import TextParser from '../util/textParser';
 
 enum Sort {
   byAZ = 1,
@@ -33,12 +33,17 @@ interface GpplElement {
   label: string;
 }
 
-export class GpplProceduresTreeProvider implements TreeDataProvider<TreeItem> {
-  private _onDidChangeTreeData: EventEmitter<TreeItem | undefined> = new EventEmitter<TreeItem | undefined>();
-  readonly onDidChangeTreeData: Event<TreeItem | undefined> = this._onDidChangeTreeData.event;
+export default class GpplProceduresTreeProvider
+  implements TreeDataProvider<TreeItem>
+{
+  private _onDidChangeTreeData: EventEmitter<TreeItem | undefined> =
+    new EventEmitter<TreeItem | undefined>();
+  readonly onDidChangeTreeData: Event<TreeItem | undefined> =
+    this._onDidChangeTreeData.event;
   private editor: TextEditor | undefined = window.activeTextEditor;
   private doc: TextDocument | undefined = this.editor?.document;
   private sorting = Sort.byDefault;
+  private textParser = new TextParser();
 
   constructor(private context: ExtensionContext) {
     window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
@@ -51,7 +56,10 @@ export class GpplProceduresTreeProvider implements TreeDataProvider<TreeItem> {
 
     if (this.doc) {
       if (element) {
-        ge = this._getChildren(element.range.start.line + 1, this._findEndOfRegion(element.range.start.line + 1));
+        ge = this._getChildren(
+          element.range.start.line + 1,
+          this._findEndOfRegion(element.range.start.line + 1)
+        );
       } else {
         ge = this._getChildren();
       }
@@ -74,7 +82,9 @@ export class GpplProceduresTreeProvider implements TreeDataProvider<TreeItem> {
   }
 
   getTreeItem(element: GpplElement): TreeItem {
-    const state = /@/.test(element.label) ? TreeItemCollapsibleState.None : TreeItemCollapsibleState.Expanded;
+    const state = /@/.test(element.label)
+      ? TreeItemCollapsibleState.None
+      : TreeItemCollapsibleState.Expanded;
     const treeItem: TreeItem = new TreeItem(element.label, state);
     treeItem.command = {
       command: constants.commands.procedureSelection,
@@ -99,7 +109,7 @@ export class GpplProceduresTreeProvider implements TreeDataProvider<TreeItem> {
           label = fp ? fp[0] : 'empty_name_function?';
           // range = textParser.getWordLocationsInDoc(this.doc, label)[0].range;
           const rgx = new RegExp('(?<=^[\\s]{0,})' + label, 'gm');
-          range = textParser.getRegExpRangesInDoc(this.doc, rgx)[0];
+          range = this.textParser.getRegExpRangesInDoc(this.doc, rgx)[0];
           children.push({
             label: label,
             range: range,
@@ -109,10 +119,14 @@ export class GpplProceduresTreeProvider implements TreeDataProvider<TreeItem> {
           const nor = findNameOfRegion.exec(text);
           if (nor) {
             label = nor[0];
-            range = textParser.getWordLocationsInDoc(this.doc, label)[0].range;
+            range = this.textParser.getWordLocationsInDoc(this.doc, label)[0]
+              .range;
           } else {
             label = 'UNNAMED_REGION';
-            range = new Range(new Position(start, 0), new Position(start, text.length));
+            range = new Range(
+              new Position(start, 0),
+              new Position(start, text.length)
+            );
           }
           children.push({
             label: label,
@@ -149,7 +163,9 @@ export class GpplProceduresTreeProvider implements TreeDataProvider<TreeItem> {
     this.editor = window.activeTextEditor;
     this.doc = this.editor?.document;
     if (window.activeTextEditor) {
-      if (window.activeTextEditor.document.languageId === constants.languageId) {
+      if (
+        window.activeTextEditor.document.languageId === constants.languageId
+      ) {
         this.refresh(true);
       } else {
         this.refresh(false);
@@ -162,7 +178,9 @@ export class GpplProceduresTreeProvider implements TreeDataProvider<TreeItem> {
   private onDocumentChanged(changeEvent: TextDocumentChangeEvent): void {
     StatusBar.update('Tree needs to be updated');
     if (window.activeTextEditor) {
-      if (window.activeTextEditor.document.languageId === constants.languageId) {
+      if (
+        window.activeTextEditor.document.languageId === constants.languageId
+      ) {
         this.refresh(true);
       } else {
         this.refresh(false);
@@ -180,7 +198,11 @@ export class GpplProceduresTreeProvider implements TreeDataProvider<TreeItem> {
     this._onDidChangeTreeData.fire(undefined);
     StatusBar.update('Tree successfully updated');
     if (viewEnable) {
-      commands.executeCommand('setContext', 'gpplProceduresTreeViewEnabled', viewEnable);
+      commands.executeCommand(
+        'setContext',
+        'gpplProceduresTreeViewEnabled',
+        viewEnable
+      );
     }
   }
   sortByAZ() {

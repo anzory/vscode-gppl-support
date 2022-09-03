@@ -8,13 +8,17 @@ import {
 } from 'vscode';
 import { constants } from '../util/constants';
 
-class GpplDocumentFormattingEditProvider implements DocumentFormattingEditProvider {
+export default class GpplDocumentFormattingEditProvider
+  implements DocumentFormattingEditProvider
+{
   indentLevel = 0;
   indent: string;
 
   constructor() {
     const indentSize = constants.format.tabSize ? constants.format.tabSize : 2;
-    this.indent = constants.format.preferSpace ? ' '.repeat(indentSize) : '\t'.repeat(indentSize);
+    this.indent = constants.format.preferSpace
+      ? ' '.repeat(indentSize)
+      : '\t'.repeat(indentSize);
   }
 
   provideDocumentFormattingEdits(
@@ -26,7 +30,10 @@ class GpplDocumentFormattingEditProvider implements DocumentFormattingEditProvid
       const textEditList: TextEdit[] = [];
       for (let i = 0; i < document.lineCount; i++) {
         textEditList.push(
-          new TextEdit(document.lineAt(i).range, this.formatLineWithIndentation(document.lineAt(i).text.trimLeft()))
+          new TextEdit(
+            document.lineAt(i).range,
+            this.formatLineWithIndentation(document.lineAt(i).text.trimLeft())
+          )
         );
       }
       this.indentLevel = 0;
@@ -68,8 +75,9 @@ class GpplDocumentFormattingEditProvider implements DocumentFormattingEditProvid
   }
 }
 
-export let gpplDocumentFormattingEditProvider = new GpplDocumentFormattingEditProvider();
+// export let gpplDocumentFormattingEditProvider =
+//   new GpplDocumentFormattingEditProvider();
 
-workspace.onDidChangeConfiguration(() => {
-  gpplDocumentFormattingEditProvider = new GpplDocumentFormattingEditProvider();
-});
+// workspace.onDidChangeConfiguration(() => {
+//   gpplDocumentFormattingEditProvider = new GpplDocumentFormattingEditProvider();
+// });

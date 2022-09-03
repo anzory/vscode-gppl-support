@@ -1,13 +1,17 @@
 'use strict';
 
 import {
-  ExtensionContext, StatusBarAlignment,
-  StatusBarItem, window
-} from "vscode";
-
+  ExtensionContext,
+  StatusBarAlignment,
+  StatusBarItem,
+  window,
+} from 'vscode';
 
 export class StatusBar {
-  static statusBar: StatusBarItem = window.createStatusBarItem(StatusBarAlignment.Right, 500);
+  static statusBar: StatusBarItem = window.createStatusBarItem(
+    StatusBarAlignment.Right,
+    500
+  );
 
   static configure(context: ExtensionContext) {
     context.subscriptions.push(this.statusBar);
