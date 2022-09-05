@@ -18,6 +18,14 @@
 
 ---
 
+## [1.6.3] - 2022-03-12
+
+### Fixed
+
+- SolidCAM `GPP Debugger` compatibility recovered.
+
+---
+
 ## [1.6.1] - 2021-09-25
 
 ### Added

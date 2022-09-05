@@ -7,8 +7,8 @@ This extension provides Full GPPL language support for VSCode: highlighting, for
 - Syntax highlighting with customization capability from `settings.json` file
 - Simple Document Formatting functionality
 - Procedure tree panel with navigation and sorting capability and auto-refresh the tree
-- Go to Definition functionality for procedures and variables
-- Go to References functionality for procedures and user variables
+- `Go to Definition` functionality for procedures and variables
+- `Go to References` functionality for procedures and user variables
 - Auto-complete & auto-indentation code
 - Shown hints when hovering
 - New auto-complete code functionality: just highlight the variable name and type the name of function - the variable will be wrapped in the function automatically
@@ -68,8 +68,6 @@ In addition, the formatting behavior depends on the following settings:
 
 There are no hard dependencies here, but I highly recommend using:
 
-- very useful extension [coenraads.bracket-pair-colorizer-2](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2) to make your pair brackets look better.
-
 - just as useful extension [alefragnani.bookmarks](https://marketplace.visualstudio.com/items?itemName=alefragnani.bookmarks).
 
 - [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono?preview.text_type=custom) font Designed by JetBrains, Philipp Nurullin, Konstantin Bulenkov.
@@ -88,9 +86,9 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
-### 1.6.3
+### 1.6.5
 
-- SolidCAM `GPP Debugger` compatibility recovered.
+- Added support for array parsing..
 
 ---
 
@@ -105,11 +103,12 @@ It is a good text editor with GPPL language support for SolidCAM postprocessor e
 
 ---
 
+## How to support the project
+
 You''ll help me greatly if you [write a review and rating](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support&ssr=false#review-details)
 
-Or even treat me to [coffee](https://paypal.me/anzory?locale.x=en_EN)
-😄
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/anzory?locale.x=en_EN)
+
+It is not necessary, but if you do it, I would appreciate it.
 
 ---
-
-**`Enjoy!`**
