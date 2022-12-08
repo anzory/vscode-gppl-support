@@ -10,6 +10,15 @@
 
 ---
 
+## [1.6.7] - 2022-12-08
+
+### Updated
+
+- Upgrade to the latest versions of the libraries used.
+- VSCode engine version updated to 1.74.0.
+
+---
+
 ## [1.6.6] - 2022-09-06
 
 ### Updated
