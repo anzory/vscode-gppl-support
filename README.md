@@ -86,10 +86,10 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
-### 1.6.6
+### 1.6.7
 
-- Added support for array parsing.
-- VSCode engine version updated.
+- Upgrade to the latest versions of the libraries used.
+- VSCode engine version updated to 1.74.0.
 
 ---
 

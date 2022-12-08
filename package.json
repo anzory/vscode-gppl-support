@@ -2,14 +2,14 @@
   "name": "vscode-gppl-support",
   "displayName": "SolidCAM postprocessor editor",
   "description": "Full SolidCAM GPP language support for VSCode: highlighting, formatting, autocomplete, code snippets and more. Write your postprocessor for SolidCAM like a pro.",
-  "version": "1.6.6",
+  "version": "1.6.7",
   "preview": false,
   "license": "MIT",
   "publisher": "anzory",
   "author": "Andrey Zorin",
   "copyright": "Copyright (c) 2021 Andrey Zorin",
   "engines": {
-    "vscode": "^1.71.0"
+    "vscode": "^1.74.0"
   },
   "keywords": [
     "gpp",
