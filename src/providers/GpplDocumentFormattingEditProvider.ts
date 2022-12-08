@@ -46,7 +46,7 @@ export default class GpplDocumentFormattingEditProvider
   formatLineWithIndentation(text: string): string {
     let _formattedText: string;
     text = text.replace(/[;\s]{0,}#\s{0,}(end)?region\b/, ';#$1region');
-    if (text.substr(0, 1) === ';' && !/(;#(end)?region)/.test(text)) {
+    if (text.substring(0, 1) === ';' && !/(;#(end)?region)/.test(text)) {
       _formattedText = this.indent.repeat(this.indentLevel) + text;
     } else {
       if (
@@ -71,7 +71,7 @@ export default class GpplDocumentFormattingEditProvider
         _formattedText = text;
       }
     }
-    return _formattedText.trimRight();
+    return _formattedText.trimEnd();
   }
 }
 
