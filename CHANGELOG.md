@@ -10,6 +10,15 @@
 
 ---
 
+## [1.6.8] - 2022-12-24
+
+### Updated
+
+- Fixed G-code highlighting
+- Added `Info` section for procedure definition
+
+---
+
 ## [1.6.7] - 2022-12-08
 
 ### Updated

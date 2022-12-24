@@ -147,19 +147,15 @@
     "coords": {
       "patterns": [
         {
-          "match": "([xX](?:[\\-\\+\\[\\]\\d\\.\\#]+))",
+          "match": "([xXyY](?:[\\-\\+\\[\\]\\d\\.\\*#]+))",
           "name": "string.gcode"
         },
         {
-          "match": "([yY](?:[\\-\\+\\[\\]\\d\\.\\#]+))",
-          "name": "string.gcode"
-        },
-        {
-          "match": "([zZ](?:[\\-\\+\\[\\]\\d\\.\\#]+))",
+          "match": "([zZ](?:[\\-\\+\\[\\]\\d\\.\\*#]+))",
           "name": "invalid.gcode"
         },
         {
-          "match": "([aAbBcC])\\s?(\\-?\\d?\\.?\\d+\\.?|\\-?\\.?(?=[#\\[]))",
+          "match": "([aAbBcC](?:[\\-\\+\\[\\]\\d\\.\\*#]+))",
           "name": "constant.character.escape.gcode"
         }
       ]

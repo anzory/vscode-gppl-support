@@ -1,4 +1,3 @@
-import { log } from 'console';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import {
@@ -20,6 +19,12 @@ export interface IGpplVariable {
   info?: string | undefined;
 }
 
+export interface IGpplProcedure {
+  name: string;
+  references?: Location[];
+  info?: string | undefined;
+}
+
 class SemanticHelper {
   private editor: TextEditor | undefined;
   private _globalUserVariables: IGpplVariable[] = [];
@@ -27,13 +32,16 @@ class SemanticHelper {
   private _localUserVariables: IGpplVariable[] = [];
   private _localUserArrays: IGpplVariable[] = [];
   private _systemGppVariables: IGpplVariable[] = [];
+  private _procedures: IGpplProcedure[] = [];
+  private _date: number;
   private textParser = new TextParser();
 
   constructor() {
     workspace.onDidChangeTextDocument((e) => this.onDocumentChanged(e));
     window.onDidChangeActiveTextEditor(() => this.onDocumentChanged());
     this.editor = window.activeTextEditor;
-    this.onDocumentChanged(undefined);
+    this._date = new Date().getTime();
+    this.parseDocument();
   }
 
   getGpplSystemVariables(): IGpplVariable[] {
@@ -50,6 +58,9 @@ class SemanticHelper {
   }
   getLocalUserArrays(): IGpplVariable[] {
     return this._localUserArrays;
+  }
+  getProcedures(): IGpplProcedure[] {
+    return this._procedures;
   }
   getGlobalUserArray(name: string): IGpplVariable | undefined {
     let res: IGpplVariable | undefined = undefined;
@@ -116,8 +127,23 @@ class SemanticHelper {
       return undefined;
     }
   }
+  getGpplProcedure(name: string): IGpplProcedure | undefined {
+    let res: IGpplProcedure | undefined = undefined;
+    if (
+      this._procedures.some((gppVar) => {
+        res = gppVar;
+        return gppVar.name === name;
+      })
+    ) {
+      return res;
+    } else {
+      return undefined;
+    }
+  }
 
   private parseSystemVariables() {
+    this._systemGppVariables = [];
+
     JSON.parse(
       readFileSync(
         resolve(
@@ -143,6 +169,35 @@ class SemanticHelper {
           info: undefined,
         });
       });
+  }
+
+  private parseProcedures() {
+    this._procedures = [];
+
+    this.editor = window.activeTextEditor;
+    const doc = this.editor?.document;
+    if (doc) {
+      let ranges: Range[] = this.textParser.getRegExpRangesInDoc(
+        doc,
+        /^\s*\@\w*\b.*$/gm
+      );
+      ranges.forEach((range) => {
+        const line = doc?.getText(range);
+        if (line) {
+          line.trim().replace(/\s{2,}/g, ' ');
+          const info = this.getInfo(line);
+          const name = this.getProcedure(line);
+          this._procedures.push({
+            name: name,
+            info: info,
+            references: this.textParser.getWordLocationsInDoc(
+              doc,
+              'call *' + name
+            ),
+          });
+        }
+      });
+    }
   }
 
   private parseUserVariables() {
@@ -243,6 +298,13 @@ class SemanticHelper {
     }
   }
 
+  private getProcedure(line: string) {
+    return line
+      .replace(/;.*/g, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim();
+  }
+
   private getVariables(line: string): string[] {
     const _items: string[] = [];
     line
@@ -300,9 +362,24 @@ class SemanticHelper {
     return i ? i.index === 0 : false;
   }
 
-  onDocumentChanged(e?: TextDocumentChangeEvent) {
+  parseDocument() {
     this.parseUserVariables();
     this.parseSystemVariables();
+    this.parseProcedures();
+  }
+
+  onDocumentChanged(e?: TextDocumentChangeEvent) {
+    const _p = 650;
+    const _d = new Date().getTime();
+
+    const timeoutId = setTimeout(() => {
+      this.parseDocument();
+    }, _p);
+
+    if (_d - this._date < _p) {
+      clearTimeout(timeoutId);
+      this._date = new Date().getTime();
+    }
 
     //
     //

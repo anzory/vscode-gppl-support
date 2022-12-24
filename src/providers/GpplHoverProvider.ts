@@ -45,7 +45,7 @@ export default class GpplHoverProvider implements HoverProvider {
         );
       }
       if (gppVar?.info) {
-        hoverContent.appendMarkdown('\n\n--- \nInfo: ' + gppVar.info);
+        hoverContent.appendMarkdown('\n\n--- \n' + gppVar.info);
       }
     }
 
@@ -71,7 +71,7 @@ export default class GpplHoverProvider implements HoverProvider {
         );
       }
       if (gppVar?.info) {
-        hoverContent.appendMarkdown('\n\n--- \nInfo: ' + gppVar.info);
+        hoverContent.appendMarkdown('\n\n--- \n' + gppVar.info);
       }
     }
 
@@ -97,7 +97,7 @@ export default class GpplHoverProvider implements HoverProvider {
         );
       }
       if (gppVar?.info) {
-        hoverContent.appendMarkdown('\n\n--- \nInfo: ' + gppVar.info);
+        hoverContent.appendMarkdown('\n\n--- \n' + gppVar.info);
       }
     }
     if (semanticHelper.isThisLocalUserVariable(word)) {
@@ -119,7 +119,7 @@ export default class GpplHoverProvider implements HoverProvider {
         );
       }
       if (gppVar?.info) {
-        hoverContent.appendMarkdown('\n\n--- \nInfo: ' + gppVar.info);
+        hoverContent.appendMarkdown('\n\n--- \n' + gppVar.info);
       }
     }
     if (semanticHelper.isThisSystemVariable(word)) {
@@ -129,7 +129,21 @@ export default class GpplHoverProvider implements HoverProvider {
       );
     }
     if (semanticHelper.isThisProcedureDeclaration(word)) {
-      hoverContent.appendCodeblock('Procedure: ' + word, constants.languageId);
+      const gppProc = semanticHelper.getGpplProcedure(word);
+      if (gppProc) {
+        hoverContent.appendCodeblock(
+          'Procedure: ' + word,
+          constants.languageId
+        );
+      }
+      if (gppProc?.references) {
+        hoverContent.appendMarkdown(
+          '\n---' + '\nFind `' + gppProc.references.length + '` references'
+        );
+      }
+      if (gppProc?.info) {
+        hoverContent.appendMarkdown('\n\n--- \n' + gppProc.info);
+      }
     }
     return Promise.resolve(new Hover(hoverContent, wordRange));
   }

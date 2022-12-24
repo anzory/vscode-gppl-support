@@ -86,10 +86,10 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
-### 1.6.7
+### 1.6.8
 
-- Upgrade to the latest versions of the libraries used.
-- VSCode engine version updated to 1.74.0.
+- Fixed G-code highlighting.
+- Added `Info` section for procedure definition
 
 ---
 
