@@ -7,7 +7,7 @@ import {
   SnippetString,
 } from 'vscode';
 import { gpplComletionsItemsList } from '../util/comletionsItemsList';
-import { IGpplVariable, semanticHelper } from '../util/semanticHelper';
+import { semanticHelper } from '../util/semanticHelper';
 
 export default class GpplCompletionItemsProvider
   implements CompletionItemProvider<CompletionItem>
