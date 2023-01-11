@@ -1,6 +1,7 @@
 'use strict';
 import {
   commands,
+  Disposable,
   ExtensionContext,
   languages,
   TextEdit,
@@ -19,13 +20,17 @@ import GpplReferenceProvider from './providers/GpplReferenceProvider';
 import Config from './util/config';
 import { constants } from './util/constants';
 import { StatusBar } from './util/statusBar';
+import { i18n } from './util/i18n';
+
+let completionItemProvider: Disposable;
+let hoverProvider: Disposable;
 
 export async function activate(context: ExtensionContext) {
   new Config().configure(context);
   StatusBar.configure(context);
   StatusBar.show();
-  const editor: TextEditor | undefined = window.activeTextEditor;
 
+  const editor: TextEditor | undefined = window.activeTextEditor;
   const gpplProceduresTreeProvider = new GpplProceduresTreeProvider(context);
   commands.registerCommand(constants.commands.refreshTree, () => {
     gpplProceduresTreeProvider.refresh();
@@ -62,12 +67,17 @@ export async function activate(context: ExtensionContext) {
       gpplProceduresTreeProvider
     )
   );
-  context.subscriptions.push(
-    languages.registerCompletionItemProvider(
-      constants.languageId,
-      new GpplCompletionItemsProvider()
-    )
+
+  completionItemProvider = languages.registerCompletionItemProvider(
+    constants.languageId,
+    new GpplCompletionItemsProvider()
   );
+  hoverProvider = languages.registerHoverProvider(
+    constants.languageId,
+    new GpplHoverProvider()
+  );
+  context.subscriptions.push(completionItemProvider);
+  context.subscriptions.push(hoverProvider);
   context.subscriptions.push(
     languages.registerDefinitionProvider(
       constants.languageId,
@@ -80,12 +90,7 @@ export async function activate(context: ExtensionContext) {
       new GpplReferenceProvider()
     )
   );
-  context.subscriptions.push(
-    languages.registerHoverProvider(
-      constants.languageId,
-      new GpplHoverProvider()
-    )
-  );
+
   context.subscriptions.push(
     languages.registerDocumentFormattingEditProvider(
       constants.languageId,
@@ -93,6 +98,7 @@ export async function activate(context: ExtensionContext) {
     )
   );
 }
+
 workspace.onDidChangeConfiguration(() => {
   window.visibleTextEditors.forEach((editor: TextEditor) => {
     editor.document.languageId === constants.languageId
@@ -100,6 +106,18 @@ workspace.onDidChangeConfiguration(() => {
         commands.executeCommand('editor.action.formatDocument'))
       : null;
   });
+
+  i18n.update();
+  completionItemProvider.dispose();
+  hoverProvider.dispose();
+  hoverProvider = languages.registerHoverProvider(
+    constants.languageId,
+    new GpplHoverProvider()
+  );
+  completionItemProvider = languages.registerCompletionItemProvider(
+    constants.languageId,
+    new GpplCompletionItemsProvider()
+  );
 });
 export function deactivate() {
   StatusBar.dispose();

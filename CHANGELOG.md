@@ -10,6 +10,14 @@
 
 ---
 
+## [1.7.0] - 2023-01-12
+
+### Added
+
+- Added `Internationalization` support for `Completion`
+
+---
+
 ## [1.6.8] - 2022-12-24
 
 ### Updated

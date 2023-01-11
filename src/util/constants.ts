@@ -5,7 +5,7 @@ import { workspace } from 'vscode';
 const gpp = JSON.parse(
   readFileSync(resolve(__dirname, 'package.json')).toString()
 );
-const confProp = Object.getOwnPropertyNames(
+const configurationProperties = Object.getOwnPropertyNames(
   gpp.contributes.configuration.properties
 );
 
@@ -31,13 +31,22 @@ class GpplConstants {
         'https://github.com/anzory/vscode-gppl-support/blob/master/README.md',
     },
     format: {
-      enable: workspace.getConfiguration().get<boolean>(confProp[2]),
-      tabSize: workspace.getConfiguration().get<number>(confProp[3]),
-      preferSpace: workspace.getConfiguration().get<boolean>(confProp[4]),
+      enable: workspace
+        .getConfiguration()
+        .get<boolean>(configurationProperties[2]),
+      tabSize: workspace
+        .getConfiguration()
+        .get<number>(configurationProperties[3]),
+      preferSpace: workspace
+        .getConfiguration()
+        .get<boolean>(configurationProperties[4]),
       applyIndentsToRegions: workspace
         .getConfiguration()
-        .get<boolean>(confProp[6]),
+        .get<boolean>(configurationProperties[6]),
     },
+    localesEnum:
+      gpp.contributes.configuration.properties['gpp.localization.defaultLocale']
+        .enum,
     languageId: gpp.contributes.languages[0].id,
     proceduresViewId: gpp.contributes.views.gpp[0].id,
     configId: gpp.contributes.languages[0].id,
