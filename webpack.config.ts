@@ -28,6 +28,7 @@ const config: Configuration = {
     new cp({
       patterns: [
         { from: './languages', to: 'languages' },
+        { from: './i18n', to: 'i18n' },
         { from: './images/icons/**.*', to: './' },
         { from: './images/**.png', to: './' },
         { from: './images/**.ico', to: './' },
@@ -76,11 +77,18 @@ module.exports = config;
 
 //========================================================
 function writeDistPackageJson(): void {
-  let distPackageJson = JSON.parse(fs.readFileSync('./package.json').toString());
+  let distPackageJson = JSON.parse(
+    fs.readFileSync('./package.json').toString()
+  );
   delete distPackageJson.scripts;
   delete distPackageJson.devDependencies;
   distPackageJson.publisher = 'anzory';
   distPackageJson.name = 'vscode-gppl-support';
   distPackageJson.main = './main';
-  fs.writeFile(resolve(__dirname, dist, 'package.json'), JSON.stringify(distPackageJson, null, ' '), 'utf8', () => {});
+  fs.writeFile(
+    resolve(__dirname, dist, 'package.json'),
+    JSON.stringify(distPackageJson, null, ' '),
+    'utf8',
+    () => {}
+  );
 }

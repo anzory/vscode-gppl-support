@@ -1,13 +1,12 @@
 import {
   CompletionItem,
-  CompletionItemKind,
   CompletionItemProvider,
   MarkdownString,
   ProviderResult,
   SnippetString,
 } from 'vscode';
 import { gpplComletionsItemsList } from '../util/comletionsItemsList';
-import { semanticHelper } from '../util/semanticHelper';
+import { i18n } from '../util/i18n';
 
 export default class GpplCompletionItemsProvider
   implements CompletionItemProvider<CompletionItem>
@@ -18,18 +17,15 @@ export default class GpplCompletionItemsProvider
       let _item: CompletionItem = new CompletionItem(item.label);
       _item.insertText = new SnippetString(item.insertText?.toString());
       _item.commitCharacters = item.commitCharacters;
-      _item.detail = item.detail;
       _item.kind = item.kind;
-
-      if (semanticHelper.isThisSystemVariable(item.label.toString())) {
-        _item.documentation = new MarkdownString('`SolidCAM` system variable');
-        _item.detail = '(system variable)';
-      } else {
+      if (item.documentation) {
         _item.documentation = new MarkdownString(
-          item.documentation?.toString()
+          i18n.t(item.documentation.toString())
         );
       }
-
+      if (item.detail) {
+        _item.detail = i18n.t(item.detail.toString());
+      }
       this._gpplComletionsItems.push(_item);
     });
   }

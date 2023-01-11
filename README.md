@@ -12,6 +12,7 @@ This extension provides Full GPPL language support for VSCode: highlighting, for
 - Auto-complete & auto-indentation code
 - Shown hints when hovering
 - New auto-complete code functionality: just highlight the variable name and type the name of function - the variable will be wrapped in the function automatically
+- internationalization support for `Completion`
 - Full compatibility with `SolidCAM debugger`
 
 ---
@@ -41,6 +42,12 @@ Sidebar with procedures tree view & sorting capability:
 Displays information about variables when the cursor is pointing
 
 ![Displays information](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/info-when-hover.gif?raw=true)
+
+---
+
+Added internationalization support for Completion
+
+![Internationalization for Completion](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/internationalization.gif?raw=true)
 
 ---
 
@@ -86,10 +93,9 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
-### 1.6.8
+### 1.7.0
 
-- Fixed G-code highlighting.
-- Added `Info` section for procedure definition
+- Added `Internationalization` support for `Completion`
 
 ---
 
@@ -106,9 +112,11 @@ It is a good text editor with GPPL language support for SolidCAM postprocessor e
 
 ## How to support the project
 
-You''ll help me greatly if you [write a review and rating](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support&ssr=false#review-details)
+- You can add language files for your locale. Please contact me at andrey.a.zorin@gmail.com to find out how.
 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/anzory?locale.x=en_EN)
+- You''ll help me greatly if you [write a review and rating](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support&ssr=false#review-details)
+
+- [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/anzory?locale.x=en_EN)
 
 It is not necessary, but if you do it, I would appreciate it.
 
