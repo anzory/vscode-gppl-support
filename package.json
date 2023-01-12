@@ -279,15 +279,12 @@
     "eslint": "^8.30.0",
     "fs": "^0.0.1-security",
     "glob": "^8.0.3",
+    "i18n": "^0.15.1",
     "mocha": "^10.2.0",
     "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.4",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
-  },
-  "dependencies": {
-    "@vscode/l10n": "^0.0.10",
-    "i18n": "^0.15.1"
   }
 }
