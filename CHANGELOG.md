@@ -10,6 +10,14 @@
 
 ---
 
+## [1.7.1]
+
+### Fixed
+
+- Fixed Syntax highlighting changes when choosing a theme other than `Default Dark+`.
+
+---
+
 ## [1.7.0] - 2023-01-12
 
 ### Added

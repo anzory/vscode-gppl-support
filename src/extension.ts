@@ -119,6 +119,7 @@ workspace.onDidChangeConfiguration(() => {
     new GpplCompletionItemsProvider()
   );
 });
+
 export function deactivate() {
   StatusBar.dispose();
 }

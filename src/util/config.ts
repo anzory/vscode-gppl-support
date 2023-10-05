@@ -3,6 +3,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import {
   ConfigurationChangeEvent,
+  ConfigurationTarget,
   ExtensionContext,
   workspace,
   WorkspaceConfiguration,
@@ -64,6 +65,15 @@ export default class Config {
   }
 
   private addColorizationSettings() {
+    workspace
+      .getConfiguration()
+      .update(
+        'editor.tokenColorCustomizations',
+        undefined,
+        ConfigurationTarget.Global,
+        true
+      );
+
     let workspaceTokenColorCustomizations = workspace.getConfiguration(
       'editor.tokenColorCustomizations'
     );
@@ -94,13 +104,12 @@ export default class Config {
       ).toString()
     );
 
-    if (!customTokenColorCustomizations['[Default Dark+]']) {
+    if (!customTokenColorCustomizations['[*Dark*]']) {
       Object.assign(customTokenColorCustomizations, colorsDefaultDark);
     } else {
       let wpDarkRules: any[] =
-        customTokenColorCustomizations['[Default Dark+]'].textMateRules;
-      let gppDarkRules: any[] =
-        colorsDefaultDark['[Default Dark+]'].textMateRules;
+        customTokenColorCustomizations['[*Dark*]'].textMateRules;
+      let gppDarkRules: any[] = colorsDefaultDark['[*Dark*]'].textMateRules;
 
       gppDarkRules.forEach((set) => {
         let exist: boolean = false;
@@ -108,20 +117,17 @@ export default class Config {
           return set.scope === wpSet.scope;
         });
         if (!exist) {
-          customTokenColorCustomizations['[Default Dark+]'].textMateRules.push(
-            set
-          );
+          customTokenColorCustomizations['[*Dark*]'].textMateRules.push(set);
         }
       });
     }
 
-    if (!customTokenColorCustomizations['[Default Light+]']) {
+    if (!customTokenColorCustomizations['[*Light*]']) {
       Object.assign(customTokenColorCustomizations, colorsDefaultLight);
     } else {
       let wpLightRules: any[] =
-        customTokenColorCustomizations['[Default Light+]'].textMateRules;
-      let gppLightRules: any[] =
-        colorsDefaultLight['[Default Light+]'].textMateRules;
+        customTokenColorCustomizations['[*Light*]'].textMateRules;
+      let gppLightRules: any[] = colorsDefaultLight['[*Light*]'].textMateRules;
 
       gppLightRules.forEach((set) => {
         let exist: boolean = false;
@@ -129,9 +135,7 @@ export default class Config {
           return set.scope === wpSet.scope;
         });
         if (!exist) {
-          customTokenColorCustomizations['[Default Light+]'].textMateRules.push(
-            set
-          );
+          customTokenColorCustomizations['[*Light*]'].textMateRules.push(set);
         }
       });
     }
