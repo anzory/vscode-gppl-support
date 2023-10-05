@@ -41,9 +41,7 @@
     "Snippets",
     "Formatters"
   ],
-  "activationEvents": [
-    "onLanguage:gpp"
-  ],
+  "activationEvents": [],
   "main": "./dist/main.js",
   "contributes": {
     "languages": [
@@ -267,6 +265,7 @@
   "devDependencies": {
     "@types/glob": "^8.1.0",
     "@types/i18n": "^0.13.6",
+<<<<<<< HEAD
     "@types/mocha": "^10.0.2",
     "@types/node": "^18.18.3",
     "@types/vscode": "^1.83.0",
@@ -277,6 +276,18 @@
     "@vscode/vsce": "^2.21.1",
     "copy-webpack-plugin": "^11.0.0",
     "eslint": "^8.50.0",
+=======
+    "@types/mocha": "^10.0.1",
+    "@types/node": "^18.15.11",
+    "@types/vscode": "^1.77.0",
+    "@types/webpack": "^5.28.1",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "@typescript-eslint/parser": "^5.57.1",
+    "@vscode/test-electron": "^2.3.0",
+    "@vscode/vsce": "^2.18.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "eslint": "^8.37.0",
+>>>>>>> 1fa0ebc8307440e9a803d9d2d9a03f6d1666fb48
     "fs": "^0.0.1-security",
     "glob": "^8.1.0",
     "i18n": "^0.15.1",
@@ -284,7 +295,12 @@
     "ts-loader": "^9.4.4",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.5",
+<<<<<<< HEAD
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
+=======
+    "webpack": "^5.77.0",
+    "webpack-cli": "^5.0.1"
+>>>>>>> 1fa0ebc8307440e9a803d9d2d9a03f6d1666fb48
   }
 }
