@@ -93,9 +93,12 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
-### 1.7.1
+### 1.7.2
 
-- Fixed: Syntax highlighting changes when choosing a theme other than `Default Dark+`.
+### Fixed:
+
+- Syntax highlighting changes when choosing a theme other than `Default Dark+`.
+- The size of icons on the toolbar.
 
 ---
 

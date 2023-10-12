@@ -11,15 +11,15 @@ export default class TextParser {
     const locations: Location[] = [];
     if (doc) {
       const text = doc.getText();
-      let regExpRes: RegExpExecArray | null;
+      let regExpResult: RegExpExecArray | null;
       do {
-        regExpRes = regExp.exec(text);
-        if (regExpRes) {
+        regExpResult = regExp.exec(text);
+        if (regExpResult) {
           const startPos: Position = doc
-            ? doc.positionAt(regExpRes.index)
+            ? doc.positionAt(regExpResult.index)
             : new Position(0, 0);
           const endPos: Position = doc
-            ? doc.positionAt(regExpRes.index + regExpRes[0].length)
+            ? doc.positionAt(regExpResult.index + regExpResult[0].length)
             : new Position(0, 0);
           const location: Location = new Location(
             doc.uri,
@@ -27,7 +27,7 @@ export default class TextParser {
           );
           locations.push(location);
         }
-      } while (regExpRes);
+      } while (regExpResult);
     }
     return locations;
   }

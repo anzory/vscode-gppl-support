@@ -10,11 +10,12 @@
 
 ---
 
-## [1.7.1]
+## [1.7.2] - 2023-10-12
 
-### Fixed
+### Fixed:
 
-- Fixed Syntax highlighting changes when choosing a theme other than `Default Dark+`.
+- Syntax highlighting changes when choosing a theme other than `Default Dark+`.
+- The size of icons on the toolbar.
 
 ---
 
