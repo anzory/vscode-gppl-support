@@ -21,6 +21,7 @@ export interface IGpplVariable {
 
 export interface IGpplProcedure {
   name: string;
+  args?: string;
   references?: Location[];
   info?: string | undefined;
 }
@@ -78,9 +79,9 @@ class SemanticHelper {
   getGlobalUserVariable(name: string): IGpplVariable | undefined {
     let res: IGpplVariable | undefined = undefined;
     if (
-      this._globalUserVariables.some((gppVar) => {
-        res = gppVar;
-        return gppVar.name === name;
+      this._globalUserVariables.some((variable) => {
+        res = variable;
+        return variable.name === name;
       })
     ) {
       return res;
@@ -91,9 +92,9 @@ class SemanticHelper {
   getLocalUserArray(name: string): IGpplVariable | undefined {
     let res: IGpplVariable | undefined = undefined;
     if (
-      this._localUserArrays.some((gppVar) => {
-        res = gppVar;
-        return gppVar.name === name;
+      this._localUserArrays.some((array) => {
+        res = array;
+        return array.name === name;
       })
     ) {
       return res;
@@ -104,9 +105,9 @@ class SemanticHelper {
   getLocalUserVariable(name: string): IGpplVariable | undefined {
     let res: IGpplVariable | undefined = undefined;
     if (
-      this._localUserVariables.some((gppVar) => {
-        res = gppVar;
-        return gppVar.name === name;
+      this._localUserVariables.some((variable) => {
+        res = variable;
+        return variable.name === name;
       })
     ) {
       return res;
@@ -117,9 +118,9 @@ class SemanticHelper {
   getGpplSystemVariable(name: string): IGpplVariable | undefined {
     let res: IGpplVariable | undefined = undefined;
     if (
-      this._systemGppVariables.some((gppVar) => {
-        res = gppVar;
-        return gppVar.name === name;
+      this._systemGppVariables.some((variable) => {
+        res = variable;
+        return variable.name === name;
       })
     ) {
       return res;
@@ -130,9 +131,9 @@ class SemanticHelper {
   getGpplProcedure(name: string): IGpplProcedure | undefined {
     let res: IGpplProcedure | undefined = undefined;
     if (
-      this._procedures.some((gppVar) => {
-        res = gppVar;
-        return gppVar.name === name;
+      this._procedures.some((procedure) => {
+        res = procedure;
+        return procedure.name === name;
       })
     ) {
       return res;
@@ -184,15 +185,17 @@ class SemanticHelper {
       ranges.forEach((range) => {
         const line = doc?.getText(range);
         if (line) {
-          line.trim().replace(/\s{2,}/g, ' ');
+          line.replace(/\s{2,}/gm, ' ').trim();
           const info = this.getInfo(line);
-          const name = this.getProcedure(line);
+          const name = this.getProcedureName(line);
+          const args = this.getProcedureArgs(line);
           this._procedures.push({
             name: name,
+            args: args,
             info: info,
             references: this.textParser.getWordLocationsInDoc(
               doc,
-              'call *' + name
+              'call ' + name
             ),
           });
         }
@@ -216,15 +219,15 @@ class SemanticHelper {
       ranges.forEach((range) => {
         const line = doc?.getText(range);
         if (line) {
-          line.trim().replace(/\s{2,}/g, ' ');
+          line.trim().replace(/\s{2,}/gm, ' ');
           const gppInfo = this.getInfo(line);
           const gppScope = line.trim().split(' ')[0];
           const gppType = line.trim().split(' ')[1];
           this.getVariables(line).forEach((ugv) => {
-            if (ugv.match(/<<.*>>/g)) {
-              const uga = ugv.replace(/<<.*>>/g, '');
+            if (ugv.match(/<<.*>>/gm)) {
+              const uga = ugv.replace(/<<.*>>/gm, '');
               this._globalUserArrays.push({
-                name: uga /*.replace(/<<.*>>/g, '')*/,
+                name: uga /*.replace(/<<.*>>/gm, '')*/,
                 scope: gppScope,
                 type: gppType + ' array',
                 references: this.textParser.getWordLocationsInDoc(
@@ -255,12 +258,12 @@ class SemanticHelper {
       ranges.forEach((range) => {
         const line = doc?.getText(range);
         if (line) {
-          line.trim().replace(/\s{2,}/g, ' ');
+          line.trim().replace(/\s{2,}/gm, ' ');
           const gppInfo = this.getInfo(line);
           const gppScope = line.split(' ')[0];
           const gppType = line.split(' ')[1];
           this.getVariables(line).forEach((ulv) => {
-            if (ulv.match(/<<.*>>/g)) {
+            if (ulv.match(/<<.*>>/gm)) {
               const ula = ulv.replace(/<<.*>>/, '');
               this._localUserArrays.push({
                 name: ula,
@@ -291,31 +294,37 @@ class SemanticHelper {
   }
 
   private getInfo(line: string): string | undefined {
-    if (/;/.test(line)) {
-      return line.replace(/^([^;]+);\s{0,}/g, '');
+    if (/;/g.test(line)) {
+      return line.replace(/^.+?;/gm, '').trim();
     } else {
       return undefined;
     }
   }
 
-  private getProcedure(line: string) {
-    return line
-      .replace(/;.*/g, '')
-      .replace(/\s{2,}/g, ' ')
-      .trim();
+  private getProcedureName(line: string): string {
+    return line.replace(/;.*/gm, '').trim().replace(/\(.*/gm, '');
+  }
+
+  getProcedureArgs(line: string): string | undefined {
+    let _arg = line.replace(/;.*/gm, '').trim();
+    if (/\(/.test(_arg)) {
+      return _arg.replace(/^(.+?)\(/gm, '').replace(/\).*$/gm, '');
+    } else {
+      return undefined;
+    }
   }
 
   private getVariables(line: string): string[] {
     const _items: string[] = [];
     line
-      .replace(/;.*/g, '')
-      .replace(/\bglobal\b/g, '')
-      .replace(/\blocal\b/g, '')
-      .replace(/\bstring\b/g, '')
-      .replace(/\blogical\b/g, '')
-      .replace(/\binteger\b/g, '')
-      .replace(/\bnumeric\b/g, '')
-      .replace(/\s{2,}/g, ' ')
+      .replace(/;.*/gm, '')
+      .replace(/\bglobal\b/gm, '')
+      .replace(/\blocal\b/gm, '')
+      .replace(/\bstring\b/gm, '')
+      .replace(/\blogical\b/gm, '')
+      .replace(/\binteger\b/gm, '')
+      .replace(/\bnumeric\b/gm, '')
+      .replace(/\s{2,}/gm, ' ')
       .trim()
       .split(' ')
       .forEach((uv) => {

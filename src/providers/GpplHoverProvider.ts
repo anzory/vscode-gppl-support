@@ -129,20 +129,22 @@ export default class GpplHoverProvider implements HoverProvider {
       );
     }
     if (semanticHelper.isThisProcedureDeclaration(word)) {
-      const gppProc = semanticHelper.getGpplProcedure(word);
-      if (gppProc) {
+      const procedure = semanticHelper.getGpplProcedure(word);
+      if (procedure) {
         hoverContent.appendCodeblock(
-          'Procedure: ' + word,
+          'Procedure: ' +
+            procedure.name +
+            (procedure.args ? '(' + procedure.args + ')' : ''),
           constants.languageId
         );
       }
-      if (gppProc?.references) {
+      if (procedure?.references) {
         hoverContent.appendMarkdown(
-          '\n---' + '\nFind `' + gppProc.references.length + '` references'
+          '\n---' + '\nFind `' + procedure.references.length + '` references'
         );
       }
-      if (gppProc?.info) {
-        hoverContent.appendMarkdown('\n\n--- \n' + gppProc.info);
+      if (procedure?.info) {
+        hoverContent.appendMarkdown('\n\n--- \n' + procedure.info);
       }
     }
     return Promise.resolve(new Hover(hoverContent, wordRange));

@@ -93,12 +93,11 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
-### 1.7.2
+### 1.7.3
 
 ### Fixed:
 
-- Syntax highlighting changes when choosing a theme other than `Default Dark+`.
-- The size of icons on the toolbar.
+- Tooltips for procedure with parameters were not displayed on mouse-over.
 
 ---
 

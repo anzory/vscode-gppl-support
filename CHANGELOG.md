@@ -10,6 +10,14 @@
 
 ---
 
+## [1.7.3] - 2023-03-19
+
+### Fixed:
+
+- Tooltips for procedure with parameters were not displayed on mouse-over.
+
+---
+
 ## [1.7.2] - 2023-10-12
 
 ### Fixed:
