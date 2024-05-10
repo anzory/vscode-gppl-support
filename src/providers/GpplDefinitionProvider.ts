@@ -11,10 +11,10 @@ import {
   window,
   workspace,
 } from 'vscode';
-import { semanticHelper } from '../util/semanticHelper';
-import TextParser from '../util/textParser';
+import { semanticHelper } from '../utils/semanticHelper';
+import TextParser from '../utils/textParser';
 
-export default class GpplDefinitionProvider implements DefinitionProvider {
+export class GpplDefinitionProvider implements DefinitionProvider {
   private definition: Location | undefined = undefined;
   private textParser = new TextParser();
   private editor: TextEditor | undefined = window.activeTextEditor;

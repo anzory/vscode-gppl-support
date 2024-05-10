@@ -8,10 +8,9 @@ import {
   Range,
   TextDocument,
 } from 'vscode';
-import { constants } from '../util/constants';
-import { IGpplVariable, semanticHelper } from '../util/semanticHelper';
+import { utils, IGpplVariable } from '../utils/utils';
 
-export default class GpplHoverProvider implements HoverProvider {
+export class GpplHoverProvider implements HoverProvider {
   constructor() {}
   provideHover(
     document: TextDocument,
@@ -23,9 +22,9 @@ export default class GpplHoverProvider implements HoverProvider {
       document.getWordRangeAtPosition(position);
     let word: string = document.getText(wordRange);
 
-    if (semanticHelper.isThisGloballUserArray(word)) {
+    if (utils.semanticHelper.isThisGloballUserArray(word)) {
       let gppVar: IGpplVariable | undefined =
-        semanticHelper.getGlobalUserArray(word);
+        utils.semanticHelper.getGlobalUserArray(word);
       if (gppVar) {
         hoverContent.appendCodeblock(
           gppVar.scope +
@@ -34,7 +33,7 @@ export default class GpplHoverProvider implements HoverProvider {
             ' ' +
             gppVar.name +
             ' ; (user array)',
-          constants.languageId
+          utils.constants.languageId
         );
       }
       if (gppVar?.references) {
@@ -49,9 +48,9 @@ export default class GpplHoverProvider implements HoverProvider {
       }
     }
 
-    if (semanticHelper.isThisLocalUserArray(word)) {
+    if (utils.semanticHelper.isThisLocalUserArray(word)) {
       let gppVar: IGpplVariable | undefined =
-        semanticHelper.getLocalUserArray(word);
+        utils.semanticHelper.getLocalUserArray(word);
       if (gppVar) {
         hoverContent.appendCodeblock(
           gppVar.scope +
@@ -60,7 +59,7 @@ export default class GpplHoverProvider implements HoverProvider {
             ' ' +
             gppVar.name +
             ' ; (user array)',
-          constants.languageId
+          utils.constants.languageId
         );
       }
       if (gppVar?.references) {
@@ -75,9 +74,9 @@ export default class GpplHoverProvider implements HoverProvider {
       }
     }
 
-    if (semanticHelper.isThisGlobalUserVariable(word)) {
+    if (utils.semanticHelper.isThisGlobalUserVariable(word)) {
       let gppVar: IGpplVariable | undefined =
-        semanticHelper.getGlobalUserVariable(word);
+        utils.semanticHelper.getGlobalUserVariable(word);
       if (gppVar) {
         hoverContent.appendCodeblock(
           gppVar.scope +
@@ -86,7 +85,7 @@ export default class GpplHoverProvider implements HoverProvider {
             ' ' +
             gppVar.name +
             ' ; (user variable)',
-          constants.languageId
+          utils.constants.languageId
         );
       }
       if (gppVar?.references) {
@@ -100,8 +99,8 @@ export default class GpplHoverProvider implements HoverProvider {
         hoverContent.appendMarkdown('\n\n--- \n' + gppVar.info);
       }
     }
-    if (semanticHelper.isThisLocalUserVariable(word)) {
-      let gppVar = semanticHelper.getLocalUserVariable(word);
+    if (utils.semanticHelper.isThisLocalUserVariable(word)) {
+      let gppVar = utils.semanticHelper.getLocalUserVariable(word);
       if (gppVar) {
         hoverContent.appendCodeblock(
           gppVar.scope +
@@ -110,7 +109,7 @@ export default class GpplHoverProvider implements HoverProvider {
             ' ' +
             gppVar.name +
             ' ; (user variable)',
-          constants.languageId
+          utils.constants.languageId
         );
       }
       if (gppVar?.references) {
@@ -122,20 +121,20 @@ export default class GpplHoverProvider implements HoverProvider {
         hoverContent.appendMarkdown('\n\n--- \n' + gppVar.info);
       }
     }
-    if (semanticHelper.isThisSystemVariable(word)) {
+    if (utils.semanticHelper.isThisSystemVariable(word)) {
       hoverContent.appendCodeblock(
         'global system variable: ' + word,
-        constants.languageId
+        utils.constants.languageId
       );
     }
-    if (semanticHelper.isThisProcedureDeclaration(word)) {
-      const procedure = semanticHelper.getGpplProcedure(word);
+    if (utils.semanticHelper.isThisProcedureDeclaration(word)) {
+      const procedure = utils.semanticHelper.getGpplProcedure(word);
       if (procedure) {
         hoverContent.appendCodeblock(
           'Procedure: ' +
             procedure.name +
             (procedure.args ? '(' + procedure.args + ')' : ''),
-          constants.languageId
+          utils.constants.languageId
         );
       }
       if (procedure?.references) {

@@ -13,9 +13,18 @@ const config: Configuration = {
   target: 'node', // vscode extensions run in a Node.js-context 📖 -> https://webpack.js.org/configuration/node/
   // mode: 'none', // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
 
+  // entry: {
+  //   main: './src/extension.ts',
+  // }, // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
+
   entry: {
     main: './src/extension.ts',
-  }, // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
+    providers: './src/providers/providers.ts',
+    utils: './src/utils/utils.ts',
+    test: './src/test/runTests.ts',
+    suite: './src/test/suite/index.ts',
+  },
+
   output: {
     // the bundle is stored in the 'dist' folder (check package.json), 📖 -> https://webpack.js.org/configuration/output/
     path: resolve(__dirname, dist),

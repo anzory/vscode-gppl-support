@@ -7,10 +7,10 @@ import {
   ReferenceProvider,
   TextDocument,
 } from 'vscode';
-import { semanticHelper } from '../util/semanticHelper';
-import TextParser from '../util/textParser';
+import { semanticHelper } from '../utils/semanticHelper';
+import TextParser from '../utils/textParser';
 
-export default class GpplReferenceProvider implements ReferenceProvider {
+export class GpplReferenceProvider implements ReferenceProvider {
   provideReferences(
     document: TextDocument,
     position: Position,

@@ -6,17 +6,19 @@ import {
   TextEdit,
   workspace,
 } from 'vscode';
-import { constants } from '../util/constants';
+import { utils } from '../utils/utils';
 
-export default class GpplDocumentFormattingEditProvider
+export class GpplDocumentFormattingEditProvider
   implements DocumentFormattingEditProvider
 {
   indentLevel = 0;
   indent: string;
 
   constructor() {
-    const indentSize = constants.format.tabSize ? constants.format.tabSize : 2;
-    this.indent = constants.format.preferSpace
+    const indentSize = utils.constants.format.tabSize
+      ? utils.constants.format.tabSize
+      : 2;
+    this.indent = utils.constants.format.preferSpace
       ? ' '.repeat(indentSize)
       : '\t'.repeat(indentSize);
   }
@@ -26,7 +28,7 @@ export default class GpplDocumentFormattingEditProvider
     options: FormattingOptions,
     token: CancellationToken
   ): TextEdit[] {
-    if (constants.format.enable) {
+    if (utils.constants.format.enable) {
       const textEditList: TextEdit[] = [];
       for (let i = 0; i < document.lineCount; i++) {
         textEditList.push(
@@ -51,7 +53,7 @@ export default class GpplDocumentFormattingEditProvider
     } else {
       if (
         /^@\w+|(^\b(i|I)f\b)|(^\b(w|W)hile\b)/.test(text) ||
-        (constants.format.applyIndentsToRegions && /#region\b/.test(text))
+        (utils.constants.format.applyIndentsToRegions && /#region\b/.test(text))
       ) {
         _formattedText = this.indent.repeat(this.indentLevel) + text;
         ++this.indentLevel;
@@ -61,7 +63,8 @@ export default class GpplDocumentFormattingEditProvider
         ++this.indentLevel;
       } else if (
         /(^\b(e|E)nd(w|p|((i|I)f)))/.test(text) ||
-        (constants.format.applyIndentsToRegions && /#endregion\b/.test(text))
+        (utils.constants.format.applyIndentsToRegions &&
+          /#endregion\b/.test(text))
       ) {
         --this.indentLevel;
         _formattedText = this.indent.repeat(this.indentLevel) + text;

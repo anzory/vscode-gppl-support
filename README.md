@@ -84,7 +84,7 @@ There are no hard dependencies here, but I highly recommend using:
 ---
 
 ## Known Issues
-
+<!--  -->
 There are no known issues with this extension.
 
 See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gppl-support/issues/new/choose).
@@ -93,11 +93,11 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
-### 1.7.3
+### 1.7.4
 
-### Fixed:
+### Removed:
 
-- Tooltips for procedure with parameters were not displayed on mouse-over.
+- Status Bar
 
 ---
 

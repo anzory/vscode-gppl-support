@@ -11,7 +11,7 @@
       "outFiles": ["${workspaceRoot}/dist/**/*.js"],
       "preLaunchTask": {
         "type": "npm",
-        "script": "prelaunch"
+        "script": "vscode:prepublish"
       }
     },
     {

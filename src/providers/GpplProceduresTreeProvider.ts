@@ -18,9 +18,8 @@ import {
   window,
   workspace,
 } from 'vscode';
-import { constants } from '../util/constants';
-import { StatusBar } from '../util/statusBar';
-import TextParser from '../util/textParser';
+import { constants } from '../utils/constants';
+import TextParser from '../utils/textParser';
 
 enum Sort {
   byAZ = 1,
@@ -33,9 +32,7 @@ interface GpplElement {
   label: string;
 }
 
-export default class GpplProceduresTreeProvider
-  implements TreeDataProvider<TreeItem>
-{
+export class GpplProceduresTreeProvider implements TreeDataProvider<TreeItem> {
   private _onDidChangeTreeData: EventEmitter<TreeItem | undefined> =
     new EventEmitter<TreeItem | undefined>();
   readonly onDidChangeTreeData: Event<TreeItem | undefined> =
@@ -48,7 +45,6 @@ export default class GpplProceduresTreeProvider
   constructor(private context: ExtensionContext) {
     window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
     workspace.onDidChangeTextDocument((e) => this.onDocumentChanged(e));
-    StatusBar.update('Tree needs to be updated');
   }
 
   getChildren(element: GpplElement): ProviderResult<GpplElement[]> {
@@ -159,7 +155,6 @@ export default class GpplProceduresTreeProvider
   }
 
   private onActiveEditorChanged(): void {
-    StatusBar.update('Tree needs to be updated');
     this.editor = window.activeTextEditor;
     this.doc = this.editor?.document;
     if (window.activeTextEditor) {
@@ -176,7 +171,6 @@ export default class GpplProceduresTreeProvider
   }
 
   private onDocumentChanged(changeEvent: TextDocumentChangeEvent): void {
-    StatusBar.update('Tree needs to be updated');
     if (window.activeTextEditor) {
       if (
         window.activeTextEditor.document.languageId === constants.languageId
@@ -196,11 +190,10 @@ export default class GpplProceduresTreeProvider
   }
   refresh(viewEnable?: boolean): void {
     this._onDidChangeTreeData.fire(undefined);
-    StatusBar.update('Tree successfully updated');
     if (viewEnable) {
       commands.executeCommand(
         'setContext',
-        'gpplProceduresTreeViewEnabled',
+        'gppProceduresTreeViewEnabled',
         viewEnable
       );
     }

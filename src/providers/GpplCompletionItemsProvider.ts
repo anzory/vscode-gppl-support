@@ -5,10 +5,10 @@ import {
   ProviderResult,
   SnippetString,
 } from 'vscode';
-import { gpplComletionsItemsList } from '../util/comletionsItemsList';
-import { i18n } from '../util/i18n';
+import { gpplComletionsItemsList } from '../utils/comletionsItemsList';
+import { i18n } from '../utils/i18n';
 
-export default class GpplCompletionItemsProvider
+export class GpplCompletionItemsProvider
   implements CompletionItemProvider<CompletionItem>
 {
   private _gpplComletionsItems: CompletionItem[] = [];
