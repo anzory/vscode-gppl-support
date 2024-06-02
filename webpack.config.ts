@@ -1,6 +1,4 @@
-// @ts-ignore
 'use strict';
-// import * as fs from 'fs';
 import { resolve } from 'path';
 import { Compiler, Configuration } from 'webpack';
 
@@ -10,13 +8,7 @@ const cp = require('copy-webpack-plugin');
 let dist = 'dist';
 
 const config: Configuration = {
-  target: 'node', // vscode extensions run in a Node.js-context 📖 -> https://webpack.js.org/configuration/node/
-  // mode: 'none', // this leaves the source code as close as possible to the original (when packaging we set this to 'production')
-
-  // entry: {
-  //   main: './src/extension.ts',
-  // }, // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
-
+  target: 'node',
   entry: {
     main: './src/extension.ts',
     providers: './src/providers/providers.ts',
@@ -26,13 +18,11 @@ const config: Configuration = {
   },
 
   output: {
-    // the bundle is stored in the 'dist' folder (check package.json), 📖 -> https://webpack.js.org/configuration/output/
     path: resolve(__dirname, dist),
     filename: '[name].js',
     libraryTarget: 'commonjs2',
     clean: true,
   },
-  // devtool: 'nosources-source-map',
   plugins: [
     new cp({
       patterns: [
