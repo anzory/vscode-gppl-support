@@ -13,8 +13,6 @@ const config: Configuration = {
     main: './src/extension.ts',
     providers: './src/providers/providers.ts',
     utils: './src/utils/utils.ts',
-    test: './src/test/runTests.ts',
-    suite: './src/test/suite/index.ts',
   },
 
   output: {

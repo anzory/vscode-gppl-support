@@ -1,4 +1,4 @@
-import { I18n } from 'i18n';
+import { I18n, TranslateOptions } from 'i18n';
 import { resolve } from 'path';
 import { workspace } from 'vscode';
 import { constants } from './constants';
@@ -17,7 +17,7 @@ class _i18n {
     directory: resolve(__dirname, 'i18n'),
   });
 
-  public t(phraseOrOptions: string | i18n.TranslateOptions): string {
+  public t(phraseOrOptions: string | TranslateOptions): string {
     return this.i18n.__(phraseOrOptions);
   }
   public update(): void {
