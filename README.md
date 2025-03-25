@@ -1,35 +1,35 @@
-# Full SolidCAM GPP Language support for VSCode (formatting, highlighting and more...)
+# GPPL Support for VSCode
 
-This extension provides Full GPPL language support for VSCode: highlighting, formatting, autocomplete, code snippets, sidebar with procedures tree view & sorting capability.
+Enhance your SolidCAM postprocessor development with full GPPL language support in Visual Studio Code. Enjoy syntax highlighting, code formatting, autocompletion, snippets, and a handy procedures tree view with sorting — all in one extension!
 
 ## Features
 
-- Syntax highlighting with customization capability from `settings.json` file
-- Simple Document Formatting functionality
-- Procedure tree panel with navigation and sorting capability and auto-refresh the tree
-- `Go to Definition` functionality for procedures and variables
-- `Go to References` functionality for procedures and user variables
-- Auto-complete & auto-indentation code
-- Shown hints when hovering
-- New auto-complete code functionality: just highlight the variable name and type the name of function - the variable will be wrapped in the function automatically
-- internationalization support for `Completion`
-- Full compatibility with `SolidCAM debugger`
+- **Syntax Highlighting**: Fully customizable via `settings.json`.
+- **Code Formatting**: Simple and reliable document formatting.
+- **Procedures Tree Panel**: Navigate, sort, and auto-refresh your procedure tree.
+- **Go to Definition**: Jump to definitions of procedures and variables with ease.
+- **Find All References**: Locate all references to procedures and user variables.
+- **Autocompletion**: Smart auto-complete and auto-indentation for faster coding.
+- **Hover Hints**: Get helpful hints by hovering over code elements.
+- **Function Wrapping**: Highlight a variable, type a function name, and watch it wrap automatically.
+- **Internationalization**: Multi-language support for autocompletion.
+- **SolidCAM Integration**: Seamless compatibility with the SolidCAM debugger.
 
 ---
 
-New auto-complete code functionality:
+**Autocompletion**:
 
 ![New auto-complete code functionality](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/auto-complete-functionality.gif?raw=true)
 
 ---
 
-Sidebar with procedures tree view & sorting capability:
+**Procedures Tree Panel**:
 
 ![Sidebar with procedure tree view](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/tree-sort.gif?raw=true)
 
 ---
 
-`Go To Definition` and `Go To References` functionality for procedures:
+**Go to Definition** and **Find All References**:
 
 (by `Ctrl+Click`, or `RightClick -> Go to Definition`, or `F12`)
 
@@ -39,15 +39,23 @@ Sidebar with procedures tree view & sorting capability:
 
 ---
 
-Displays information about variables when the cursor is pointing
+**Hover Hints**:
 
 ![Displays information](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/info-when-hover.gif?raw=true)
 
 ---
 
-Added internationalization support for Completion
+**Internationalization**:
 
 ![Internationalization for Completion](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/internationalization.gif?raw=true)
+
+---
+
+## Installation
+
+1. Open VSCode.
+2. Go to Extensions Marketplace.
+3. Search for `anzory.vscode-gppl-support` and click Install.
 
 ---
 
@@ -93,11 +101,11 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
-### 1.7.7
+### 1.7.8
 
-### Added:
+### Update:
 
-Update to the latest versions of VSCode and other libraries
+- to the latest versions of VSCode and other libraries
 
 ---
 
@@ -112,14 +120,15 @@ It is a good text editor with GPPL language support for SolidCAM postprocessor e
 
 ---
 
-## How to support the project
+## Help Make This Project Better
 
-- You can add language files for your locale. Please contact me at andrey.a.zorin@gmail.com to find out how.
+Love this extension? Here’s how you can help:
 
-- You''ll help me greatly if you [write a review and rating](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support&ssr=false#review-details)
-
+- ⭐ Leave a star on GitHub.
+- 📝 Write a review or share your feedback.
+- 🌍 Add language files for your locale — email me at andrey.a.zorin@gmail.com!
+- 💻 Contribute code or report issues via pull requests.
 - [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/anzory?locale.x=en_EN)
 
-It is not necessary, but if you do it, I would appreciate it.
 
 ---

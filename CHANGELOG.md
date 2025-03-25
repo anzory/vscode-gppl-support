@@ -10,11 +10,11 @@
 
 ---
 
-## [1.7.7] - 2024-08-06
+## [1.7.9] - 2024-08-06
 
-### Added:
+### Update:
 
-- Update to the latest versions of VSCode and other libraries
+- to the latest versions of VSCode and other libraries
 
 ---
 
