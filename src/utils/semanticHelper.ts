@@ -9,7 +9,7 @@ import {
   workspace,
 } from 'vscode';
 import { constants } from './constants';
-import TextParser from './textParser';
+import TextParser, { textParser } from './textParser';
 
 export interface IVariable {
   name: string;
@@ -35,7 +35,7 @@ class SemanticHelper {
   private _systemGppVariables: IVariable[] = [];
   private _procedures: IProcedure[] = [];
   private _date: number;
-  private textParser = new TextParser();
+  private textParser = textParser;
 
   constructor() {
     workspace.onDidChangeTextDocument((e) => this.onDocumentChanged(e));
@@ -116,60 +116,62 @@ class SemanticHelper {
     }
   }
   getGpplSystemVariable(name: string): IVariable | undefined {
-    let res: IVariable | undefined = undefined;
-    if (
-      this._systemGppVariables.some((variable) => {
-        res = variable;
-        return variable.name === name;
-      })
-    ) {
-      return res;
-    } else {
-      return undefined;
-    }
+    return this.findInArray(this._systemGppVariables, name);
   }
+
   getGpplProcedure(name: string): IProcedure | undefined {
-    let res: IProcedure | undefined = undefined;
-    if (
-      this._procedures.some((procedure) => {
-        res = procedure;
-        return procedure.name === name;
-      })
-    ) {
-      return res;
-    } else {
-      return undefined;
-    }
+    return this.findInArray(this._procedures, name);
+  }
+
+  private findInArray<T extends { name: string }>(
+    array: T[],
+    name: string
+  ): T | undefined {
+    return array.find((item) => item.name === name);
   }
 
   private parseSystemVariables() {
     this._systemGppVariables = [];
 
-    JSON.parse(
-      readFileSync(
-        resolve(
-          __dirname,
-          'languages',
-          constants.languageId,
-          'gpp.tmLanguage.json'
-        )
-      ).toString()
-    )
-      .repository.keywords.patterns[12].match.replace('(?i)\\b(', '')
-      .replace(')\\b', '')
-      .split('|')
-      .forEach((sv: string) => {
-        this._systemGppVariables.push({
-          name: sv,
-          scope: 'global',
-          type: '',
-          references: this.textParser.getWordLocationsInDoc(
-            this.editor?.document,
-            '\\b' + sv
-          ),
-          info: undefined,
+    try {
+      const tmLanguage = JSON.parse(
+        readFileSync(
+          resolve(
+            __dirname,
+            'languages',
+            constants.languageId,
+            'gpp.tmLanguage.json'
+          )
+        ).toString()
+      );
+
+      // Находим паттерн для ключевых слов более надежным способом
+      const keywordsPattern = tmLanguage.repository?.keywords?.patterns?.find(
+        (pattern: any) => pattern.name === 'keyword.control.gpp'
+      );
+
+      if (keywordsPattern && keywordsPattern.match) {
+        const keywords = keywordsPattern.match
+          .replace(/\(\?i\)\\b\(/g, '')
+          .replace(/\)\\b/g, '')
+          .split('|');
+
+        keywords.forEach((sv: string) => {
+          this._systemGppVariables.push({
+            name: sv,
+            scope: 'global',
+            type: '',
+            references: this.textParser.getWordLocationsInDoc(
+              this.editor?.document,
+              '\\b' + sv
+            ),
+            info: undefined,
+          });
         });
-      });
+      }
+    } catch (error) {
+      console.error('Error parsing system variables:', error);
+    }
   }
 
   private parseProcedures() {
@@ -224,10 +226,10 @@ class SemanticHelper {
           const gppScope = line.trim().split(' ')[0];
           const gppType = line.trim().split(' ')[1];
           this.getVariables(line).forEach((ugv) => {
-            if (ugv.match(/<<.*>>/gm)) {
-              const uga = ugv.replace(/<<.*>>/gm, '');
+            if (ugv.match(/<<.*>>/g)) {
+              const uga = ugv.replace(/<<.*>>/g, '');
               this._globalUserArrays.push({
-                name: uga /*.replace(/<<.*>>/gm, '')*/,
+                name: uga,
                 scope: gppScope,
                 type: gppType + ' array',
                 references: this.textParser.getWordLocationsInDoc(
@@ -263,8 +265,8 @@ class SemanticHelper {
           const gppScope = line.split(' ')[0];
           const gppType = line.split(' ')[1];
           this.getVariables(line).forEach((ulv) => {
-            if (ulv.match(/<<.*>>/gm)) {
-              const ula = ulv.replace(/<<.*>>/, '');
+            if (ulv.match(/<<.*>>/g)) {
+              const ula = ulv.replace(/<<.*>>/g, '');
               this._localUserArrays.push({
                 name: ula,
                 scope: gppScope,
@@ -372,26 +374,41 @@ class SemanticHelper {
   }
 
   parseDocument() {
-    this.parseUserVariables();
-    this.parseSystemVariables();
-    this.parseProcedures();
+    try {
+      this.parseUserVariables();
+      this.parseSystemVariables();
+      this.parseProcedures();
+    } catch (error) {
+      console.error('Error during document parsing:', error);
+      // В случае ошибки очищаем данные для предотвращения некорректного состояния
+      this.clearAllData();
+    }
+  }
+
+  private clearAllData() {
+    this._globalUserVariables = [];
+    this._globalUserArrays = [];
+    this._localUserVariables = [];
+    this._localUserArrays = [];
+    this._systemGppVariables = [];
+    this._procedures = [];
   }
 
   onDocumentChanged(e?: TextDocumentChangeEvent) {
-    const _p = 650;
-    const _d = new Date().getTime();
-
-    const timeoutId = setTimeout(() => {
-      this.parseDocument();
-    }, _p);
-
-    if (_d - this._date < _p) {
-      clearTimeout(timeoutId);
-      this._date = new Date().getTime();
+    // Используем дебаунсинг для предотвращения множественных вызовов парсинга
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
     }
 
-    //
-    //
+    this.debounceTimer = setTimeout(() => {
+      try {
+        this.parseDocument();
+      } catch (error) {
+        console.error('Error parsing document:', error);
+      }
+    }, 300);
   }
+
+  private debounceTimer?: NodeJS.Timeout;
 }
 export const semanticHelper = new SemanticHelper();

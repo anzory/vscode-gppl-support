@@ -15,10 +15,12 @@ export class GpplDocumentFormattingEditProvider
   indent: string;
 
   constructor() {
-    const indentSize = utils.constants.format.tabSize
-      ? utils.constants.format.tabSize
-      : 2;
-    this.indent = utils.constants.format.preferSpace
+    // Безопасное получение настроек форматирования с fallback значениями
+    const formatConfig = utils.constants?.format;
+    const indentSize = formatConfig?.tabSize || 2;
+    const preferSpaces = formatConfig?.preferSpace !== false;
+
+    this.indent = preferSpaces
       ? ' '.repeat(indentSize)
       : '\t'.repeat(indentSize);
   }
@@ -28,59 +30,96 @@ export class GpplDocumentFormattingEditProvider
     options: FormattingOptions,
     token: CancellationToken
   ): TextEdit[] {
-    if (utils.constants.format.enable) {
+    try {
+      // Безопасная проверка настроек форматирования
+      const formatConfig = utils.constants?.format;
+      if (!formatConfig?.enable) {
+        return [];
+      }
+
       const textEditList: TextEdit[] = [];
       for (let i = 0; i < document.lineCount; i++) {
+        const line = document.lineAt(i);
+        const trimmedLine = line.text.trimStart(); // Используем современный метод
+
         textEditList.push(
-          new TextEdit(
-            document.lineAt(i).range,
-            this.formatLineWithIndentation(document.lineAt(i).text.trimLeft())
-          )
+          new TextEdit(line.range, this.formatLineWithIndentation(trimmedLine))
         );
       }
+
       this.indentLevel = 0;
       return textEditList;
-    } else {
+    } catch (error) {
+      console.error('Error in document formatting:', error);
       return [];
     }
   }
 
   formatLineWithIndentation(text: string): string {
-    let _formattedText: string;
-    text = text.replace(/[;\s]{0,}#\s{0,}(end)?region\b/, ';#$1region');
-    if (text.substring(0, 1) === ';' && !/(;#(end)?region)/.test(text)) {
-      _formattedText = this.indent.repeat(this.indentLevel) + text;
-    } else {
-      if (
-        /^@\w+|(^\b(i|I)f\b)|(^\b(w|W)hile\b)/.test(text) ||
-        (utils.constants.format.applyIndentsToRegions && /#region\b/.test(text))
-      ) {
-        _formattedText = this.indent.repeat(this.indentLevel) + text;
-        ++this.indentLevel;
-      } else if (/(^\b(e|E)(lse|lse(i|I)f))/.test(text)) {
-        --this.indentLevel;
-        _formattedText = this.indent.repeat(this.indentLevel) + text;
-        ++this.indentLevel;
-      } else if (
-        /(^\b(e|E)nd(w|p|((i|I)f)))/.test(text) ||
-        (utils.constants.format.applyIndentsToRegions &&
-          /#endregion\b/.test(text))
-      ) {
-        --this.indentLevel;
-        _formattedText = this.indent.repeat(this.indentLevel) + text;
-      } else if (text !== '') {
-        _formattedText = this.indent.repeat(this.indentLevel) + text;
-      } else {
-        _formattedText = text;
+    try {
+      if (!text) {
+        return '';
       }
+
+      // Нормализуем регионы
+      text = text.replace(/[;\s]*#\s*(end)?region\b/g, ';#$1region');
+
+      // Проверяем, является ли строка комментарием
+      if (text.startsWith(';') && !/(;#(end)?region)/.test(text)) {
+        return this.createIndent() + text;
+      }
+
+      // Восстанавливаем оригинальную логику работы с отступами
+      return this.formatLineWithOriginalLogic(text);
+    } catch (error) {
+      console.error('Error formatting line:', error);
+      return text; // Возвращаем оригинальный текст при ошибке
     }
-    return _formattedText.trimEnd();
+  }
+
+  private formatLineWithOriginalLogic(text: string): string {
+    const formatConfig = utils.constants?.format;
+    const applyIndentsToRegions = formatConfig?.applyIndentsToRegions !== false;
+
+    // Конструкции, начинающиеся новый блок (отступ увеличивается ПОСЛЕ)
+    if (
+      /^@\w+/.test(text) || // Определения процедур
+      /^\b(i|I)f\b/.test(text) || // Условные операторы
+      /^\b(w|W)hile\b/.test(text) || // Циклы
+      (applyIndentsToRegions && /#region\b/.test(text))
+    ) {
+      const formattedText = this.createIndent() + text;
+      ++this.indentLevel;
+      return formattedText;
+    }
+
+    // Конструкции else/elseif (специальная обработка)
+    if (/^\b(e|E)lse\b/.test(text) || /^\b(e|E)lse(i|I)f\b/.test(text)) {
+      --this.indentLevel;
+      const formattedText = this.createIndent() + text;
+      ++this.indentLevel;
+      return formattedText;
+    }
+
+    // Завершающие конструкции (отступ уменьшается ДО)
+    if (
+      /^\b(e|E)nd(w|p|((i|I)f))\b/.test(text) || // endwhile, endproc, endif
+      (applyIndentsToRegions && /#endregion\b/.test(text))
+    ) {
+      --this.indentLevel;
+      return this.createIndent() + text;
+    }
+
+    // Обычные строки (текущий отступ)
+    if (text !== '') {
+      return this.createIndent() + text;
+    }
+
+    // Пустые строки
+    return text;
+  }
+
+  private createIndent(): string {
+    return this.indent.repeat(Math.max(0, this.indentLevel));
   }
 }
-
-// export let gpplDocumentFormattingEditProvider =
-//   new GpplDocumentFormattingEditProvider();
-
-// workspace.onDidChangeConfiguration(() => {
-//   gpplDocumentFormattingEditProvider = new GpplDocumentFormattingEditProvider();
-// });

@@ -8,7 +8,7 @@ import {
   TextDocument,
 } from 'vscode';
 import { semanticHelper } from '../utils/semanticHelper';
-import TextParser from '../utils/textParser';
+import { textParser } from '../utils/textParser';
 
 export class GpplReferenceProvider implements ReferenceProvider {
   provideReferences(
@@ -17,18 +17,18 @@ export class GpplReferenceProvider implements ReferenceProvider {
     context: ReferenceContext,
     token: CancellationToken
   ): ProviderResult<Location[]> {
-    let res: Location[] | undefined = undefined;
-    const textParser = new TextParser();
-    let wordRange = document.getWordRangeAtPosition(position);
-    let word = document.getText(wordRange);
+    const wordRange = document.getWordRangeAtPosition(position);
+    const word = document.getText(wordRange);
     let locations: Location[];
+
     if (semanticHelper.isThisUserVariableOrArray(word)) {
       locations = textParser.getWordLocationsInDoc(document, '\\b' + word);
-      res = locations;
+      return Promise.resolve(locations);
     } else if (semanticHelper.isThisProcedureDeclaration(word)) {
       locations = textParser.getWordLocationsInDoc(document, word);
-      res = locations;
+      return Promise.resolve(locations);
     }
-    return Promise.resolve(res);
+
+    return Promise.resolve(undefined);
   }
 }

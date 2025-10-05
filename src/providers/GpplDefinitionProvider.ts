@@ -9,14 +9,12 @@ import {
   TextDocument,
   TextEditor,
   window,
-  workspace,
 } from 'vscode';
 import { semanticHelper } from '../utils/semanticHelper';
-import TextParser from '../utils/textParser';
+import { textParser } from '../utils/textParser';
 
 export class GpplDefinitionProvider implements DefinitionProvider {
   private definition: Location | undefined = undefined;
-  private textParser = new TextParser();
   private editor: TextEditor | undefined = window.activeTextEditor;
   private doc: TextDocument | undefined = this.editor?.document;
 
@@ -34,27 +32,25 @@ export class GpplDefinitionProvider implements DefinitionProvider {
     position: Position,
     token: CancellationToken
   ): ProviderResult<Definition | DefinitionLink[]> {
-    if (this.doc) {
-      let word = this.doc.getText(this.doc.getWordRangeAtPosition(position));
-      let locations: Location[];
-      if (semanticHelper.isThisUserVariableOrArray(word)) {
-        locations = this.textParser.getWordLocationsInDoc(
-          this.doc,
-          '\\b' + word
-        );
-        this.definition = locations[0];
-      } else if (semanticHelper.isThisProcedureDeclaration(word)) {
-        locations = this.textParser.getWordLocationsInDoc(this.doc, word);
-        locations.forEach((location: Location) => {
-          let line = this.doc?.lineAt(location.range.start.line).text;
-          if (line && !/;|(\bcall\b)/.test(line)) {
-            this.definition = location;
-          }
-        });
-      }
-      return Promise.resolve(this.definition);
-    } else {
-      return Promise.resolve(undefined);
+    const wordRange = document.getWordRangeAtPosition(position);
+    const word = document.getText(wordRange);
+
+    if (semanticHelper.isThisUserVariableOrArray(word)) {
+      const locations = textParser.getWordLocationsInDoc(
+        document,
+        '\\b' + word
+      );
+      this.definition = locations[0];
+    } else if (semanticHelper.isThisProcedureDeclaration(word)) {
+      const locations = textParser.getWordLocationsInDoc(document, word);
+      locations.forEach((location: Location) => {
+        const line = document.lineAt(location.range.start.line).text;
+        if (line && !/;|(\bcall\b)/.test(line)) {
+          this.definition = location;
+        }
+      });
     }
+
+    return Promise.resolve(this.definition);
   }
 }
