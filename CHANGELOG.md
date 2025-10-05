@@ -10,9 +10,21 @@
 
 ---
 
+## [1.7.11] - 2025-10-05
+
+### Added
+
+- Document Symbols to the Outline window
+
+### Improved
+
+- parsing algorithm
+
+---
+
 ## [1.7.10] - 2025-10-05
 
-### Update
+### Updated
 
 - to the latest versions of VSCode and other libraries
 

@@ -91,6 +91,12 @@ export async function activate(context: ExtensionContext) {
       new providers.formattingProvider()
     )
   );
+  context.subscriptions.push(
+    languages.registerDocumentSymbolProvider(
+      utils.constants.languageId,
+      new providers.documentSymbolProvider()
+    )
+  );
 }
 
 workspace.onDidChangeConfiguration(() => {

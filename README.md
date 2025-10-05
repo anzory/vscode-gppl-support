@@ -4,6 +4,7 @@ Enhance your SolidCAM postprocessor development with full GPPL language support 
 
 ## Features
 
+- **Document Symbols** in the Outline Window
 - **Syntax Highlighting**: Fully customizable via `settings.json`.
 - **Code Formatting**: Simple and reliable document formatting.
 - **Procedures Tree Panel**: Navigate, sort, and auto-refresh your procedure tree.
@@ -17,9 +18,17 @@ Enhance your SolidCAM postprocessor development with full GPPL language support 
 
 ---
 
+**Document Symbols**:
+
+`New:` Document Symbols in the Outline Window
+
+![Document Symbols in the Outline Window](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/documentSymbols.png?raw=true)
+
+---
+
 **Autocompletion**:
 
-![New auto-complete code functionality](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/auto-complete-functionality.gif?raw=true)
+![Auto-complete code functionality](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/auto-complete-functionality.gif?raw=true)
 
 ---
 
@@ -101,11 +110,15 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
-### 1.7.10
+### 1.7.11
 
-### Update
+### Added
 
-- to the latest versions of VSCode and other libraries
+- Document Symbols to the Outline window
+
+### Improved
+
+- parsing algorithm
 
 ---
 
