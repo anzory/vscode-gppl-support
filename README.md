@@ -101,9 +101,9 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
-### 1.7.8
+### 1.7.10
 
-### Update:
+### Update
 
 - to the latest versions of VSCode and other libraries
 
@@ -126,9 +126,8 @@ Love this extension? Here’s how you can help:
 
 - ⭐ Leave a star on GitHub.
 - 📝 Write a review or share your feedback.
-- 🌍 Add language files for your locale — email me at andrey.a.zorin@gmail.com!
+- 🌍 Add language files for your locale — email me at <andrey.a.zorin@gmail.com>!
 - 💻 Contribute code or report issues via pull requests.
 - [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/anzory?locale.x=en_EN)
-
 
 ---

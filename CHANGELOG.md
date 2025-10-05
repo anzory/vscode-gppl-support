@@ -12,7 +12,7 @@
 
 ## [1.7.9] - 2024-08-06
 
-### Update:
+### Update
 
 - to the latest versions of VSCode and other libraries
 
@@ -20,7 +20,7 @@
 
 ## [1.7.4] - 2024-05-10
 
-### Removed:
+### Removed
 
 - Status Bar
 
@@ -28,7 +28,7 @@
 
 ## [1.7.3] - 2024-03-19
 
-### Fixed:
+### Fixed
 
 - Tooltips for procedure with parameters were not displayed on mouse-over.
 
@@ -36,7 +36,7 @@
 
 ## [1.7.2] - 2023-10-12
 
-### Fixed:
+### Fixed
 
 - Syntax highlighting changes when choosing a theme other than `Default Dark+`.
 - The size of icons on the toolbar.

@@ -1,10 +1,12 @@
+files/
 out
 dist/
 node_modules/
 .vscode-test/
 .vscode/
-*.vsix
+.kilocode/
 .tmp/
+*.vsix
 vsc-extension-quickstart.md
 vscode-gppl-support-*.vsix
 *.txt
