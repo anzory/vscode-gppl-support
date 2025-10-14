@@ -30,6 +30,7 @@ const config: Configuration = {
         { from: './images/**.png', to: './' },
         { from: './images/**.ico', to: './' },
         { from: './images/**.svg', to: './' },
+        { from: './images/**.json', to: './' },
         { from: './**.md', to: './' },
       ],
     }),

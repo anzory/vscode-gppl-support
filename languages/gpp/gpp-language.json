@@ -4,67 +4,28 @@
     "lineComment": ";"
   },
   "brackets": [
-    [
-      "{",
-      "}"
-    ],
-    [
-      "[",
-      "]"
-    ],
-    [
-      "(",
-      ")"
-    ]
+    ["{", "}"],
+    ["[", "]"],
+    ["(", ")"]
   ],
   "autoClosingPairs": [
-    [
-      "(",
-      ")"
-    ],
-    [
-      "[",
-      "]"
-    ],
-    [
-      "{",
-      "}"
-    ],
-    [
-      "'",
-      "'"
-    ],
-    [
-      "\"",
-      "\""
-    ]
+    ["(", ")"],
+    ["[", "]"],
+    ["{", "}"],
+    ["'", "'"],
+    ["\"", "\""]
   ],
   "surroundingPairs": [
-    [
-      "(",
-      ")"
-    ],
-    [
-      "[",
-      "]"
-    ],
-    [
-      "{",
-      "}"
-    ],
-    [
-      "'",
-      "'"
-    ],
-    [
-      "\"",
-      "\""
-    ]
+    ["(", ")"],
+    ["[", "]"],
+    ["{", "}"],
+    ["'", "'"],
+    ["\"", "\""]
   ],
   "wordPattern": "(-?\\d+\\.\\d+)|(-?\\d+\\.?)|(\\@\\w+)|(\\w+)",
   "indentationRules": {
     "increaseIndentPattern": {
-      "pattern": "([iI]f|[eE]lse|[eE]lse[iI]f|[wW]hile)|(@.*$)|(;\\s{0,}#region.*$)"
+      "pattern": "([iI][f]|[eE]lse|[eE]lse[iI]f|[wW]hile)|(@.*$)|(;\\s{0,}#region.*$)"
     },
     "decreaseIndentPattern": {
       "pattern": "([eE]lse|[eE]lse[iI]f|[eE]nd[iI]f|[eE]ndw)|([eE]ndp)|(;\\s{0,}#endregion.*$)"
