@@ -8,6 +8,19 @@
 
 - and more ...
 
+## [1.7.13] - 2025-10-14
+
+### Added
+
+- Search and filtering functionality in the Outline panel for quick symbol lookup
+- Keyboard shortcuts documentation for Outline panel features
+
+### Improved
+
+- Updated README.md with tips for using Outline panel search and breadcrumbs navigation
+
+---
+
 ## [1.7.12] - 2025-10-14
 
 ### Removed

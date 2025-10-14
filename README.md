@@ -23,6 +23,10 @@ Enhance your SolidCAM postprocessor development with full GPPL language support 
 
 ![Document Symbols in the Outline Window](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/documentSymbols.png?raw=true)
 
+> **Tip:** You can now use search and filtering in the Outline panel for quick symbol lookup. Use `Ctrl+Alt+F` in the Outline panel to search and filter items.
+>
+> **Reminder:** Don't forget to enable breadcrumbs in VSCode (`View -> Appearance -> Breadcrumbs` or setting `Breadcrumbs: Enabled`) for better code structure navigation.
+
 ---
 
 **Autocompletion**:
