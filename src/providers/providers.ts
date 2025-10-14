@@ -3,7 +3,6 @@ import { GpplDefinitionProvider } from './GpplDefinitionProvider';
 import { GpplDocumentFormattingEditProvider } from './GpplDocumentFormattingEditProvider';
 import { GpplDocumentSymbolProvider } from './GpplDocumentSymbolProvider';
 import { GpplHoverProvider } from './GpplHoverProvider';
-import { GpplProceduresTreeProvider } from './GpplProceduresTreeProvider';
 import { GpplReferenceProvider } from './GpplReferenceProvider';
 
 // Интерфейс для базового провайдера с общими методами
@@ -18,6 +17,5 @@ export const providers = {
   documentSymbolProvider: GpplDocumentSymbolProvider,
   formattingProvider: GpplDocumentFormattingEditProvider,
   hoverProvider: GpplHoverProvider,
-  proceduresTreeProvider: GpplProceduresTreeProvider,
   referenceProvider: GpplReferenceProvider,
 };

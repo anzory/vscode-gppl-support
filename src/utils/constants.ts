@@ -16,13 +16,7 @@ class GpplConstants {
       version: gpp.version,
     },
     commands: {
-      refreshTree: gpp.contributes.commands[0].command,
-      procedureSelection: gpp.contributes.commands[1].command,
-      procedureTitle: gpp.contributes.commands[1].title,
-      sortByAZ: gpp.contributes.commands[2].command,
-      sortByZA: gpp.contributes.commands[3].command,
-      sortByDefault: gpp.contributes.commands[4].command,
-      formatDocument: gpp.contributes.commands[5].command,
+      formatDocument: gpp.contributes.commands[0].command,
     },
     urls: {
       changeLog:
@@ -48,7 +42,6 @@ class GpplConstants {
       gpp.contributes.configuration.properties['gpp.localization.defaultLocale']
         .enum,
     languageId: gpp.contributes.languages[0].id,
-    proceduresViewId: gpp.contributes.views.gpp[0].id,
     configId: gpp.contributes.languages[0].id,
     copyright: gpp.copyright,
     extensionOutputChannelName: gpp.shortName,

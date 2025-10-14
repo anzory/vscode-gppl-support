@@ -149,58 +149,7 @@
         }
       }
     },
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "gpp",
-          "title": "GPPL",
-          "icon": "./images/new-logo.svg",
-          "when": "view == gpp.ProceduresTree"
-        }
-      ]
-    },
-    "views": {
-      "gpp": [
-        {
-          "id": "gpp.ProceduresTree",
-          "icon": "./images/new-logo.png",
-          "name": "Procedures Tree",
-          "contextualTitle": "GPPL Procedures Tree",
-          "when": "gppProceduresTreeViewEnabled == true",
-          "type": "tree"
-        }
-      ]
-    },
-    "viewsWelcome": [
-      {
-        "view": "gpp.ProceduresTree",
-        "contents": "GPPL Tree only available when viewing GPPL",
-        "when": "gppProceduresTreeViewEnabled !== true"
-      }
-    ],
     "menus": {
-      "view/title": [
-        {
-          "command": "gpp.ProceduresTree.RefreshTree",
-          "when": "view == gpp.ProceduresTree",
-          "group": "navigation"
-        },
-        {
-          "command": "gpp.ProceduresTree.SortByAZ",
-          "when": "view == gpp.ProceduresTree",
-          "group": "navigation"
-        },
-        {
-          "command": "gpp.ProceduresTree.SortByZA",
-          "when": "view == gpp.ProceduresTree",
-          "group": "navigation"
-        },
-        {
-          "command": "gpp.ProceduresTree.SortByDefault",
-          "when": "view == gpp.ProceduresTree",
-          "group": "navigation"
-        }
-      ],
       "editor/title/run": [
         {
           "command": "gpp.editor.Format",
@@ -209,45 +158,6 @@
       ]
     },
     "commands": [
-      {
-        "command": "gpp.ProceduresTree.RefreshTree",
-        "title": "Refresh Tree",
-        "icon": {
-          "light": "images/icons/arrow-clockwise.svg",
-          "dark": "images/icons/arrow-clockwise-dark.svg"
-        }
-      },
-      {
-        "command": "gpp.ProceduresTree.Selection",
-        "title": "Procedure Selection"
-      },
-      {
-        "command": "gpp.ProceduresTree.SortByAZ",
-        "title": "Sort By A-Z",
-        "category": "sorting",
-        "icon": {
-          "light": "images/icons/sort-up.svg",
-          "dark": "images/icons/sort-up-dark.svg"
-        }
-      },
-      {
-        "command": "gpp.ProceduresTree.SortByZA",
-        "title": "Sort By Z-A",
-        "category": "sorting",
-        "icon": {
-          "light": "images/icons/sort-down.svg",
-          "dark": "images/icons/sort-down-dark.svg"
-        }
-      },
-      {
-        "command": "gpp.ProceduresTree.SortByDefault",
-        "title": "Sort By Default",
-        "category": "sorting",
-        "icon": {
-          "light": "images/icons/sort-up-down.svg",
-          "dark": "images/icons/sort-up-down-dark.svg"
-        }
-      },
       {
         "command": "gpp.editor.Format",
         "title": "Format Document",

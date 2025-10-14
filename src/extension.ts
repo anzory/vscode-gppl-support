@@ -21,23 +21,6 @@ export async function activate(context: ExtensionContext) {
   new utils.config().configure(context);
 
   const editor: TextEditor | undefined = window.activeTextEditor;
-  const treeProvider = new providers.proceduresTreeProvider(context);
-  commands.registerCommand(utils.constants.commands.refreshTree, () => {
-    treeProvider.refresh();
-  });
-  commands.registerCommand(
-    utils.constants.commands.procedureSelection,
-    (range) => treeProvider.select(range)
-  );
-  commands.registerCommand(utils.constants.commands.sortByAZ, () =>
-    treeProvider.sortByAZ()
-  );
-  commands.registerCommand(utils.constants.commands.sortByZA, () =>
-    treeProvider.sortByZA()
-  );
-  commands.registerCommand(utils.constants.commands.sortByDefault, () =>
-    treeProvider.sortByDefault()
-  );
   commands.registerCommand(
     utils.constants.commands.formatDocument,
     async () => {
@@ -54,12 +37,6 @@ export async function activate(context: ExtensionContext) {
         await workspace.applyEdit(edit);
       }
     }
-  );
-  context.subscriptions.push(
-    window.registerTreeDataProvider(
-      utils.constants.proceduresViewId,
-      treeProvider
-    )
   );
 
   completionItemProvider = languages.registerCompletionItemProvider(

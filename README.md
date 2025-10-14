@@ -1,13 +1,12 @@
 # GPPL Support for VSCode
 
-Enhance your SolidCAM postprocessor development with full GPPL language support in Visual Studio Code. Enjoy syntax highlighting, code formatting, autocompletion, snippets, and a handy procedures tree view with sorting — all in one extension!
+Enhance your SolidCAM postprocessor development with full GPPL language support in Visual Studio Code. Enjoy syntax highlighting, code formatting, autocompletion, snippets, and document symbols in the Outline panel — all in one extension!
 
 ## Features
 
 - **Document Symbols** in the Outline Window
 - **Syntax Highlighting**: Fully customizable via `settings.json`.
 - **Code Formatting**: Simple and reliable document formatting.
-- **Procedures Tree Panel**: Navigate, sort, and auto-refresh your procedure tree.
 - **Go to Definition**: Jump to definitions of procedures and variables with ease.
 - **Find All References**: Locate all references to procedures and user variables.
 - **Autocompletion**: Smart auto-complete and auto-indentation for faster coding.
@@ -29,12 +28,6 @@ Enhance your SolidCAM postprocessor development with full GPPL language support 
 **Autocompletion**:
 
 ![Auto-complete code functionality](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/auto-complete-functionality.gif?raw=true)
-
----
-
-**Procedures Tree Panel**:
-
-![Sidebar with procedure tree view](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/tree-sort.gif?raw=true)
 
 ---
 
@@ -109,6 +102,16 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 ---
 
 ## Release Notes
+
+### 1.7.12
+
+### Removed
+
+- Custom Procedures Tree View panel (replaced with standard Outline panel for document symbols)
+
+### Improved
+
+- Simplified extension architecture by removing custom tree view implementation
 
 ### 1.7.11
 

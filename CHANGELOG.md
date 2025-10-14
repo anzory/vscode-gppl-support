@@ -8,6 +8,17 @@
 
 - and more ...
 
+## [1.7.12] - 2025-10-14
+
+### Removed
+
+- Custom Procedures Tree View panel (replaced with standard Outline panel for document symbols)
+
+### Improved
+
+- Simplified extension architecture by removing custom tree view implementation
+- Document symbols now displayed in standard VSCode Outline panel
+
 ---
 
 ## [1.7.11] - 2025-10-05
