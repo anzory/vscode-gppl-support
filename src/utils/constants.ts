@@ -9,7 +9,18 @@ const configurationProperties = Object.getOwnPropertyNames(
   gpp.contributes.configuration.properties
 );
 
+/**
+ * Manages application constants and configuration settings for the GPP extension.
+ *
+ * This class provides centralized access to:
+ * - Extension metadata (name, version)
+ * - Command definitions
+ * - URL references
+ * - Formatting configuration
+ * - Language settings
+ */
 class GpplConstants {
+  /** Collection of all application constants */
   public constants = {
     extension: {
       name: gpp.name,
@@ -48,8 +59,19 @@ class GpplConstants {
   };
 }
 
+/**
+ * Global constants instance for the GPP extension.
+ *
+ * This instance is automatically updated when configuration changes occur.
+ */
 export let constants = new GpplConstants().constants;
 
+/**
+ * Handles configuration changes by updating constants.
+ *
+ * Automatically recreates constants when VS Code configuration changes
+ * to ensure all settings are current.
+ */
 workspace.onDidChangeConfiguration(() => {
   constants = new GpplConstants().constants;
 });

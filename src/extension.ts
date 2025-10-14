@@ -17,6 +17,16 @@ import { utils } from './utils/utils';
 let completionItemProvider: Disposable;
 let hoverProvider: Disposable;
 
+/**
+ * Activates the VS Code extension for SolidCAM GPP language support.
+ *
+ * This function is called when the extension is activated. It sets up:
+ * - Configuration management
+ * - Document formatting command
+ * - Language feature providers (completion, hover, definition, reference, formatting, symbols)
+ *
+ * @param context - The extension context provided by VS Code
+ */
 export async function activate(context: ExtensionContext) {
   new utils.config().configure(context);
 
@@ -76,6 +86,14 @@ export async function activate(context: ExtensionContext) {
   );
 }
 
+/**
+ * Handles configuration changes for the extension.
+ *
+ * When the extension configuration changes, this function:
+ * - Reformats all open GPP documents
+ * - Updates internationalization settings
+ * - Recreates language feature providers to apply new settings
+ */
 workspace.onDidChangeConfiguration(() => {
   window.visibleTextEditors.forEach((editor: TextEditor) => {
     editor.document.languageId === utils.constants.languageId
@@ -97,4 +115,10 @@ workspace.onDidChangeConfiguration(() => {
   );
 });
 
+/**
+ * Deactivates the VS Code extension.
+ *
+ * This function is called when the extension is deactivated.
+ * Currently, no cleanup is required as VS Code handles provider disposal automatically.
+ */
 export function deactivate() {}

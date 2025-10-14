@@ -9,23 +9,47 @@ import {
   workspace,
 } from 'vscode';
 import { constants } from './constants';
-import TextParser, { textParser } from './textParser';
+import { textParser } from './textParser';
 
+/**
+ * Interface representing a variable in GPP code.
+ */
 export interface IVariable {
+  /** The name of the variable */
   name: string;
+  /** The scope of the variable (global/local) */
   scope: string;
+  /** The data type of the variable */
   type: string;
+  /** Array of locations where this variable is referenced */
   references?: Location[];
+  /** Additional information about the variable */
   info?: string | undefined;
 }
 
+/**
+ * Interface representing a procedure in GPP code.
+ */
 export interface IProcedure {
+  /** The name of the procedure */
   name: string;
+  /** The arguments of the procedure */
   args?: string;
+  /** Array of locations where this procedure is referenced */
   references?: Location[];
+  /** Additional information about the procedure */
   info?: string | undefined;
 }
 
+/**
+ * Provides semantic analysis functionality for GPP code.
+ *
+ * This class analyzes GPP documents to extract:
+ * - User-defined variables and arrays (global and local)
+ * - System variables
+ * - Procedure definitions and calls
+ * - References and relationships between elements
+ */
 class SemanticHelper {
   private editor: TextEditor | undefined;
   private _globalUserVariables: IVariable[] = [];
@@ -37,6 +61,12 @@ class SemanticHelper {
   private _date: number;
   private textParser = textParser;
 
+  /**
+   * Creates an instance of SemanticHelper.
+   *
+   * Sets up event listeners for document changes and initializes
+   * the semantic analysis with the current active editor.
+   */
   constructor() {
     workspace.onDidChangeTextDocument((e) => this.onDocumentChanged(e));
     window.onDidChangeActiveTextEditor(() => this.onDocumentChanged());
@@ -45,24 +75,65 @@ class SemanticHelper {
     this.parseDocument();
   }
 
+  /**
+   * Gets all system variables defined in GPP.
+   *
+   * @returns Array of system variable definitions
+   */
   getGpplSystemVariables(): IVariable[] {
     return this._systemGppVariables;
   }
+
+  /**
+   * Gets all global user-defined variables.
+   *
+   * @returns Array of global user variable definitions
+   */
   getGlobalUserVariables(): IVariable[] {
     return this._globalUserVariables;
   }
+
+  /**
+   * Gets all global user-defined arrays.
+   *
+   * @returns Array of global user array definitions
+   */
   getGlobalUserArrays(): IVariable[] {
     return this._globalUserArrays;
   }
+
+  /**
+   * Gets all local user-defined variables.
+   *
+   * @returns Array of local user variable definitions
+   */
   getLocalUserVariables(): IVariable[] {
     return this._localUserVariables;
   }
+
+  /**
+   * Gets all local user-defined arrays.
+   *
+   * @returns Array of local user array definitions
+   */
   getLocalUserArrays(): IVariable[] {
     return this._localUserArrays;
   }
+
+  /**
+   * Gets all procedure definitions.
+   *
+   * @returns Array of procedure definitions
+   */
   getProcedures(): IProcedure[] {
     return this._procedures;
   }
+  /**
+   * Gets a global user-defined array by name.
+   *
+   * @param name - The name of the array to find
+   * @returns The array definition or undefined if not found
+   */
   getGlobalUserArray(name: string): IVariable | undefined {
     let res: IVariable | undefined = undefined;
     if (
@@ -76,6 +147,13 @@ class SemanticHelper {
       return undefined;
     }
   }
+
+  /**
+   * Gets a global user-defined variable by name.
+   *
+   * @param name - The name of the variable to find
+   * @returns The variable definition or undefined if not found
+   */
   getGlobalUserVariable(name: string): IVariable | undefined {
     let res: IVariable | undefined = undefined;
     if (
@@ -89,6 +167,13 @@ class SemanticHelper {
       return undefined;
     }
   }
+
+  /**
+   * Gets a local user-defined array by name.
+   *
+   * @param name - The name of the array to find
+   * @returns The array definition or undefined if not found
+   */
   getLocalUserArray(name: string): IVariable | undefined {
     let res: IVariable | undefined = undefined;
     if (
@@ -102,6 +187,13 @@ class SemanticHelper {
       return undefined;
     }
   }
+
+  /**
+   * Gets a local user-defined variable by name.
+   *
+   * @param name - The name of the variable to find
+   * @returns The variable definition or undefined if not found
+   */
   getLocalUserVariable(name: string): IVariable | undefined {
     let res: IVariable | undefined = undefined;
     if (
@@ -115,14 +207,35 @@ class SemanticHelper {
       return undefined;
     }
   }
+
+  /**
+   * Gets a system variable by name.
+   *
+   * @param name - The name of the system variable to find
+   * @returns The system variable definition or undefined if not found
+   */
   getGpplSystemVariable(name: string): IVariable | undefined {
     return this.findInArray(this._systemGppVariables, name);
   }
 
+  /**
+   * Gets a procedure by name.
+   *
+   * @param name - The name of the procedure to find
+   * @returns The procedure definition or undefined if not found
+   */
   getGpplProcedure(name: string): IProcedure | undefined {
     return this.findInArray(this._procedures, name);
   }
 
+  /**
+   * Finds an item in an array by name.
+   *
+   * @private
+   * @param array - The array to search in
+   * @param name - The name to search for
+   * @returns The found item or undefined if not found
+   */
   private findInArray<T extends { name: string }>(
     array: T[],
     name: string
@@ -130,6 +243,11 @@ class SemanticHelper {
     return array.find((item) => item.name === name);
   }
 
+  /**
+   * Parses system variables from the GPP language configuration.
+   *
+   * @private
+   */
   private parseSystemVariables() {
     this._systemGppVariables = [];
 
@@ -174,6 +292,11 @@ class SemanticHelper {
     }
   }
 
+  /**
+   * Parses procedure definitions from the current document.
+   *
+   * @private
+   */
   private parseProcedures() {
     this._procedures = [];
 
@@ -205,6 +328,11 @@ class SemanticHelper {
     }
   }
 
+  /**
+   * Parses user-defined variables and arrays from the current document.
+   *
+   * @private
+   */
   private parseUserVariables() {
     this._globalUserVariables = [];
     this._globalUserArrays = [];
@@ -295,6 +423,13 @@ class SemanticHelper {
     }
   }
 
+  /**
+   * Extracts additional information from a comment on the same line.
+   *
+   * @private
+   * @param line - The line of code to extract info from
+   * @returns The comment text or undefined if no comment found
+   */
   private getInfo(line: string): string | undefined {
     if (/;/g.test(line)) {
       return line.replace(/^.+?;/gm, '').trim();
@@ -303,10 +438,23 @@ class SemanticHelper {
     }
   }
 
+  /**
+   * Extracts the procedure name from a procedure declaration line.
+   *
+   * @private
+   * @param line - The procedure declaration line
+   * @returns The procedure name
+   */
   private getProcedureName(line: string): string {
     return line.replace(/;.*/gm, '').trim().replace(/\(.*/gm, '');
   }
 
+  /**
+   * Extracts procedure arguments from a procedure declaration line.
+   *
+   * @param line - The procedure declaration line
+   * @returns The procedure arguments or undefined if no arguments
+   */
   getProcedureArgs(line: string): string | undefined {
     let _arg = line.replace(/;.*/gm, '').trim();
     if (/\(/.test(_arg)) {
@@ -316,6 +464,13 @@ class SemanticHelper {
     }
   }
 
+  /**
+   * Extracts variable names from a variable declaration line.
+   *
+   * @private
+   * @param line - The variable declaration line
+   * @returns Array of variable names found in the line
+   */
   private getVariables(line: string): string[] {
     const _items: string[] = [];
     line
@@ -337,10 +492,22 @@ class SemanticHelper {
     return _items;
   }
 
+  /**
+   * Checks if a given name is a system variable.
+   *
+   * @param name - The name to check
+   * @returns True if the name is a system variable
+   */
   isThisSystemVariable(name: string): boolean {
     return this._systemGppVariables.find((x) => x.name === name) ? true : false;
   }
 
+  /**
+   * Checks if a given name is a user-defined variable or array.
+   *
+   * @param name - The name to check
+   * @returns True if the name is a user variable or array
+   */
   isThisUserVariableOrArray(name: string): boolean {
     return (
       this.isThisLocalUserVariable(name) ||
@@ -350,29 +517,62 @@ class SemanticHelper {
     );
   }
 
+  /**
+   * Checks if a given name is a global user-defined variable.
+   *
+   * @param name - The name to check
+   * @returns True if the name is a global user variable
+   */
   isThisGlobalUserVariable(name: string): boolean {
     return this._globalUserVariables.find((x) => x.name === name)
       ? true
       : false;
   }
 
+  /**
+   * Checks if a given name is a local user-defined variable.
+   *
+   * @param name - The name to check
+   * @returns True if the name is a local user variable
+   */
   isThisLocalUserVariable(name: string): boolean {
     return this._localUserVariables.find((x) => x.name === name) ? true : false;
   }
 
+  /**
+   * Checks if a given name is a global user-defined array.
+   *
+   * @param name - The name to check
+   * @returns True if the name is a global user array
+   */
   isThisGloballUserArray(name: string): boolean {
     return this._globalUserArrays.find((x) => x.name === name) ? true : false;
   }
 
+  /**
+   * Checks if a given name is a local user-defined array.
+   *
+   * @param name - The name to check
+   * @returns True if the name is a local user array
+   */
   isThisLocalUserArray(name: string): boolean {
     return this._localUserArrays.find((x) => x.name === name) ? true : false;
   }
 
+  /**
+   * Checks if a given name is a procedure declaration.
+   *
+   * @param name - The name to check
+   * @returns True if the name starts with '@' (procedure declaration)
+   */
   isThisProcedureDeclaration(name: string): boolean {
     const i = name.match(/@/);
     return i ? i.index === 0 : false;
   }
 
+  /**
+   * Parses the entire document to extract semantic information.
+   */
   parseDocument() {
     try {
       this.parseUserVariables();
@@ -385,6 +585,11 @@ class SemanticHelper {
     }
   }
 
+  /**
+   * Clears all parsed data arrays.
+   *
+   * @private
+   */
   private clearAllData() {
     this._globalUserVariables = [];
     this._globalUserArrays = [];
@@ -394,6 +599,11 @@ class SemanticHelper {
     this._procedures = [];
   }
 
+  /**
+   * Handles document change events with debouncing.
+   *
+   * @param e - The document change event (optional)
+   */
   onDocumentChanged(e?: TextDocumentChangeEvent) {
     // Используем дебаунсинг для предотвращения множественных вызовов парсинга
     if (this.debounceTimer) {
@@ -411,4 +621,10 @@ class SemanticHelper {
 
   private debounceTimer?: NodeJS.Timeout;
 }
+/**
+ * Global instance of SemanticHelper for semantic analysis.
+ *
+ * This singleton instance provides semantic analysis functionality
+ * for the currently active document in the extension.
+ */
 export const semanticHelper = new SemanticHelper();

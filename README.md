@@ -21,7 +21,7 @@ Enhance your SolidCAM postprocessor development with full GPPL language support 
 
 `New:` Document Symbols in the Outline Window
 
-![Document Symbols in the Outline Window](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/documentSymbols.png?raw=true)
+![Document Symbols in the Outline Window](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/documentSymbols.gif?raw=true)
 
 > **Tip:** You can now use search and filtering in the Outline panel for quick symbol lookup. Use `Ctrl+Alt+F` in the Outline panel to search and filter items.
 >
@@ -107,6 +107,17 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
+### 1.7.13
+
+### Added
+
+- Search and filtering functionality in the Outline panel for quick symbol lookup
+- Keyboard shortcuts documentation for Outline panel features
+
+### Improved
+
+- Updated README.md with tips for using Outline panel search and breadcrumbs navigation
+
 ### 1.7.12
 
 ### Removed
@@ -116,16 +127,6 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 ### Improved
 
 - Simplified extension architecture by removing custom tree view implementation
-
-### 1.7.11
-
-### Added
-
-- Document Symbols to the Outline window
-
-### Improved
-
-- parsing algorithm
 
 ---
 

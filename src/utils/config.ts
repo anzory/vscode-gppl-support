@@ -10,15 +10,39 @@ import {
 } from 'vscode';
 import { constants } from './constants';
 
+/**
+ * Configuration settings interface for GPP extension.
+ */
 type IgpplSettings = {
+  /** Enable syntax colorization */
   colorization: boolean;
+  /** Machine type setting */
   machine: string;
+  /** Auto reference setting */
   trAutoRef: boolean;
+  /** Status bar enable setting */
   statusEnabled: boolean;
 };
+
+/**
+ * Manages configuration settings for the GPP extension.
+ *
+ * This class handles:
+ * - Reading and writing configuration settings
+ * - Automatic colorization setup
+ * - Configuration change notifications
+ * - Parameter validation and fallbacks
+ */
 export class Config {
   private config: WorkspaceConfiguration;
 
+  /**
+   * Creates an instance of Config.
+   *
+   * Initializes the configuration and sets up:
+   * - Default formatter for GPP files
+   * - Colorization settings
+   */
   constructor() {
     this.config = workspace.getConfiguration(constants.configId);
     workspace
@@ -27,27 +51,57 @@ export class Config {
     this.addColorizationSettings();
   }
 
+  /**
+   * Configures the extension context with configuration change handlers.
+   *
+   * @param context - The extension context to configure
+   */
   configure(context: ExtensionContext) {
     context.subscriptions.push(
       workspace.onDidChangeConfiguration(this.onConfigurationChanged)
     );
   }
 
+  /**
+   * Handles configuration change events.
+   *
+   * @private
+   * @param e - The configuration change event
+   */
   private onConfigurationChanged(e: ConfigurationChangeEvent) {
     if (!e.affectsConfiguration(constants.configId)) {
       this.reloadConfig();
     }
   }
 
+  /**
+   * Reloads the configuration from workspace settings.
+   *
+   * @private
+   */
   private reloadConfig() {
     this.config = workspace.getConfiguration(constants.configId);
   }
 
+  /**
+   * Gets a configuration parameter value.
+   *
+   * @param param - The parameter name to retrieve
+   * @returns The parameter value
+   */
   getParam(param: string): any {
     this.reloadConfig();
     return this.config.get(param);
   }
 
+  /**
+   * Sets a configuration parameter value.
+   *
+   * @param param - The parameter name to set
+   * @param value - The value to set
+   * @param global - Whether to set globally or workspace-specific
+   * @returns True if the parameter was set successfully
+   */
   setParam(param: string, value: any, global = true): boolean {
     try {
       this.config.update(param, value, global);
@@ -64,16 +118,15 @@ export class Config {
     }
   }
 
+  /**
+   * Adds colorization settings for GPP syntax highlighting.
+   *
+   * This method merges GPP-specific token color customizations with
+   * existing workspace token color settings for both light and dark themes.
+   *
+   * @private
+   */
   private addColorizationSettings() {
-    workspace
-      .getConfiguration()
-      .update(
-        'editor.tokenColorCustomizations',
-        undefined,
-        ConfigurationTarget.Global,
-        true
-      );
-
     let workspaceTokenColorCustomizations = workspace.getConfiguration(
       'editor.tokenColorCustomizations'
     );
@@ -104,8 +157,11 @@ export class Config {
       ).toString()
     );
 
+    let hasChanges = false;
+
     if (!customTokenColorCustomizations['[*Dark*]']) {
       Object.assign(customTokenColorCustomizations, colorsDefaultDark);
+      hasChanges = true;
     } else {
       let wpDarkRules: any[] =
         customTokenColorCustomizations['[*Dark*]'].textMateRules;
@@ -118,12 +174,14 @@ export class Config {
         });
         if (!exist) {
           customTokenColorCustomizations['[*Dark*]'].textMateRules.push(set);
+          hasChanges = true;
         }
       });
     }
 
     if (!customTokenColorCustomizations['[*Light*]']) {
       Object.assign(customTokenColorCustomizations, colorsDefaultLight);
+      hasChanges = true;
     } else {
       let wpLightRules: any[] =
         customTokenColorCustomizations['[*Light*]'].textMateRules;
@@ -136,12 +194,19 @@ export class Config {
         });
         if (!exist) {
           customTokenColorCustomizations['[*Light*]'].textMateRules.push(set);
+          hasChanges = true;
         }
       });
     }
 
-    workspace
-      .getConfiguration('editor')
-      .update('tokenColorCustomizations', customTokenColorCustomizations, true);
+    if (hasChanges) {
+      workspace
+        .getConfiguration('editor')
+        .update(
+          'tokenColorCustomizations',
+          customTokenColorCustomizations,
+          true
+        );
+    }
   }
 }

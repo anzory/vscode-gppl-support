@@ -10,8 +10,29 @@ import {
 } from 'vscode';
 import { utils, IGpplVariable } from '../utils/utils';
 
+/**
+ * Provides hover information for GPP language constructs in VS Code.
+ *
+ * This provider shows helpful information when hovering over:
+ * - User-defined variables and arrays (global and local)
+ * - System variables
+ * - Procedure declarations
+ * - References and additional information
+ */
 export class GpplHoverProvider implements HoverProvider {
+  /**
+   * Creates an instance of GpplHoverProvider.
+   */
   constructor() {}
+
+  /**
+   * Provides hover information for the symbol at the given position.
+   *
+   * @param document - The text document containing the symbol
+   * @param position - The position of the symbol
+   * @param token - A cancellation token for the operation
+   * @returns A promise that resolves to hover information or undefined
+   */
   provideHover(
     document: TextDocument,
     position: Position,

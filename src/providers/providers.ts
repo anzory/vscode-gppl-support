@@ -5,12 +5,31 @@ import { GpplDocumentSymbolProvider } from './GpplDocumentSymbolProvider';
 import { GpplHoverProvider } from './GpplHoverProvider';
 import { GpplReferenceProvider } from './GpplReferenceProvider';
 
-// Интерфейс для базового провайдера с общими методами
+/**
+ * Interface for base provider with common methods.
+ */
 export interface IBaseProvider {
+  /**
+   * Refreshes the provider's data or state.
+   */
   refresh?(): void;
+  /**
+   * Disposes of the provider and cleans up resources.
+   */
   dispose?(): void;
 }
 
+/**
+ * Collection of all GPP language service providers.
+ *
+ * This object contains instances of all provider classes used by the extension:
+ * - completionItemsProvider: Provides autocompletion suggestions
+ * - definitionProvider: Enables "Go to Definition" functionality
+ * - documentSymbolProvider: Provides document outline/symbols
+ * - formattingProvider: Handles document formatting
+ * - hoverProvider: Shows information on hover
+ * - referenceProvider: Enables "Find All References" functionality
+ */
 export const providers = {
   completionItemsProvider: GpplCompletionItemsProvider,
   definitionProvider: GpplDefinitionProvider,

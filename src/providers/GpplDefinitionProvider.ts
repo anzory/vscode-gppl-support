@@ -13,20 +13,46 @@ import {
 import { semanticHelper } from '../utils/semanticHelper';
 import { textParser } from '../utils/textParser';
 
+/**
+ * Provides "Go to Definition" functionality for GPP language constructs.
+ *
+ * This provider enables navigation to the definition of:
+ * - User-defined variables and arrays
+ * - Procedure declarations
+ * - Other GPP language elements
+ */
 export class GpplDefinitionProvider implements DefinitionProvider {
   private definition: Location | undefined = undefined;
   private editor: TextEditor | undefined = window.activeTextEditor;
   private doc: TextDocument | undefined = this.editor?.document;
 
+  /**
+   * Creates an instance of GpplDefinitionProvider.
+   *
+   * Sets up event listener for active editor changes to maintain current document context.
+   */
   constructor() {
     window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
   }
 
+  /**
+   * Handles active editor change events.
+   *
+   * Updates the current editor and document references when the active editor changes.
+   */
   private onActiveEditorChanged(): void {
     this.editor = window.activeTextEditor;
     this.doc = this.editor?.document;
   }
 
+  /**
+   * Provides the definition location for the symbol at the given position.
+   *
+   * @param document - The text document containing the symbol
+   * @param position - The position of the symbol
+   * @param token - A cancellation token for the operation
+   * @returns A promise that resolves to the definition location or locations
+   */
   provideDefinition(
     document: TextDocument,
     position: Position,

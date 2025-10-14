@@ -9,9 +9,23 @@ import {
 } from 'vscode';
 import TextParser from '../utils/textParser';
 
+/**
+ * Provides document symbols (outline) for GPP language files.
+ *
+ * This provider enables the document outline view showing:
+ * - Procedure definitions (@procedure_name)
+ * - Region blocks (#region)
+ * - Hierarchical structure of the document
+ */
 export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
   private textParser = new TextParser();
 
+  /**
+   * Provides symbol information for the entire document.
+   *
+   * @param document - The text document to analyze
+   * @returns A promise that resolves to an array of document symbols
+   */
   provideDocumentSymbols(
     document: TextDocument
   ): ProviderResult<DocumentSymbol[]> {
@@ -20,6 +34,15 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
     return symbols;
   }
 
+  /**
+   * Recursively parses the document to extract symbols.
+   *
+   * @private
+   * @param document - The text document to parse
+   * @param symbols - Array to store found symbols
+   * @param startLine - Starting line number for parsing
+   * @param endLine - Ending line number for parsing
+   */
   private parseDocument(
     document: TextDocument,
     symbols: DocumentSymbol[],
@@ -75,9 +98,10 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
         }
 
         const endRegionLine = this.findEndOfRegion(document, line);
-        const endPosition = endRegionLine < document.lineCount
-          ? document.lineAt(endRegionLine).range.end
-          : document.lineAt(document.lineCount - 1).range.end;
+        const endPosition =
+          endRegionLine < document.lineCount
+            ? document.lineAt(endRegionLine).range.end
+            : document.lineAt(document.lineCount - 1).range.end;
         const regionRange: Range = new Range(selectionRange.start, endPosition);
         const regionSymbol: DocumentSymbol = new DocumentSymbol(
           label,
@@ -103,6 +127,14 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
     }
   }
 
+  /**
+   * Finds the end line of a region block.
+   *
+   * @private
+   * @param document - The text document containing the region
+   * @param startLine - The starting line of the region
+   * @returns The line number where the region ends
+   */
   private findEndOfRegion(document: TextDocument, startLine: number): number {
     const findEndOfRegion = /#endregion/gm;
     const findRegion = /#region/gm;

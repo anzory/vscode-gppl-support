@@ -8,12 +8,30 @@ import {
 } from 'vscode';
 import { utils } from '../utils/utils';
 
+/**
+ * Provides document formatting functionality for GPP language files.
+ *
+ * This provider handles indentation and formatting of GPP code including:
+ * - Proper indentation for control structures (if, while, procedures)
+ * - Region handling (#region/#endregion)
+ * - Comment formatting
+ * - Customizable tab size and space preferences
+ */
 export class GpplDocumentFormattingEditProvider
   implements DocumentFormattingEditProvider
 {
+  /** Current indentation level for nested structures */
   indentLevel = 0;
+  /** Indentation string (spaces or tabs) based on configuration */
   indent: string;
 
+  /**
+   * Creates an instance of GpplDocumentFormattingEditProvider.
+   *
+   * Initializes the indentation settings based on workspace configuration:
+   * - Tab size (default: 2)
+   * - Spaces vs tabs preference
+   */
   constructor() {
     // Безопасное получение настроек форматирования с fallback значениями
     const formatConfig = utils.constants?.format;
@@ -25,6 +43,14 @@ export class GpplDocumentFormattingEditProvider
       : '\t'.repeat(indentSize);
   }
 
+  /**
+   * Provides formatting edits for the entire document.
+   *
+   * @param document - The text document to format
+   * @param options - Formatting options from VS Code
+   * @param token - A cancellation token for the operation
+   * @returns An array of text edits to apply for formatting
+   */
   provideDocumentFormattingEdits(
     document: TextDocument,
     options: FormattingOptions,
@@ -55,6 +81,12 @@ export class GpplDocumentFormattingEditProvider
     }
   }
 
+  /**
+   * Formats a single line with appropriate indentation.
+   *
+   * @param text - The text line to format
+   * @returns The formatted line with proper indentation
+   */
   formatLineWithIndentation(text: string): string {
     try {
       if (!text) {
@@ -77,6 +109,13 @@ export class GpplDocumentFormattingEditProvider
     }
   }
 
+  /**
+   * Applies the original formatting logic to a line of text.
+   *
+   * @private
+   * @param text - The text line to format
+   * @returns The formatted line with proper indentation and structure
+   */
   private formatLineWithOriginalLogic(text: string): string {
     const formatConfig = utils.constants?.format;
     const applyIndentsToRegions = formatConfig?.applyIndentsToRegions !== false;
@@ -119,6 +158,12 @@ export class GpplDocumentFormattingEditProvider
     return text;
   }
 
+  /**
+   * Creates an indentation string for the current indent level.
+   *
+   * @private
+   * @returns A string containing the appropriate amount of indentation
+   */
   private createIndent(): string {
     return this.indent.repeat(Math.max(0, this.indentLevel));
   }
