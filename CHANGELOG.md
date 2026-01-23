@@ -8,6 +8,18 @@
 
 - and more ...
 
+## [1.8.0] - 2026-01-23
+
+### Added
+
+- `CodeLens` for Document Symbols
+
+### Improved
+
+- double character output during autocompletion
+
+---
+
 ## [1.7.13] - 2025-10-14
 
 ### Added

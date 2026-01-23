@@ -5,6 +5,7 @@ Enhance your SolidCAM postprocessor development with full GPPL language support 
 ## Features
 
 - **Document Symbols** in the Outline Window
+- **CodeLens** for Document Symbols
 - **Syntax Highlighting**: Fully customizable via `settings.json`.
 - **Code Formatting**: Simple and reliable document formatting.
 - **Go to Definition**: Jump to definitions of procedures and variables with ease.
@@ -19,9 +20,9 @@ Enhance your SolidCAM postprocessor development with full GPPL language support 
 
 **Document Symbols**:
 
-`New:` Document Symbols in the Outline Window
+Document Symbols in the Outline Window
 
-![Document Symbols in the Outline Window](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/documentSymbols.gif?raw=true)
+![Document Symbols in the Outline Window](/images/screens/documentSymbols.gif?raw=true)
 
 > **Tip:** You can now use search and filtering in the Outline panel for quick symbol lookup. Use `Ctrl+Alt+F` in the Outline panel to search and filter items.
 >
@@ -29,9 +30,15 @@ Enhance your SolidCAM postprocessor development with full GPPL language support 
 
 ---
 
+**CodeLens**
+
+![CodeLens for Document Symbols](/images/screens/codeLens.gif?raw=true)
+
+---
+
 **Autocompletion**:
 
-![Auto-complete code functionality](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/auto-complete-functionality.gif?raw=true)
+![Auto-complete code functionality](/images/screens/auto-complete-functionality.gif?raw=true)
 
 ---
 
@@ -39,7 +46,7 @@ Enhance your SolidCAM postprocessor development with full GPPL language support 
 
 (by `Ctrl+Click`, or `RightClick -> Go to Definition`, or `F12`)
 
-![Go to Definition](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/goto-definition.gif?raw=true)
+![Go to Definition](/images/screens/goto-definition.gif?raw=true)
 
 > **Tip:** You can open the definition to the side with `Ctrl+Alt+Click`.
 
@@ -47,13 +54,13 @@ Enhance your SolidCAM postprocessor development with full GPPL language support 
 
 **Hover Hints**:
 
-![Displays information](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/info-when-hover.gif?raw=true)
+![Displays information](/images/screens/info-when-hover.gif?raw=true)
 
 ---
 
 **Internationalization**:
 
-![Internationalization for Completion](https://github.com/anzory/vscode-gppl-support/blob/master/images/screens/internationalization.gif?raw=true)
+![Internationalization for Completion](/images/screens/internationalization.gif?raw=true)
 
 ---
 
@@ -107,26 +114,15 @@ See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gpp
 
 ## Release Notes
 
-### 1.7.13
+### 1.8.0
 
 ### Added
 
-- Search and filtering functionality in the Outline panel for quick symbol lookup
-- Keyboard shortcuts documentation for Outline panel features
+- `CodeLens` for Document Symbols
 
 ### Improved
 
-- Updated README.md with tips for using Outline panel search and breadcrumbs navigation
-
-### 1.7.12
-
-### Removed
-
-- Custom Procedures Tree View panel (replaced with standard Outline panel for document symbols)
-
-### Improved
-
-- Simplified extension architecture by removing custom tree view implementation
+- double character output during autocompletion
 
 ---
 
