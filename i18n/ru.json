@@ -1635,5 +1635,6 @@
 	"completion.doc.tool_type.value": "Одно из возможных значений переменной `tool_type`",
 	"lexical.error": "недопустимый символ: {0}",
 	"parser.variable.lenght.error": "длина переменной не должна превышать 60 символов",
-	"parser.variable.first.letter.error": "первый символ не должен быть цифрой"
+	"parser.variable.first.letter.error": "первый символ не должен быть цифрой",
+	"codelens.procedure.calls": "{name}: вызовов {count}"
 }

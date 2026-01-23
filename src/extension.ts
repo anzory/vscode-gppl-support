@@ -4,6 +4,8 @@ import {
   Disposable,
   ExtensionContext,
   languages,
+  Location,
+  Position,
   TextEdit,
   TextEditor,
   Uri,
@@ -16,6 +18,7 @@ import { utils } from './utils/utils';
 
 let completionItemProvider: Disposable;
 let hoverProvider: Disposable;
+let codeLensProvider: Disposable;
 
 /**
  * Activates the VS Code extension for SolidCAM GPP language support.
@@ -49,6 +52,18 @@ export async function activate(context: ExtensionContext) {
     }
   );
 
+  commands.registerCommand(
+    utils.constants.commands.showProcedureReferences,
+    async (documentUri: Uri, position: Position, locations: Location[]) => {
+      await commands.executeCommand(
+        'editor.action.showReferences',
+        documentUri,
+        position,
+        locations
+      );
+    }
+  );
+
   completionItemProvider = languages.registerCompletionItemProvider(
     utils.constants.languageId,
     new providers.completionItemsProvider()
@@ -57,8 +72,13 @@ export async function activate(context: ExtensionContext) {
     utils.constants.languageId,
     new providers.hoverProvider()
   );
+  codeLensProvider = languages.registerCodeLensProvider(
+    utils.constants.languageId,
+    new providers.codeLensProvider()
+  );
   context.subscriptions.push(completionItemProvider);
   context.subscriptions.push(hoverProvider);
+  context.subscriptions.push(codeLensProvider);
   context.subscriptions.push(
     languages.registerDefinitionProvider(
       utils.constants.languageId,
@@ -105,6 +125,7 @@ workspace.onDidChangeConfiguration(() => {
   utils.i18n.update();
   completionItemProvider.dispose();
   hoverProvider.dispose();
+  codeLensProvider.dispose();
   hoverProvider = languages.registerHoverProvider(
     utils.constants.languageId,
     new providers.hoverProvider()
@@ -112,6 +133,10 @@ workspace.onDidChangeConfiguration(() => {
   completionItemProvider = languages.registerCompletionItemProvider(
     utils.constants.languageId,
     new providers.completionItemsProvider()
+  );
+  codeLensProvider = languages.registerCodeLensProvider(
+    utils.constants.languageId,
+    new providers.codeLensProvider()
   );
 });
 

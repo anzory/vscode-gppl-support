@@ -1,4 +1,5 @@
 import { GpplCompletionItemsProvider } from './GpplCompletionItemsProvider';
+import { GpplCodeLensProvider } from './GpplCodeLensProvider';
 import { GpplDefinitionProvider } from './GpplDefinitionProvider';
 import { GpplDocumentFormattingEditProvider } from './GpplDocumentFormattingEditProvider';
 import { GpplDocumentSymbolProvider } from './GpplDocumentSymbolProvider';
@@ -32,6 +33,7 @@ export interface IBaseProvider {
  */
 export const providers = {
   completionItemsProvider: GpplCompletionItemsProvider,
+  codeLensProvider: GpplCodeLensProvider,
   definitionProvider: GpplDefinitionProvider,
   documentSymbolProvider: GpplDocumentSymbolProvider,
   formattingProvider: GpplDocumentFormattingEditProvider,

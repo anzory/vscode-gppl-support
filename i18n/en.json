@@ -1635,5 +1635,6 @@
   "completion.doc.tool_type.value": "One of the possible values of the `tool_type` variable",
   "lexical.error": "illegal character: {0}",
   "parser.variable.lenght.error": "the length of the variable must not exceed 60 characters",
-  "parser.variable.first.letter.error": "the first character must not be a digit"
+  "parser.variable.first.letter.error": "the first character must not be a digit",
+  "codelens.procedure.calls": "{name}: {count} calls"
 }

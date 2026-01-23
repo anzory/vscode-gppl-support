@@ -28,6 +28,7 @@ class GpplConstants {
     },
     commands: {
       formatDocument: gpp.contributes.commands[0].command,
+      showProcedureReferences: gpp.contributes.commands[1].command,
     },
     urls: {
       changeLog:

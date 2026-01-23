@@ -166,6 +166,11 @@
           "light": "images/icons/text-indent-left.svg",
           "dark": "images/icons/text-indent-left-dark.svg"
         }
+      },
+      {
+        "command": "gpp.editor.ShowProcedureReferences",
+        "title": "Show Procedure References",
+        "category": "navigation"
       }
     ]
   },
