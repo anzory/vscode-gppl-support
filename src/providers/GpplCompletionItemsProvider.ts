@@ -3,6 +3,7 @@ import {
   CompletionItemProvider,
   MarkdownString,
   ProviderResult,
+  Range,
   SnippetString,
 } from 'vscode';
 import { gpplComletionsItemsList } from '../utils/comletionsItemsList';
@@ -35,7 +36,7 @@ export class GpplCompletionItemsProvider
     gpplComletionsItemsList.forEach((item) => {
       let _item: CompletionItem = new CompletionItem(item.label);
       _item.insertText = new SnippetString(item.insertText?.toString());
-      _item.commitCharacters = item.commitCharacters;
+      _item.commitCharacters = undefined;
       _item.kind = item.kind;
       if (item.documentation) {
         _item.documentation = new MarkdownString(
@@ -64,6 +65,14 @@ export class GpplCompletionItemsProvider
     token: any,
     context: any
   ): ProviderResult<CompletionItem[]> {
+    const wordRange = document.getWordRangeAtPosition(
+      position,
+      /[@A-Za-z_][\w@]*/
+    );
+    const replaceRange = wordRange ?? new Range(position, position);
+    this._gpplComletionsItems.forEach((item) => {
+      item.range = replaceRange;
+    });
     return this._gpplComletionsItems;
   }
 }
