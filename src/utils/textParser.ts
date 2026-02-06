@@ -64,6 +64,10 @@ export default class TextParser {
     const locations: Location[] = [];
     const text = doc.getText();
     const regExp = this.getCachedRegExp(word + '\\b');
+    // Ensure lastIndex is reset in case a cached RegExp has state
+    try {
+      (regExp as RegExp).lastIndex = 0;
+    } catch {}
 
     let regExpResult: RegExpExecArray | null;
     do {
@@ -95,6 +99,11 @@ export default class TextParser {
 
     const ranges: Range[] = [];
     const text = doc.getText();
+
+    // Reset lastIndex on incoming RegExp to avoid stateful exec issues
+    try {
+      (regExp as RegExp).lastIndex = 0;
+    } catch {}
 
     // Создаем копию регулярного выражения, чтобы не изменять оригинал
     const regExpCopy = new RegExp(regExp.source, regExp.flags);

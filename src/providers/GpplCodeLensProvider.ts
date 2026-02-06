@@ -4,6 +4,7 @@ import {
   CodeLensProvider,
   Command,
   DocumentSymbol,
+  SymbolKind,
   ProviderResult,
   Range,
   TextDocument,
@@ -47,6 +48,11 @@ export class GpplCodeLensProvider implements CodeLensProvider {
     const codeLenses: CodeLens[] = [];
 
     for (const symbol of flatSymbols) {
+      // Skip region/namespace symbols: they should remain in document outline
+      // but must not receive CodeLens entries.
+      if (symbol.kind === SymbolKind.Namespace) {
+        continue;
+      }
       const escapedName = this.escapeRegExp(symbol.name);
       const allLocations = textParser.getWordLocationsInDoc(
         document,

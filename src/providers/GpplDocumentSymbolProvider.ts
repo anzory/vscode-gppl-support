@@ -49,9 +49,9 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
     startLine: number,
     endLine: number
   ): void {
-    const findProcedure = /(?<=^[\s]{0,})@\w+\b/;
-    const findRegion = /(?<=^[;\s]{0,})#region/;
-    const findNameOfRegion = /(?<=^[;\s]{0,}#region\s{0,})\w+\b/;
+    const findProcedure = /^\s*@\w+\b/;
+    const findRegion = /^[;\s]*#region/;
+    const findNameOfRegion = /^[;\s]*#region\s*(\w+)\b/;
 
     for (let line = startLine; line < endLine; line++) {
       const text = document.lineAt(line).text;
@@ -59,8 +59,12 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
       if (findProcedure.test(text)) {
         const match = findProcedure.exec(text);
         if (match) {
-          const label = match[0];
-          const rgx = new RegExp('(?<=^[\\s]{0,})' + label, 'gm');
+          // Trim leading whitespace so label represents the actual token (e.g. "@proc")
+          const label = match[0].trim();
+          // escape label for use in dynamic regexp
+          const escapedLabel = label.replace(/[-\\/\\^$*+?.()|[\]{}]/g, '\\$&');
+          // Find exact token positions (without leading spaces)
+          const rgx = new RegExp(escapedLabel, 'gm');
           const ranges = this.textParser.getRegExpRangesInDoc(document, rgx);
           if (ranges.length > 0) {
             const range = ranges[0];
@@ -81,8 +85,8 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
         let label: string;
         let selectionRange: Range;
 
-        if (nameMatch) {
-          label = nameMatch[0];
+        if (nameMatch && nameMatch[1]) {
+          label = nameMatch[1];
           const locations = this.textParser.getWordLocationsInDoc(
             document,
             label

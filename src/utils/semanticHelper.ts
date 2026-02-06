@@ -135,17 +135,7 @@ class SemanticHelper {
    * @returns The array definition or undefined if not found
    */
   getGlobalUserArray(name: string): IVariable | undefined {
-    let res: IVariable | undefined = undefined;
-    if (
-      this._globalUserArrays.some((gppVar) => {
-        res = gppVar;
-        return gppVar.name === name;
-      })
-    ) {
-      return res;
-    } else {
-      return undefined;
-    }
+    return this._globalUserArrays.find((gppVar) => gppVar.name === name);
   }
 
   /**
@@ -547,6 +537,11 @@ class SemanticHelper {
    */
   isThisGloballUserArray(name: string): boolean {
     return this._globalUserArrays.find((x) => x.name === name) ? true : false;
+  }
+
+  // Correctly spelled alias to avoid breaking callers and provide a clearer API
+  isThisGlobalUserArray(name: string): boolean {
+    return this.isThisGloballUserArray(name);
   }
 
   /**
