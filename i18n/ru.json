@@ -1637,4 +1637,5 @@
 	"parser.variable.lenght.error": "длина переменной не должна превышать 60 символов",
 	"parser.variable.first.letter.error": "первый символ не должен быть цифрой",
 	"codelens.procedure.calls": "{name}: вызовов {count}"
+	,"codelens.procedure.references": "ссылок: {count}"
 }

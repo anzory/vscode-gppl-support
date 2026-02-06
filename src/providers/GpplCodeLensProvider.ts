@@ -62,10 +62,8 @@ export class GpplCodeLensProvider implements CodeLensProvider {
         (location) => !this.isSameRange(location.range, symbol.selectionRange)
       );
       const callCount = callLocations.length;
-      const template = utils.i18n.t('codelens.procedure.calls');
-      const title = template
-        .replace('{name}', symbol.name)
-        .replace('{count}', callCount.toString());
+      const template = utils.i18n.t('codelens.procedure.references');
+      const title = template.replace('{count}', callCount.toString());
       const command: Command = {
         title,
         command: utils.constants.commands.showProcedureReferences,
