@@ -1,6 +1,8 @@
 # GPPL Support for VSCode
 
-Enhance your SolidCAM postprocessor development with full GPPL language support in Visual Studio Code. Enjoy syntax highlighting, code formatting, autocompletion, snippets, and document symbols in the Outline panel — all in one extension!
+[![VS Code Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/anzory.vscode-gppl-support)](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support) [![Installs](https://img.shields.io/visual-studio-marketplace/i/anzory.vscode-gppl-support)](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support) [![GitHub Stars](https://img.shields.io/github/stars/anzory/vscode-gppl-support?style=social)](https://github.com/anzory/vscode-gppl-support) [![License](https://img.shields.io/github/license/anzory/vscode-gppl-support)](https://github.com/anzory/vscode-gppl-support/blob/master/LICENSE.md)
+
+Enhance your `SolidCAM` postprocessor development with full `GPPL language` support in `Visual Studio Code`. Enjoy syntax highlighting, code formatting, autocompletion, snippets, and document symbols in the Outline panel — all in one extension!
 
 ## Features
 
@@ -69,6 +71,7 @@ Document Symbols in the Outline Window
 1. Open VSCode.
 2. Go to Extensions Marketplace.
 3. Search for `anzory.vscode-gppl-support` and click Install.
+4. Or download [VSIX](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/anzory/vsextensions/vscode-gppl-support/1.8.0/vspackage) and install offline from it.
 
 ---
 
@@ -76,7 +79,7 @@ Document Symbols in the Outline Window
 
 There are a few settings for this extension:
 
-(File -> Preferenses -> Settins -> Extensions)
+(File -> Preferences -> Settings -> Extensions)
 
 - `Editor: Default Formatter`: you must specify _'anzory.vscode-gppl-support'_ to be able to format GPPL documents (by default)
 - `Format: Enable`: specifies whether or not the document can be formatted
@@ -86,7 +89,7 @@ There are a few settings for this extension:
 
 In addition, the formatting behavior depends on the following settings:
 
-(File -> Preferenses -> Settins -> Text Editor -> Formatting)
+(File -> Preferences -> Settings -> Text Editor -> Formatting)
 
 - `Format On Save`: defines whether or not the document will be formatted when it is saved
 
@@ -108,7 +111,7 @@ There are no hard dependencies here, but I highly recommend using:
 
 There are no known issues with this extension.
 
-See a issue? feel free to open the [issues](https://github.com/anzory/vscode-gppl-support/issues/new/choose).
+Found an issue? Feel free to open the [issues](https://github.com/anzory/vscode-gppl-support/issues/new/choose).
 
 ---
 

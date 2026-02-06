@@ -8,6 +8,16 @@
 
 - and more ...
 
+---
+
+## [1.8.1] - 2026-01-23
+
+### Improved
+
+- now CodeLens shows links instead of calls
+
+---
+
 ## [1.8.0] - 2026-01-23
 
 ### Added
