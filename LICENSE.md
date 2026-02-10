@@ -1,4 +1,4 @@
-# License
+# MIT License
 
 Copyright: © _Andrei Zorin_, 2024, aka [@anzory](https://github.com/anzory/vscode-gppl-support)
 
