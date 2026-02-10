@@ -1,6 +1,3 @@
----
-SPDX-License-Identifier: MIT
----
 
 # MIT License
 
