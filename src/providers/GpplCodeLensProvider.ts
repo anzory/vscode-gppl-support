@@ -69,7 +69,9 @@ export class GpplCodeLensProvider implements CodeLensProvider {
         command: utils.constants.commands.showProcedureReferences,
         arguments: [document.uri, symbol.selectionRange.start, callLocations],
       };
-      codeLenses.push(new CodeLens(symbol.range, command));
+      // Use selectionRange (the symbol name range) so CodeLens appears on declaration line
+      const anchorRange = symbol.selectionRange || symbol.range;
+      codeLenses.push(new CodeLens(anchorRange, command));
     }
 
     return codeLenses;

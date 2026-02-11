@@ -2,6 +2,7 @@
 import {
   DocumentSymbol,
   DocumentSymbolProvider,
+  Position,
   ProviderResult,
   Range,
   SymbolKind,
@@ -61,22 +62,22 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
         if (match) {
           // Trim leading whitespace so label represents the actual token (e.g. "@proc")
           const label = match[0].trim();
-          // escape label for use in dynamic regexp
-          const escapedLabel = label.replace(/[-\\/\\^$*+?.()|[\]{}]/g, '\\$&');
-          // Find exact token positions (without leading spaces)
-          const rgx = new RegExp(escapedLabel, 'gm');
-          const ranges = this.textParser.getRegExpRangesInDoc(document, rgx);
-          if (ranges.length > 0) {
-            const range = ranges[0];
-            const symbol = new DocumentSymbol(
-              label,
-              '',
-              SymbolKind.Function,
-              range,
-              range
-            );
-            symbols.push(symbol);
-          }
+          // Compute range directly from the current line number and token position
+          // to avoid the issue where \s* in a multiline regex captures newlines
+          // and shifts the range to an earlier line.
+          const startChar = text.indexOf(label);
+          const range = new Range(
+            new Position(line, startChar),
+            new Position(line, startChar + label.length)
+          );
+          const symbol = new DocumentSymbol(
+            label,
+            '',
+            SymbolKind.Function,
+            range,
+            range
+          );
+          symbols.push(symbol);
         }
       }
 
