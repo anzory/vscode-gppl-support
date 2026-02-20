@@ -9,7 +9,7 @@
   "author": "Andrey Zorin",
   "copyright": "Copyright (c) 2026 Andrey Zorin",
   "engines": {
-    "vscode": "^1.108.0"
+    "vscode": "^1.105.0"
   },
   "keywords": [
     "gpp",
@@ -145,6 +145,12 @@
           ],
           "default": "en",
           "description": "Determines which language to use for messages",
+          "scope": "window"
+        },
+        "gpp.outline.showSymbolDetail": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show call count in document outline symbol detail (does not affect CodeLens)",
           "scope": "window"
         }
       }

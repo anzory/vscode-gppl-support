@@ -7,8 +7,10 @@ import {
   Range,
   SymbolKind,
   TextDocument,
+  workspace,
 } from 'vscode';
 import TextParser from '../utils/textParser';
+import { utils } from '../utils/utils';
 
 /**
  * Provides document symbols (outline) for GPP language files.
@@ -70,9 +72,22 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
             new Position(line, startChar),
             new Position(line, startChar + label.length)
           );
+          const allLocations = this.textParser.getWordLocationsInDoc(
+            document,
+            this.escapeRegExp(label)
+          );
+          const callCount = allLocations.filter(
+            (loc) => !this.isSameRange(loc.range, range)
+          ).length;
+          const showDetail = workspace
+            .getConfiguration('gpp')
+            .get<boolean>('gpp.outline.showSymbolDetail', true);
+          const detail = showDetail
+            ? utils.i18n.t('outline.detail.calls').replace('{count}', callCount.toString())
+            : '';
           const symbol = new DocumentSymbol(
             label,
-            '',
+            detail,
             SymbolKind.Function,
             range,
             range
@@ -130,6 +145,29 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
         line = endRegionLine;
       }
     }
+  }
+
+  /**
+   * Checks if two ranges are equal.
+   *
+   * @private
+   * @param a - First range
+   * @param b - Second range
+   * @returns True if ranges are equal
+   */
+  private isSameRange(a: Range, b: Range): boolean {
+    return a.start.isEqual(b.start) && a.end.isEqual(b.end);
+  }
+
+  /**
+   * Escapes special regex characters in a string for use in RegExp.
+   *
+   * @private
+   * @param value - The string to escape
+   * @returns The escaped string safe for use in regular expressions
+   */
+  private escapeRegExp(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   /**

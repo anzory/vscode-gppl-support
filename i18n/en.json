@@ -1636,6 +1636,8 @@
   "lexical.error": "illegal character: {0}",
   "parser.variable.lenght.error": "the length of the variable must not exceed 60 characters",
   "parser.variable.first.letter.error": "the first character must not be a digit",
-  "codelens.procedure.calls": "{name}: {count} calls"
-  ,"codelens.procedure.references": "references: {count}"
+  "codelens.procedure.calls": "{name}: {count} calls",
+  "codelens.procedure.references": "references: {count}",
+  "codelens.procedure.occurrences": "occurrences: {count}",
+  "outline.detail.calls": "calls: {count}"
 }

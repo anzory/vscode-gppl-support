@@ -6,7 +6,6 @@ import {
   DocumentSymbol,
   SymbolKind,
   ProviderResult,
-  Range,
   TextDocument,
 } from 'vscode';
 import { GpplDocumentSymbolProvider } from './GpplDocumentSymbolProvider';
@@ -58,16 +57,12 @@ export class GpplCodeLensProvider implements CodeLensProvider {
         document,
         escapedName
       );
-      const callLocations = allLocations.filter(
-        (location) => !this.isSameRange(location.range, symbol.selectionRange)
-      );
-      const callCount = callLocations.length;
       const template = utils.i18n.t('codelens.procedure.references');
-      const title = template.replace('{count}', callCount.toString());
+      const title = template.replace('{count}', allLocations.length.toString());
       const command: Command = {
         title,
         command: utils.constants.commands.showProcedureReferences,
-        arguments: [document.uri, symbol.selectionRange.start, callLocations],
+        arguments: [document.uri, symbol.selectionRange.start, allLocations],
       };
       // Use selectionRange (the symbol name range) so CodeLens appears on declaration line
       const anchorRange = symbol.selectionRange || symbol.range;
@@ -75,10 +70,6 @@ export class GpplCodeLensProvider implements CodeLensProvider {
     }
 
     return codeLenses;
-  }
-
-  private isSameRange(a: Range, b: Range): boolean {
-    return a.start.isEqual(b.start) && a.end.isEqual(b.end);
   }
 
   private escapeRegExp(value: string): string {

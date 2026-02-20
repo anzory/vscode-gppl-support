@@ -1636,6 +1636,8 @@
 	"lexical.error": "недопустимый символ: {0}",
 	"parser.variable.lenght.error": "длина переменной не должна превышать 60 символов",
 	"parser.variable.first.letter.error": "первый символ не должен быть цифрой",
-	"codelens.procedure.calls": "{name}: вызовов {count}"
-	,"codelens.procedure.references": "ссылок: {count}"
+	"codelens.procedure.calls": "{name}: вызовов {count}",
+	"codelens.procedure.references": "ссылок: {count}",
+	"codelens.procedure.occurrences": "вхождений: {count}",
+	"outline.detail.calls": "вызовов: {count}"
 }
