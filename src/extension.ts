@@ -14,6 +14,7 @@ import {
   WorkspaceEdit,
 } from 'vscode';
 import { providers } from './providers/providers';
+import { Logger } from './utils/logger';
 import { utils } from './utils/utils';
 
 let completionItemProvider: Disposable;
@@ -32,6 +33,9 @@ let documentSymbolProvider: Disposable;
  * @param context - The extension context provided by VS Code
  */
 export async function activate(context: ExtensionContext) {
+  // Initialize Logger first
+  Logger.configure(context);
+  
   new utils.config().configure(context);
 
   const editor: TextEditor | undefined = window.activeTextEditor;
@@ -169,6 +173,8 @@ function registerConfigurationChangeListener(context: ExtensionContext): void {
  * Deactivates the VS Code extension.
  *
  * This function is called when the extension is deactivated.
- * Currently, no cleanup is required as VS Code handles provider disposal automatically.
+ * Cleans up Logger resources.
  */
-export function deactivate() {}
+export function deactivate() {
+  Logger.close();
+}

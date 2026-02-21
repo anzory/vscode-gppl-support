@@ -10,6 +10,7 @@ import {
   workspace,
 } from 'vscode';
 import { constants } from './constants';
+import { Logger } from './logger';
 import { textParser } from './textParser';
 
 /**
@@ -84,7 +85,7 @@ function getSystemVariableNames(): string[] {
       cachedSystemVariableNames = [];
     }
   } catch (error) {
-    console.error('Error loading system variables:', error);
+    Logger.error('Error loading system variables:', error);
     cachedSystemVariableNames = [];
   }
 
@@ -623,7 +624,7 @@ class SemanticHelper implements Disposable {
       this.parseSystemVariables();
       this.parseProcedures();
     } catch (error) {
-      console.error('Error during document parsing:', error);
+      Logger.error('Error during document parsing:', error);
       // Clear data on error to prevent inconsistent state
       this.clearAllData();
     }
@@ -658,7 +659,7 @@ class SemanticHelper implements Disposable {
       try {
         this.parseDocument();
       } catch (error) {
-        console.error('Error parsing document:', error);
+        Logger.error('Error parsing document:', error);
       }
     }, 300);
   }

@@ -5,6 +5,7 @@ import {
   TextDocument,
   TextEdit,
 } from 'vscode';
+import { Logger } from '../utils/logger';
 import { utils } from '../utils/utils';
 
 /**
@@ -75,7 +76,7 @@ export class GpplDocumentFormattingEditProvider
       this.indentLevel = 0;
       return textEditList;
     } catch (error) {
-      console.error('Error in document formatting:', error);
+      Logger.error('Error in document formatting:', error);
       return [];
     }
   }
@@ -103,7 +104,7 @@ export class GpplDocumentFormattingEditProvider
       // Apply original indentation logic
       return this.formatLineWithOriginalLogic(text);
     } catch (error) {
-      console.error('Error formatting line:', error);
+      Logger.error('Error formatting line:', error);
       return text; // Return original text on error
     }
   }

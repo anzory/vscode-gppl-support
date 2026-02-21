@@ -1,13 +1,29 @@
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
 import { workspace } from 'vscode';
+
+/**
+ * Resolves the correct path to package.json.
+ * In development: __dirname is out/src/utils, so package.json is ../../package.json
+ * In production (webpack): __dirname is dist/, and package.json is in the same directory
+ * @private
+ */
+function resolvePackageJsonPath(): string {
+  // Try production path first (webpack dist folder)
+  const prodPath = resolve(__dirname, 'package.json');
+  if (existsSync(prodPath)) {
+    return prodPath;
+  }
+  // Fallback to development path
+  return resolve(__dirname, '..', '..', 'package.json');
+}
 
 /**
  * Parsed package.json content containing extension metadata and configuration.
  * @private
  */
 const gpp = JSON.parse(
-  readFileSync(resolve(__dirname, '..', 'package.json')).toString()
+  readFileSync(resolvePackageJsonPath()).toString()
 );
 
 /**
@@ -65,7 +81,7 @@ class GpplConstants {
     languageId: gpp.contributes.languages[0].id,
     configId: gpp.contributes.languages[0].id,
     copyright: gpp.copyright,
-    extensionOutputChannelName: gpp.displayName,
+    extensionOutputChannelName: 'SolidCAM GPPL',
   };
 }
 

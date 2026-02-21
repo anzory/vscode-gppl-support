@@ -1,16 +1,25 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
-    "target": "ES2015",
+    "target": "ES2020",
     "strict": true /* enable all strict type-checking options */,
-    "lib": ["ESNext"],
+    "lib": [
+      "ES2020"
+    ],
     "rootDir": "src",
-    "outDir": "out"
+    "outDir": "out",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
     // "sourceMap": true,
     /* Additional Checks */
     // "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
     // "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
     // "noUnusedParameters": true,  /* Report errors on unused parameters. */
   },
-  "exclude": ["node_modules", "tmp", "webpack.config.ts"]
+  "exclude": [
+    "node_modules",
+    "tmp",
+    "webpack.config.ts"
+  ]
 }

@@ -11,8 +11,6 @@ const config: Configuration = {
   target: 'node',
   entry: {
     main: './src/extension.ts',
-    providers: './src/providers/providers.ts',
-    utils: './src/utils/utils.ts',
   },
 
   output: {
@@ -65,6 +63,11 @@ const config: Configuration = {
     // the vscode-module is created on-the-fly and must be excluded.
     // Add other modules that cannot be webpack'ed, 📖 -> https://webpack.js.org/configuration/externals/
     vscode: 'commonjs vscode',
+  },
+  // Preserve __dirname and __filename for correct path resolution
+  node: {
+    __dirname: false,
+    __filename: false,
   },
   resolve: {
     // support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
