@@ -105,7 +105,7 @@ export default class TextParser {
       (regExp as RegExp).lastIndex = 0;
     } catch {}
 
-    // Создаем копию регулярного выражения, чтобы не изменять оригинал
+    // Create a copy of the regex to avoid modifying the original
     const regExpCopy = new RegExp(regExp.source, regExp.flags);
     let regExpRes: RegExpExecArray | null;
 

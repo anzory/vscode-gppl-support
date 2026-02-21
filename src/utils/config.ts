@@ -11,20 +11,6 @@ import {
 import { constants } from './constants';
 
 /**
- * Configuration settings interface for GPP extension.
- */
-type IgpplSettings = {
-  /** Enable syntax colorization */
-  colorization: boolean;
-  /** Machine type setting */
-  machine: string;
-  /** Auto reference setting */
-  trAutoRef: boolean;
-  /** Status bar enable setting */
-  statusEnabled: boolean;
-};
-
-/**
  * Manages configuration settings for the GPP extension.
  *
  * This class handles:
@@ -102,18 +88,13 @@ export class Config {
    * @param global - Whether to set globally or workspace-specific
    * @returns True if the parameter was set successfully
    */
-  setParam(param: string, value: any, global = true): boolean {
+  setParam(param: string, value: unknown, global = true): boolean {
     try {
       this.config.update(param, value, global);
-    } catch (err) {
-      return false;
-    }
-
-    this.reloadConfig();
-
-    if (this.config !== undefined) {
-      return true;
-    } else {
+      this.reloadConfig();
+      // Verify the value was set correctly
+      return this.config.get(param) === value;
+    } catch {
       return false;
     }
   }

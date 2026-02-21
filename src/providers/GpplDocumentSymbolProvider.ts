@@ -131,7 +131,7 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
           selectionRange
         );
 
-        // Рекурсивно парсим содержимое региона
+        // Recursively parse region content
         this.parseDocument(
           document,
           regionSymbol.children,
@@ -141,7 +141,7 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
 
         symbols.push(regionSymbol);
 
-        // Пропускаем обработанные строки
+        // Skip processed lines
         line = endRegionLine;
       }
     }

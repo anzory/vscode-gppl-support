@@ -4,7 +4,6 @@ import {
   FormattingOptions,
   TextDocument,
   TextEdit,
-  workspace,
 } from 'vscode';
 import { utils } from '../utils/utils';
 
@@ -33,7 +32,7 @@ export class GpplDocumentFormattingEditProvider
    * - Spaces vs tabs preference
    */
   constructor() {
-    // Безопасное получение настроек форматирования с fallback значениями
+    // Safely get formatting settings with fallback values
     const formatConfig = utils.constants?.format;
     const indentSize = formatConfig?.tabSize || 2;
     const preferSpaces = formatConfig?.preferSpace !== false;
@@ -57,7 +56,7 @@ export class GpplDocumentFormattingEditProvider
     token: CancellationToken
   ): TextEdit[] {
     try {
-      // Безопасная проверка настроек форматирования
+      // Safely check formatting settings
       const formatConfig = utils.constants?.format;
       if (!formatConfig?.enable) {
         return [];
@@ -66,7 +65,7 @@ export class GpplDocumentFormattingEditProvider
       const textEditList: TextEdit[] = [];
       for (let i = 0; i < document.lineCount; i++) {
         const line = document.lineAt(i);
-        const trimmedLine = line.text.trimStart(); // Используем современный метод
+        const trimmedLine = line.text.trimStart(); // Use modern method
 
         textEditList.push(
           new TextEdit(line.range, this.formatLineWithIndentation(trimmedLine))
@@ -93,19 +92,19 @@ export class GpplDocumentFormattingEditProvider
         return '';
       }
 
-      // Нормализуем регионы
+      // Normalize regions
       text = text.replace(/[;\s]*#\s*(end)?region\b/g, ';#$1region');
 
-      // Проверяем, является ли строка комментарием
+      // Check if line is a comment
       if (text.startsWith(';') && !/(;#(end)?region)/.test(text)) {
         return this.createIndent() + text;
       }
 
-      // Восстанавливаем оригинальную логику работы с отступами
+      // Apply original indentation logic
       return this.formatLineWithOriginalLogic(text);
     } catch (error) {
       console.error('Error formatting line:', error);
-      return text; // Возвращаем оригинальный текст при ошибке
+      return text; // Return original text on error
     }
   }
 
@@ -120,11 +119,11 @@ export class GpplDocumentFormattingEditProvider
     const formatConfig = utils.constants?.format;
     const applyIndentsToRegions = formatConfig?.applyIndentsToRegions !== false;
 
-    // Конструкции, начинающиеся новый блок (отступ увеличивается ПОСЛЕ)
+    // Block-starting constructs (indent increases AFTER)
     if (
-      /^@\w+/.test(text) || // Определения процедур
-      /^\b(i|I)f\b/.test(text) || // Условные операторы
-      /^\b(w|W)hile\b/.test(text) || // Циклы
+      /^@\w+/.test(text) || // Procedure definitions
+      /^\b(i|I)f\b/.test(text) || // Conditional statements
+      /^\b(w|W)hile\b/.test(text) || // Loops
       (applyIndentsToRegions && /#region\b/.test(text))
     ) {
       const formattedText = this.createIndent() + text;
@@ -132,7 +131,7 @@ export class GpplDocumentFormattingEditProvider
       return formattedText;
     }
 
-    // Конструкции else/elseif (специальная обработка)
+    // else/elseif constructs (special handling)
     if (/^\b(e|E)lse\b/.test(text) || /^\b(e|E)lse(i|I)f\b/.test(text)) {
       --this.indentLevel;
       const formattedText = this.createIndent() + text;
@@ -140,7 +139,7 @@ export class GpplDocumentFormattingEditProvider
       return formattedText;
     }
 
-    // Завершающие конструкции (отступ уменьшается ДО)
+    // Block-ending constructs (indent decreases BEFORE)
     if (
       /^\b(e|E)nd(w|p|((i|I)f))\b/.test(text) || // endwhile, endproc, endif
       (applyIndentsToRegions && /#endregion\b/.test(text))
@@ -149,12 +148,12 @@ export class GpplDocumentFormattingEditProvider
       return this.createIndent() + text;
     }
 
-    // Обычные строки (текущий отступ)
+    // Regular lines (current indent)
     if (text !== '') {
       return this.createIndent() + text;
     }
 
-    // Пустые строки
+    // Empty lines
     return text;
   }
 

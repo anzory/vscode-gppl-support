@@ -2,9 +2,18 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { workspace } from 'vscode';
 
+/**
+ * Parsed package.json content containing extension metadata and configuration.
+ * @private
+ */
 const gpp = JSON.parse(
   readFileSync(resolve(__dirname, 'package.json')).toString()
 );
+
+/**
+ * Array of configuration property names from package.json contributes section.
+ * @private
+ */
 const configurationProperties = Object.getOwnPropertyNames(
   gpp.contributes.configuration.properties
 );

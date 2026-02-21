@@ -51,14 +51,25 @@ export interface IProcedure {
  * - References and relationships between elements
  */
 class SemanticHelper {
+  /** Current active text editor */
   private editor: TextEditor | undefined;
+  /** Global user-defined variables extracted from the document */
   private _globalUserVariables: IVariable[] = [];
+  /** Global user-defined arrays extracted from the document */
   private _globalUserArrays: IVariable[] = [];
+  /** Local user-defined variables extracted from the document */
   private _localUserVariables: IVariable[] = [];
+  /** Local user-defined arrays extracted from the document */
   private _localUserArrays: IVariable[] = [];
+  /** System variables defined in GPP language configuration */
   private _systemGppVariables: IVariable[] = [];
+  /** Procedure definitions extracted from the document */
   private _procedures: IProcedure[] = [];
+  /** Timestamp of last parse operation */
   private _date: number;
+  /** Timer for debouncing document change events */
+  private debounceTimer?: NodeJS.Timeout;
+  /** Text parser instance for document analysis */
   private textParser = textParser;
 
   /**
@@ -253,7 +264,7 @@ class SemanticHelper {
         ).toString()
       );
 
-      // Находим паттерн для ключевых слов более надежным способом
+      // Find the keyword pattern in a more reliable way
       const keywordsPattern = tmLanguage.repository?.keywords?.patterns?.find(
         (pattern: any) => pattern.name === 'keyword.control.gpp'
       );
@@ -575,7 +586,7 @@ class SemanticHelper {
       this.parseProcedures();
     } catch (error) {
       console.error('Error during document parsing:', error);
-      // В случае ошибки очищаем данные для предотвращения некорректного состояния
+      // Clear data on error to prevent inconsistent state
       this.clearAllData();
     }
   }
@@ -600,7 +611,7 @@ class SemanticHelper {
    * @param e - The document change event (optional)
    */
   onDocumentChanged(e?: TextDocumentChangeEvent) {
-    // Используем дебаунсинг для предотвращения множественных вызовов парсинга
+    // Use debouncing to prevent multiple parsing calls
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
     }
@@ -613,8 +624,6 @@ class SemanticHelper {
       }
     }, 300);
   }
-
-  private debounceTimer?: NodeJS.Timeout;
 }
 /**
  * Global instance of SemanticHelper for semantic analysis.

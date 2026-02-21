@@ -39,6 +39,14 @@ export class GpplCodeLensProvider implements CodeLensProvider {
     );
   }
 
+  /**
+   * Builds CodeLens items from document symbols.
+   *
+   * @private
+   * @param document - The text document to analyze
+   * @param symbols - Array of document symbols to create CodeLens for
+   * @returns Array of CodeLens items for the symbols
+   */
   private buildCodeLenses(
     document: TextDocument,
     symbols: DocumentSymbol[]
@@ -72,10 +80,24 @@ export class GpplCodeLensProvider implements CodeLensProvider {
     return codeLenses;
   }
 
+  /**
+   * Escapes special regex characters in a string.
+   *
+   * @private
+   * @param value - The string to escape
+   * @returns The escaped string safe for use in regular expressions
+   */
   private escapeRegExp(value: string): string {
     return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
+  /**
+   * Flattens a hierarchical symbol structure into a flat array.
+   *
+   * @private
+   * @param symbols - Array of document symbols (potentially with children)
+   * @returns Flattened array containing all symbols including nested children
+   */
   private flattenSymbols(symbols: DocumentSymbol[]): DocumentSymbol[] {
     const result: DocumentSymbol[] = [];
     for (const symbol of symbols) {

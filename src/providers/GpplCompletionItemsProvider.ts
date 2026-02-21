@@ -1,10 +1,14 @@
 import {
+  CancellationToken,
+  CompletionContext,
   CompletionItem,
   CompletionItemProvider,
   MarkdownString,
+  Position,
   ProviderResult,
   Range,
   SnippetString,
+  TextDocument,
 } from 'vscode';
 import { gpplComletionsItemsList } from '../utils/comletionsItemsList';
 import { i18n } from '../utils/i18n';
@@ -60,10 +64,10 @@ export class GpplCompletionItemsProvider
    * @returns A promise that resolves to an array of completion items
    */
   provideCompletionItems(
-    document: any,
-    position: any,
-    token: any,
-    context: any
+    document: TextDocument,
+    position: Position,
+    token: CancellationToken,
+    context: CompletionContext
   ): ProviderResult<CompletionItem[]> {
     const wordRange = document.getWordRangeAtPosition(
       position,
