@@ -73,7 +73,7 @@ function getSystemVariableNames(): string[] {
     );
 
     const keywordsPattern = tmLanguage.repository?.keywords?.patterns?.find(
-      (pattern: { name?: string; match?: string }) => pattern.name === 'keyword.control.gpp'
+      (pattern: { name?: string; match?: string }) => pattern.name === 'keyword.control.system.variable.gpp'
     );
 
     if (keywordsPattern && keywordsPattern.match) {

@@ -10,11 +10,12 @@
 
 ---
 
-## [1.8.1] - 2026-01-23
+## [1.9.0] - 2026-02-21
 
 ### Improved
 
-- now CodeLens shows links instead of calls
+- Now CodeLens shows links instead of calls
+- The Document Symbol Details field shows calls
 
 ---
 
