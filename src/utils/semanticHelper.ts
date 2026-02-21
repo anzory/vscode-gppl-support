@@ -42,6 +42,55 @@ export interface IProcedure {
 }
 
 /**
+ * Cached system variable names loaded from language configuration.
+ * This is static because system variables don't change between documents.
+ */
+let cachedSystemVariableNames: string[] | null = null;
+
+/**
+ * Loads system variable names from the GPP language configuration file.
+ * Results are cached for performance.
+ *
+ * @returns Array of system variable names
+ */
+function getSystemVariableNames(): string[] {
+  if (cachedSystemVariableNames !== null) {
+    return cachedSystemVariableNames;
+  }
+
+  try {
+    const tmLanguage = JSON.parse(
+      readFileSync(
+        resolve(
+          __dirname,
+          'languages',
+          constants.languageId,
+          'gpp.tmLanguage.json'
+        )
+      ).toString()
+    );
+
+    const keywordsPattern = tmLanguage.repository?.keywords?.patterns?.find(
+      (pattern: { name?: string; match?: string }) => pattern.name === 'keyword.control.gpp'
+    );
+
+    if (keywordsPattern && keywordsPattern.match) {
+      cachedSystemVariableNames = keywordsPattern.match
+        .replace(/\(\?i\)\\b\(/g, '')
+        .replace(/\)\\b/g, '')
+        .split('|');
+    } else {
+      cachedSystemVariableNames = [];
+    }
+  } catch (error) {
+    console.error('Error loading system variables:', error);
+    cachedSystemVariableNames = [];
+  }
+
+  return cachedSystemVariableNames!;
+}
+
+/**
  * Provides semantic analysis functionality for GPP code.
  *
  * This class analyzes GPP documents to extract:
@@ -65,12 +114,12 @@ class SemanticHelper {
   private _systemGppVariables: IVariable[] = [];
   /** Procedure definitions extracted from the document */
   private _procedures: IProcedure[] = [];
-  /** Timestamp of last parse operation */
-  private _date: number;
   /** Timer for debouncing document change events */
-  private debounceTimer?: NodeJS.Timeout;
+  private debounceTimer?: ReturnType<typeof setTimeout>;
   /** Text parser instance for document analysis */
   private textParser = textParser;
+  /** Cached document version to avoid unnecessary reparsing */
+  private lastDocumentVersion: number = -1;
 
   /**
    * Creates an instance of SemanticHelper.
@@ -82,7 +131,6 @@ class SemanticHelper {
     workspace.onDidChangeTextDocument((e) => this.onDocumentChanged(e));
     window.onDidChangeActiveTextEditor(() => this.onDocumentChanged());
     this.editor = window.activeTextEditor;
-    this._date = new Date().getTime();
     this.parseDocument();
   }
 
@@ -246,51 +294,27 @@ class SemanticHelper {
 
   /**
    * Parses system variables from the GPP language configuration.
+   * Uses cached system variable names for better performance.
    *
    * @private
    */
   private parseSystemVariables() {
     this._systemGppVariables = [];
 
-    try {
-      const tmLanguage = JSON.parse(
-        readFileSync(
-          resolve(
-            __dirname,
-            'languages',
-            constants.languageId,
-            'gpp.tmLanguage.json'
-          )
-        ).toString()
-      );
+    const systemVarNames = getSystemVariableNames();
+    const doc = this.editor?.document;
 
-      // Find the keyword pattern in a more reliable way
-      const keywordsPattern = tmLanguage.repository?.keywords?.patterns?.find(
-        (pattern: any) => pattern.name === 'keyword.control.gpp'
-      );
-
-      if (keywordsPattern && keywordsPattern.match) {
-        const keywords = keywordsPattern.match
-          .replace(/\(\?i\)\\b\(/g, '')
-          .replace(/\)\\b/g, '')
-          .split('|');
-
-        keywords.forEach((sv: string) => {
-          this._systemGppVariables.push({
-            name: sv,
-            scope: 'global',
-            type: '',
-            references: this.textParser.getWordLocationsInDoc(
-              this.editor?.document,
-              '\\b' + sv
-            ),
-            info: undefined,
-          });
-        });
-      }
-    } catch (error) {
-      console.error('Error parsing system variables:', error);
-    }
+    systemVarNames.forEach((sv: string) => {
+      this._systemGppVariables.push({
+        name: sv,
+        scope: 'global',
+        type: '',
+        references: doc
+          ? this.textParser.getWordLocationsInDoc(doc, '\\b' + sv)
+          : [],
+        info: undefined,
+      });
+    });
   }
 
   /**
@@ -304,14 +328,13 @@ class SemanticHelper {
     this.editor = window.activeTextEditor;
     const doc = this.editor?.document;
     if (doc) {
-      let ranges: Range[] = this.textParser.getRegExpRangesInDoc(
+      const ranges: Range[] = this.textParser.getRegExpRangesInDoc(
         doc,
         /^\s*\@\w*\b.*$/gm
       );
       ranges.forEach((range) => {
-        const line = doc?.getText(range);
+        const line = doc.getText(range);
         if (line) {
-          line.replace(/\s{2,}/gm, ' ').trim();
           const info = this.getInfo(line);
           const name = this.getProcedureName(line);
           const args = this.getProcedureArgs(line);
@@ -348,9 +371,8 @@ class SemanticHelper {
         /\bglobal\b.*$/gm
       );
       ranges.forEach((range) => {
-        const line = doc?.getText(range);
+        const line = doc.getText(range);
         if (line) {
-          line.trim().replace(/\s{2,}/gm, ' ');
           const gppInfo = this.getInfo(line);
           const gppScope = line.trim().split(' ')[0];
           const gppType = line.trim().split(' ')[1];
@@ -383,16 +405,13 @@ class SemanticHelper {
         }
       });
 
-      //
-
       ranges = this.textParser.getRegExpRangesInDoc(doc, /\blocal\b.*$/gm);
       ranges.forEach((range) => {
-        const line = doc?.getText(range);
+        const line = doc.getText(range);
         if (line) {
-          line.trim().replace(/\s{2,}/gm, ' ');
           const gppInfo = this.getInfo(line);
-          const gppScope = line.split(' ')[0];
-          const gppType = line.split(' ')[1];
+          const gppScope = line.trim().split(' ')[0];
+          const gppType = line.trim().split(' ')[1];
           this.getVariables(line).forEach((ulv) => {
             if (ulv.match(/<<.*>>/g)) {
               const ula = ulv.replace(/<<.*>>/g, '');

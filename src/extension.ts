@@ -104,6 +104,9 @@ export async function activate(context: ExtensionContext) {
     new providers.documentSymbolProvider()
   );
   context.subscriptions.push(documentSymbolProvider);
+
+  // Register configuration change listener
+  registerConfigurationChangeListener(context);
 }
 
 /**
@@ -113,37 +116,54 @@ export async function activate(context: ExtensionContext) {
  * - Reformats all open GPP documents
  * - Updates internationalization settings
  * - Recreates language feature providers to apply new settings
+ *
+ * @param context - The extension context for managing subscriptions
  */
-workspace.onDidChangeConfiguration(() => {
-  window.visibleTextEditors.forEach((editor: TextEditor) => {
-    editor.document.languageId === utils.constants.languageId
-      ? (commands.executeCommand(utils.constants.commands.formatDocument),
-        commands.executeCommand('editor.action.formatDocument'))
-      : null;
-  });
+function registerConfigurationChangeListener(context: ExtensionContext): void {
+  context.subscriptions.push(
+    workspace.onDidChangeConfiguration(() => {
+      // Format all open GPP documents
+      window.visibleTextEditors.forEach((editor: TextEditor) => {
+        if (editor.document.languageId === utils.constants.languageId) {
+          commands.executeCommand('editor.action.formatDocument');
+        }
+      });
 
-  utils.i18n.update();
-  completionItemProvider.dispose();
-  hoverProvider.dispose();
-  codeLensProvider.dispose();
-  documentSymbolProvider.dispose();
-  hoverProvider = languages.registerHoverProvider(
-    utils.constants.languageId,
-    new providers.hoverProvider()
+      // Update internationalization settings
+      utils.i18n.update();
+
+      // Dispose old providers
+      completionItemProvider.dispose();
+      hoverProvider.dispose();
+      codeLensProvider.dispose();
+      documentSymbolProvider.dispose();
+
+      // Recreate providers with new settings
+      completionItemProvider = languages.registerCompletionItemProvider(
+        utils.constants.languageId,
+        new providers.completionItemsProvider()
+      );
+      hoverProvider = languages.registerHoverProvider(
+        utils.constants.languageId,
+        new providers.hoverProvider()
+      );
+      codeLensProvider = languages.registerCodeLensProvider(
+        utils.constants.languageId,
+        new providers.codeLensProvider()
+      );
+      documentSymbolProvider = languages.registerDocumentSymbolProvider(
+        utils.constants.languageId,
+        new providers.documentSymbolProvider()
+      );
+
+      // Add new providers to subscriptions
+      context.subscriptions.push(completionItemProvider);
+      context.subscriptions.push(hoverProvider);
+      context.subscriptions.push(codeLensProvider);
+      context.subscriptions.push(documentSymbolProvider);
+    })
   );
-  completionItemProvider = languages.registerCompletionItemProvider(
-    utils.constants.languageId,
-    new providers.completionItemsProvider()
-  );
-  codeLensProvider = languages.registerCodeLensProvider(
-    utils.constants.languageId,
-    new providers.codeLensProvider()
-  );
-  documentSymbolProvider = languages.registerDocumentSymbolProvider(
-    utils.constants.languageId,
-    new providers.documentSymbolProvider()
-  );
-});
+}
 
 /**
  * Deactivates the VS Code extension.

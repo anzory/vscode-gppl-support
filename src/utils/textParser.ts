@@ -1,16 +1,30 @@
 import { Location, Position, Range, TextDocument } from 'vscode';
 
 /**
+ * Maximum size of the RegExp cache to prevent memory leaks.
+ */
+const MAX_CACHE_SIZE = 100;
+
+/**
+ * Simple LRU (Least Recently Used) cache entry.
+ */
+interface CacheEntry {
+  regExp: RegExp;
+  lastUsed: number;
+}
+
+/**
  * Provides text parsing functionality for GPP documents.
  *
  * This class offers utilities for:
  * - Finding word locations in documents
  * - Regular expression-based text searching
  * - Position and range calculations
- * - Performance optimization through regex caching
+ * - Performance optimization through LRU regex caching
  */
 export default class TextParser {
-  private regExpCache: Map<string, RegExp> = new Map();
+  private regExpCache: Map<string, CacheEntry> = new Map();
+  private cacheOrder: number = 0;
 
   /**
    * Creates start and end positions from character index and length.
@@ -33,17 +47,57 @@ export default class TextParser {
   }
 
   /**
+   * Evicts the least recently used cache entries if cache is full.
+   *
+   * @private
+   */
+  private evictIfNeeded(): void {
+    if (this.regExpCache.size >= MAX_CACHE_SIZE) {
+      // Find and remove the least recently used entry
+      let oldestKey: string | null = null;
+      let oldestTime = Infinity;
+
+      for (const [key, entry] of this.regExpCache) {
+        if (entry.lastUsed < oldestTime) {
+          oldestTime = entry.lastUsed;
+          oldestKey = key;
+        }
+      }
+
+      if (oldestKey) {
+        this.regExpCache.delete(oldestKey);
+      }
+    }
+  }
+
+  /**
    * Gets a cached regular expression or creates a new one.
+   * Uses LRU eviction policy to prevent memory leaks.
    *
    * @private
    * @param pattern - The regex pattern string
    * @returns The compiled regular expression
    */
   private getCachedRegExp(pattern: string): RegExp {
-    if (!this.regExpCache.has(pattern)) {
-      this.regExpCache.set(pattern, new RegExp(pattern, 'gm'));
+    const cached = this.regExpCache.get(pattern);
+
+    if (cached) {
+      // Update last used time
+      cached.lastUsed = ++this.cacheOrder;
+      return cached.regExp;
     }
-    return this.regExpCache.get(pattern)!;
+
+    // Evict old entries if needed
+    this.evictIfNeeded();
+
+    // Create new entry
+    const regExp = new RegExp(pattern, 'gm');
+    this.regExpCache.set(pattern, {
+      regExp,
+      lastUsed: ++this.cacheOrder,
+    });
+
+    return regExp;
   }
 
   /**

@@ -55,7 +55,7 @@ export class Config {
    * @param e - The configuration change event
    */
   private onConfigurationChanged(e: ConfigurationChangeEvent) {
-    if (!e.affectsConfiguration(constants.configId)) {
+    if (e.affectsConfiguration(constants.configId)) {
       this.reloadConfig();
     }
   }

@@ -7,7 +7,7 @@ import { workspace } from 'vscode';
  * @private
  */
 const gpp = JSON.parse(
-  readFileSync(resolve(__dirname, 'package.json')).toString()
+  readFileSync(resolve(__dirname, '..', 'package.json')).toString()
 );
 
 /**
@@ -65,7 +65,7 @@ class GpplConstants {
     languageId: gpp.contributes.languages[0].id,
     configId: gpp.contributes.languages[0].id,
     copyright: gpp.copyright,
-    extensionOutputChannelName: gpp.shortName,
+    extensionOutputChannelName: gpp.displayName,
   };
 }
 

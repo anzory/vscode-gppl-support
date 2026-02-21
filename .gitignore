@@ -6,6 +6,7 @@ node_modules/
 .vscode/
 .kilocode/
 .tmp/
+plans/
 *.vsix
 vsc-extension-quickstart.md
 vscode-gppl-support-*.vsix
