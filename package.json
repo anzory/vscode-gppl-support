@@ -134,7 +134,7 @@
         "gpp.outline.showSymbolDetail": {
           "type": "boolean",
           "default": true,
-          "description": "Show call count in document outline symbol detail (does not affect CodeLens)",
+          "description": "Show call count in document outline symbol detail",
           "scope": "window"
         }
       }
