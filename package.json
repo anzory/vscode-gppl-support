@@ -41,7 +41,6 @@
     "Snippets",
     "Formatters"
   ],
-  "activationEvents": [],
   "main": "./dist/main.js",
   "contributes": {
     "iconThemes": [

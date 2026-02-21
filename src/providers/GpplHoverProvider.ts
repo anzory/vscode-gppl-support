@@ -38,8 +38,18 @@ export class GpplHoverProvider implements HoverProvider {
     position: Position,
     token: CancellationToken
   ): ProviderResult<Hover> {
+    // Check for cancellation
+    if (token.isCancellationRequested) {
+      return undefined;
+    }
+
     const hoverContent: MarkdownString = new MarkdownString();
     const wordRange: Range | undefined = document.getWordRangeAtPosition(position);
+    
+    if (!wordRange) {
+      return undefined;
+    }
+
     const word: string = document.getText(wordRange);
 
     // Check for user-defined variables and arrays

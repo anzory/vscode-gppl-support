@@ -11,6 +11,34 @@ import {
 import { constants } from './constants';
 
 /**
+ * Represents a TextMate rule for syntax highlighting.
+ */
+interface TextMateRule {
+  scope: string | string[];
+  settings: {
+    foreground?: string;
+    fontStyle?: string;
+    background?: string;
+  };
+}
+
+/**
+ * Represents theme-specific token color customizations.
+ */
+interface ThemeTokenColors {
+  textMateRules: TextMateRule[];
+}
+
+/**
+ * Represents the complete token color customizations structure.
+ */
+interface TokenColorCustomizations {
+  '[*Dark*]'?: ThemeTokenColors;
+  '[*Light*]'?: ThemeTokenColors;
+  [key: string]: unknown;
+}
+
+/**
  * Manages configuration settings for the GPP extension.
  *
  * This class handles:
@@ -108,16 +136,16 @@ export class Config {
    * @private
    */
   private addColorizationSettings() {
-    let workspaceTokenColorCustomizations = workspace.getConfiguration(
+    const workspaceTokenColorCustomizations = workspace.getConfiguration(
       'editor.tokenColorCustomizations'
     );
-    let customTokenColorCustomizations: any = {};
+    const customTokenColorCustomizations: TokenColorCustomizations = {};
     Object.assign(
       customTokenColorCustomizations,
       workspaceTokenColorCustomizations
     );
 
-    let colorsDefaultDark = JSON.parse(
+    const colorsDefaultDark: TokenColorCustomizations = JSON.parse(
       readFileSync(
         resolve(
           __dirname,
@@ -127,7 +155,7 @@ export class Config {
         )
       ).toString()
     );
-    let colorsDefaultLight = JSON.parse(
+    const colorsDefaultLight: TokenColorCustomizations = JSON.parse(
       readFileSync(
         resolve(
           __dirname,
@@ -144,40 +172,42 @@ export class Config {
       Object.assign(customTokenColorCustomizations, colorsDefaultDark);
       hasChanges = true;
     } else {
-      let wpDarkRules: any[] =
-        customTokenColorCustomizations['[*Dark*]'].textMateRules;
-      let gppDarkRules: any[] = colorsDefaultDark['[*Dark*]'].textMateRules;
+      const wpDarkRules: TextMateRule[] =
+        customTokenColorCustomizations['[*Dark*]']?.textMateRules || [];
+      const gppDarkRules: TextMateRule[] =
+        colorsDefaultDark['[*Dark*]']?.textMateRules || [];
 
-      gppDarkRules.forEach((set) => {
-        let exist: boolean = false;
-        exist = wpDarkRules.some((wpSet) => {
-          return set.scope === wpSet.scope;
-        });
+      for (const set of gppDarkRules) {
+        const exist = wpDarkRules.some(
+          (wpSet) =>
+            JSON.stringify(set.scope) === JSON.stringify(wpSet.scope)
+        );
         if (!exist) {
-          customTokenColorCustomizations['[*Dark*]'].textMateRules.push(set);
+          customTokenColorCustomizations['[*Dark*]']!.textMateRules.push(set);
           hasChanges = true;
         }
-      });
+      }
     }
 
     if (!customTokenColorCustomizations['[*Light*]']) {
       Object.assign(customTokenColorCustomizations, colorsDefaultLight);
       hasChanges = true;
     } else {
-      let wpLightRules: any[] =
-        customTokenColorCustomizations['[*Light*]'].textMateRules;
-      let gppLightRules: any[] = colorsDefaultLight['[*Light*]'].textMateRules;
+      const wpLightRules: TextMateRule[] =
+        customTokenColorCustomizations['[*Light*]']?.textMateRules || [];
+      const gppLightRules: TextMateRule[] =
+        colorsDefaultLight['[*Light*]']?.textMateRules || [];
 
-      gppLightRules.forEach((set) => {
-        let exist: boolean = false;
-        exist = wpLightRules.some((wpSet) => {
-          return set.scope === wpSet.scope;
-        });
+      for (const set of gppLightRules) {
+        const exist = wpLightRules.some(
+          (wpSet) =>
+            JSON.stringify(set.scope) === JSON.stringify(wpSet.scope)
+        );
         if (!exist) {
-          customTokenColorCustomizations['[*Light*]'].textMateRules.push(set);
+          customTokenColorCustomizations['[*Light*]']!.textMateRules.push(set);
           hasChanges = true;
         }
-      });
+      }
     }
 
     if (hasChanges) {

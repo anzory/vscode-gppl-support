@@ -1,6 +1,7 @@
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import {
+  Disposable,
   Range,
   Location,
   TextDocumentChangeEvent,
@@ -99,7 +100,7 @@ function getSystemVariableNames(): string[] {
  * - Procedure definitions and calls
  * - References and relationships between elements
  */
-class SemanticHelper {
+class SemanticHelper implements Disposable {
   /** Current active text editor */
   private editor: TextEditor | undefined;
   /** Global user-defined variables extracted from the document */
@@ -120,6 +121,8 @@ class SemanticHelper {
   private textParser = textParser;
   /** Cached document version to avoid unnecessary reparsing */
   private lastDocumentVersion: number = -1;
+  /** Disposables to clean up on dispose */
+  private disposables: Disposable[] = [];
 
   /**
    * Creates an instance of SemanticHelper.
@@ -128,10 +131,26 @@ class SemanticHelper {
    * the semantic analysis with the current active editor.
    */
   constructor() {
-    workspace.onDidChangeTextDocument((e) => this.onDocumentChanged(e));
-    window.onDidChangeActiveTextEditor(() => this.onDocumentChanged());
+    this.disposables.push(
+      workspace.onDidChangeTextDocument((e) => this.onDocumentChanged(e))
+    );
+    this.disposables.push(
+      window.onDidChangeActiveTextEditor(() => this.onDocumentChanged())
+    );
     this.editor = window.activeTextEditor;
     this.parseDocument();
+  }
+
+  /**
+   * Disposes of the semantic helper and cleans up resources.
+   */
+  dispose(): void {
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
+    this.disposables.forEach((d) => d.dispose());
+    this.disposables = [];
+    this.clearAllData();
   }
 
   /**

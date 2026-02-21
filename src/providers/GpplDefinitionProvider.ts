@@ -3,6 +3,7 @@ import {
   Definition,
   DefinitionLink,
   DefinitionProvider,
+  Disposable,
   Location,
   Position,
   ProviderResult,
@@ -21,10 +22,11 @@ import { textParser } from '../utils/textParser';
  * - Procedure declarations
  * - Other GPP language elements
  */
-export class GpplDefinitionProvider implements DefinitionProvider {
+export class GpplDefinitionProvider implements DefinitionProvider, Disposable {
   private definition: Location | undefined = undefined;
   private editor: TextEditor | undefined = window.activeTextEditor;
   private doc: TextDocument | undefined = this.editor?.document;
+  private disposable: Disposable | undefined;
 
   /**
    * Creates an instance of GpplDefinitionProvider.
@@ -32,7 +34,16 @@ export class GpplDefinitionProvider implements DefinitionProvider {
    * Sets up event listener for active editor changes to maintain current document context.
    */
   constructor() {
-    window.onDidChangeActiveTextEditor(() => this.onActiveEditorChanged());
+    this.disposable = window.onDidChangeActiveTextEditor(() =>
+      this.onActiveEditorChanged()
+    );
+  }
+
+  /**
+   * Disposes of the provider and cleans up resources.
+   */
+  dispose(): void {
+    this.disposable?.dispose();
   }
 
   /**
@@ -58,25 +69,44 @@ export class GpplDefinitionProvider implements DefinitionProvider {
     position: Position,
     token: CancellationToken
   ): ProviderResult<Definition | DefinitionLink[]> {
+    // Check for cancellation
+    if (token.isCancellationRequested) {
+      return undefined;
+    }
+
     const wordRange = document.getWordRangeAtPosition(position);
+    if (!wordRange) {
+      return undefined;
+    }
+
     const word = document.getText(wordRange);
 
     if (semanticHelper.isThisUserVariableOrArray(word)) {
+      if (token.isCancellationRequested) {
+        return undefined;
+      }
       const locations = textParser.getWordLocationsInDoc(
         document,
         '\\b' + word
       );
       this.definition = locations[0];
     } else if (semanticHelper.isThisProcedureDeclaration(word)) {
+      if (token.isCancellationRequested) {
+        return undefined;
+      }
       const locations = textParser.getWordLocationsInDoc(document, word);
-      locations.forEach((location: Location) => {
+      for (const location of locations) {
+        if (token.isCancellationRequested) {
+          return undefined;
+        }
         const line = document.lineAt(location.range.start.line).text;
         if (line && !/;|(\bcall\b)/.test(line)) {
           this.definition = location;
+          break;
         }
-      });
+      }
     }
 
-    return Promise.resolve(this.definition);
+    return this.definition;
   }
 }

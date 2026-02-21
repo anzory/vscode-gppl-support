@@ -34,18 +34,30 @@ export class GpplReferenceProvider implements ReferenceProvider {
     context: ReferenceContext,
     token: CancellationToken
   ): ProviderResult<Location[]> {
-    const wordRange = document.getWordRangeAtPosition(position);
-    const word = document.getText(wordRange);
-    let locations: Location[];
-
-    if (semanticHelper.isThisUserVariableOrArray(word)) {
-      locations = textParser.getWordLocationsInDoc(document, '\\b' + word);
-      return Promise.resolve(locations);
-    } else if (semanticHelper.isThisProcedureDeclaration(word)) {
-      locations = textParser.getWordLocationsInDoc(document, word);
-      return Promise.resolve(locations);
+    // Check for cancellation
+    if (token.isCancellationRequested) {
+      return undefined;
     }
 
-    return Promise.resolve(undefined);
+    const wordRange = document.getWordRangeAtPosition(position);
+    if (!wordRange) {
+      return undefined;
+    }
+
+    const word = document.getText(wordRange);
+
+    if (token.isCancellationRequested) {
+      return undefined;
+    }
+
+    if (semanticHelper.isThisUserVariableOrArray(word)) {
+      const locations = textParser.getWordLocationsInDoc(document, '\\b' + word);
+      return locations;
+    } else if (semanticHelper.isThisProcedureDeclaration(word)) {
+      const locations = textParser.getWordLocationsInDoc(document, word);
+      return locations;
+    }
+
+    return undefined;
   }
 }

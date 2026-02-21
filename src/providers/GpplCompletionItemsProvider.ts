@@ -69,6 +69,11 @@ export class GpplCompletionItemsProvider
     token: CancellationToken,
     context: CompletionContext
   ): ProviderResult<CompletionItem[]> {
+    // Check for cancellation
+    if (token.isCancellationRequested) {
+      return undefined;
+    }
+
     const wordRange = document.getWordRangeAtPosition(
       position,
       /[@A-Za-z_][\w@]*/
