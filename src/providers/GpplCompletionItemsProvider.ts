@@ -14,6 +14,17 @@ import { gpplComletionsItemsList } from '../utils/comletionsItemsList';
 import { i18n } from '../utils/i18n';
 
 /**
+ * Interface for completion item template data.
+ */
+interface CompletionItemTemplate {
+  label: string;
+  insertText: string;
+  kind: CompletionItem['kind'];
+  documentation?: string;
+  detail?: string;
+}
+
+/**
  * Provides completion items for GPP language support in VS Code.
  *
  * This provider offers autocompletion functionality including:
@@ -25,33 +36,54 @@ import { i18n } from '../utils/i18n';
 export class GpplCompletionItemsProvider
   implements CompletionItemProvider<CompletionItem>
 {
-  private _gpplComletionsItems: CompletionItem[] = [];
+  /**
+   * Templates for completion items.
+   * These are used to create new CompletionItem instances for each request,
+   * avoiding mutation of shared state.
+   */
+  private _itemTemplates: CompletionItemTemplate[] = [];
 
   /**
    * Creates an instance of GpplCompletionItemsProvider.
    *
-   * Initializes completion items from the predefined list, setting up:
-   * - Insert text as snippets
-   * - Commit characters for quick completion
-   * - Documentation in the user's preferred language
-   * - Appropriate completion item kinds
+   * Initializes completion item templates from the predefined list.
    */
   constructor() {
     gpplComletionsItemsList.forEach((item) => {
-      let _item: CompletionItem = new CompletionItem(item.label);
-      _item.insertText = new SnippetString(item.insertText?.toString());
-      _item.commitCharacters = undefined;
-      _item.kind = item.kind;
-      if (item.documentation) {
-        _item.documentation = new MarkdownString(
-          i18n.t(item.documentation.toString())
-        );
-      }
-      if (item.detail) {
-        _item.detail = i18n.t(item.detail.toString());
-      }
-      this._gpplComletionsItems.push(_item);
+      this._itemTemplates.push({
+        label: item.label as string,
+        insertText: item.insertText?.toString() || '',
+        kind: item.kind,
+        documentation: item.documentation?.toString(),
+        detail: item.detail?.toString(),
+      });
     });
+  }
+
+  /**
+   * Creates a new CompletionItem from a template with the specified range.
+   *
+   * @param template - The template to create the item from
+   * @param range - The range to apply to the item
+   * @returns A new CompletionItem instance
+   */
+  private createCompletionItem(
+    template: CompletionItemTemplate,
+    range: Range
+  ): CompletionItem {
+    const item = new CompletionItem(template.label);
+    item.insertText = new SnippetString(template.insertText);
+    item.kind = template.kind;
+    item.range = range;
+
+    if (template.documentation) {
+      item.documentation = new MarkdownString(i18n.t(template.documentation));
+    }
+    if (template.detail) {
+      item.detail = i18n.t(template.detail);
+    }
+
+    return item;
   }
 
   /**
@@ -79,9 +111,10 @@ export class GpplCompletionItemsProvider
       /[@A-Za-z_][\w@]*/
     );
     const replaceRange = wordRange ?? new Range(position, position);
-    this._gpplComletionsItems.forEach((item) => {
-      item.range = replaceRange;
-    });
-    return this._gpplComletionsItems;
+
+    // Create new CompletionItem instances for each request to avoid mutation
+    return this._itemTemplates.map((template) =>
+      this.createCompletionItem(template, replaceRange)
+    );
   }
 }

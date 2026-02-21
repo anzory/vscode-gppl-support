@@ -1,6 +1,6 @@
 import { readFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
-import { workspace } from 'vscode';
+import { Disposable, workspace } from 'vscode';
 
 /**
  * Resolves the correct path to package.json.
@@ -90,11 +90,33 @@ class GpplConstants {
 export let constants = new GpplConstants().constants;
 
 /**
- * Handles configuration changes by updating constants.
- *
- * Automatically recreates constants when VS Code configuration changes
- * to ensure all settings are current.
+ * Stores the configuration change subscription for proper cleanup.
+ * @private
  */
-workspace.onDidChangeConfiguration(() => {
+let configChangeDisposable: Disposable | undefined;
+
+/**
+ * Initializes the configuration change listener for constants.
+ * Must be called during extension activation to ensure proper cleanup.
+ *
+ * @param subscriptions - The extension subscriptions array to add the disposable to
+ */
+export function initializeConstants(subscriptions: Disposable[]): void {
+  // Dispose previous subscription if exists
+  if (configChangeDisposable) {
+    configChangeDisposable.dispose();
+  }
+
+  // Create new subscription and add to subscriptions for proper cleanup
+  configChangeDisposable = workspace.onDidChangeConfiguration(() => {
+    constants = new GpplConstants().constants;
+  });
+  subscriptions.push(configChangeDisposable);
+}
+
+/**
+ * Updates constants immediately (used for initial load or manual refresh).
+ */
+export function refreshConstants(): void {
   constants = new GpplConstants().constants;
-});
+}

@@ -14,6 +14,7 @@ import {
   WorkspaceEdit,
 } from 'vscode';
 import { providers } from './providers/providers';
+import { initializeConstants } from './utils/constants';
 import { Logger } from './utils/logger';
 import { utils } from './utils/utils';
 
@@ -36,13 +37,17 @@ export async function activate(context: ExtensionContext) {
   // Initialize Logger first
   Logger.configure(context);
   
+  // Initialize constants with proper subscription management
+  initializeConstants(context.subscriptions);
+  
   new utils.config().configure(context);
 
-  const editor: TextEditor | undefined = window.activeTextEditor;
   commands.registerCommand(
     utils.constants.commands.formatDocument,
     async () => {
-      const docUri: Uri | undefined = editor?.document.uri;
+      // Get the current active editor at the time of command execution
+      const activeEditor = window.activeTextEditor;
+      const docUri: Uri | undefined = activeEditor?.document.uri;
       const textEdits: TextEdit[] | undefined = await commands.executeCommand(
         'vscode.executeFormatDocumentProvider',
         docUri
