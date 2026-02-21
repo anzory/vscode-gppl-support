@@ -83,7 +83,7 @@ export class GpplHoverProvider implements HoverProvider {
     let gppVar: IGpplVariable | undefined;
     let varType: string = '';
 
-    if (utils.semanticHelper.isThisGloballUserArray(word)) {
+    if (utils.semanticHelper.isThisGlobalUserArray(word)) {
       gppVar = utils.semanticHelper.getGlobalUserArray(word);
       varType = 'user array';
     } else if (utils.semanticHelper.isThisLocalUserArray(word)) {

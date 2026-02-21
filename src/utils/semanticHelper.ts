@@ -552,7 +552,7 @@ class SemanticHelper implements Disposable {
     return (
       this.isThisLocalUserVariable(name) ||
       this.isThisGlobalUserVariable(name) ||
-      this.isThisGloballUserArray(name) ||
+      this.isThisGlobalUserArray(name) ||
       this.isThisLocalUserArray(name)
     );
   }
@@ -585,13 +585,8 @@ class SemanticHelper implements Disposable {
    * @param name - The name to check
    * @returns True if the name is a global user array
    */
-  isThisGloballUserArray(name: string): boolean {
-    return this._globalUserArrays.find((x) => x.name === name) ? true : false;
-  }
-
-  // Correctly spelled alias to avoid breaking callers and provide a clearer API
   isThisGlobalUserArray(name: string): boolean {
-    return this.isThisGloballUserArray(name);
+    return this._globalUserArrays.find((x) => x.name === name) ? true : false;
   }
 
   /**
