@@ -43,13 +43,6 @@
   ],
   "main": "./dist/main.js",
   "contributes": {
-    "iconThemes": [
-      {
-        "id": "GppIcons",
-        "label": "Gpp Language Icons",
-        "path": "./images/icon-theme.json"
-      }
-    ],
     "languages": [
       {
         "id": "gpp",
@@ -59,6 +52,10 @@
         "extensions": [
           ".gpp"
         ],
+        "icon": {
+          "light": "./images/gpp-logo.png",
+          "dark": "./images/gpp-logo.png"
+        },
         "configuration": "./languages/gpp/gpp-language.json"
       },
       {
