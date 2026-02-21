@@ -57,6 +57,13 @@ export class GpplHoverProvider implements HoverProvider {
         'global system variable: ' + word,
         utils.constants.languageId
       );
+
+      // Add localized documentation from i18n if available
+      const i18nKey = `completion.doc.${word}.variable`;
+      const doc = utils.i18n.t(i18nKey);
+      if (doc && doc !== i18nKey) {
+        hoverContent.appendMarkdown(`\n---\n${doc}`);
+      }
     }
 
     // Check for procedure declarations
