@@ -27,14 +27,6 @@ const gpp = JSON.parse(
 );
 
 /**
- * Array of configuration property names from package.json contributes section.
- * @private
- */
-const configurationProperties = Object.getOwnPropertyNames(
-  gpp.contributes.configuration.properties
-);
-
-/**
  * Manages application constants and configuration settings for the GPP extension.
  *
  * This class provides centralized access to:
@@ -61,19 +53,24 @@ class GpplConstants {
       readme:
         'https://github.com/anzory/vscode-gppl-support/blob/master/README.md',
     },
+    files: {
+      encoding: workspace
+        .getConfiguration('gpp.files')
+        .get<string>('encoding', 'windows1251'),
+    },
     format: {
       enable: workspace
-        .getConfiguration()
-        .get<boolean>(configurationProperties[2]),
+        .getConfiguration('gpp.format')
+        .get<boolean>('enable', true),
       tabSize: workspace
-        .getConfiguration()
-        .get<number>(configurationProperties[3]),
+        .getConfiguration('gpp.format')
+        .get<number>('tabSize', 2),
       preferSpace: workspace
-        .getConfiguration()
-        .get<boolean>(configurationProperties[4]),
+        .getConfiguration('gpp.format')
+        .get<boolean>('preferSpaces', true),
       applyIndentsToRegions: workspace
-        .getConfiguration()
-        .get<boolean>(configurationProperties[6]),
+        .getConfiguration('gpp.format')
+        .get<boolean>('applyIndentsToRegions', true),
     },
     localesEnum:
       gpp.contributes.configuration.properties['gpp.localization.defaultLocale']

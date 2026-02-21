@@ -100,12 +100,6 @@
           "description": "Default GPPL files encoding",
           "scope": "window"
         },
-        "gpp.editor.defaultFormatter": {
-          "type": "string",
-          "default": "anzory.vscode-gppl-support",
-          "description": "Default GPPL files formatter",
-          "scope": "window"
-        },
         "gpp.format.enable": {
           "type": "boolean",
           "default": true,
@@ -122,12 +116,6 @@
           "type": "boolean",
           "default": true,
           "description": "Prefer spaces over tabs",
-          "scope": "window"
-        },
-        "gpp.format.insertSpacesAroundEqualSign": {
-          "type": "boolean",
-          "default": true,
-          "description": "Determines whether spaces should be inserted before and after the `equal` sign",
           "scope": "window"
         },
         "gpp.format.applyIndentsToRegions": {

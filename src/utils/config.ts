@@ -55,6 +55,7 @@ export class Config {
    *
    * Initializes the configuration and sets up:
    * - Default formatter for GPP files
+   * - File encoding for GPP files
    * - Colorization settings
    */
   constructor() {
@@ -62,6 +63,7 @@ export class Config {
     workspace
       .getConfiguration('[gpp]')
       .update('editor.defaultFormatter', 'anzory.vscode-gppl-support');
+    this.setFilesEncoding();
     this.addColorizationSettings();
   }
 
@@ -85,6 +87,7 @@ export class Config {
   private onConfigurationChanged(e: ConfigurationChangeEvent) {
     if (e.affectsConfiguration(constants.configId)) {
       this.reloadConfig();
+      this.setFilesEncoding();
     }
   }
 
@@ -95,6 +98,21 @@ export class Config {
    */
   private reloadConfig() {
     this.config = workspace.getConfiguration(constants.configId);
+  }
+
+  /**
+   * Sets the file encoding for GPP files based on configuration.
+   *
+   * This method applies the configured encoding (e.g., windows1251, utf8)
+   * to all GPP language files through VS Code's language-specific settings.
+   *
+   * @private
+   */
+  private setFilesEncoding() {
+    const encoding = constants.files.encoding;
+    workspace
+      .getConfiguration('[gpp]')
+      .update('files.encoding', encoding, ConfigurationTarget.Global);
   }
 
   /**
