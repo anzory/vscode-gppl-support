@@ -19,6 +19,7 @@ import { utils } from './utils/utils';
 let completionItemProvider: Disposable;
 let hoverProvider: Disposable;
 let codeLensProvider: Disposable;
+let documentSymbolProvider: Disposable;
 
 /**
  * Activates the VS Code extension for SolidCAM GPP language support.
@@ -98,12 +99,11 @@ export async function activate(context: ExtensionContext) {
       new providers.formattingProvider()
     )
   );
-  context.subscriptions.push(
-    languages.registerDocumentSymbolProvider(
-      utils.constants.languageId,
-      new providers.documentSymbolProvider()
-    )
+  documentSymbolProvider = languages.registerDocumentSymbolProvider(
+    utils.constants.languageId,
+    new providers.documentSymbolProvider()
   );
+  context.subscriptions.push(documentSymbolProvider);
 }
 
 /**
@@ -126,6 +126,7 @@ workspace.onDidChangeConfiguration(() => {
   completionItemProvider.dispose();
   hoverProvider.dispose();
   codeLensProvider.dispose();
+  documentSymbolProvider.dispose();
   hoverProvider = languages.registerHoverProvider(
     utils.constants.languageId,
     new providers.hoverProvider()
@@ -137,6 +138,10 @@ workspace.onDidChangeConfiguration(() => {
   codeLensProvider = languages.registerCodeLensProvider(
     utils.constants.languageId,
     new providers.codeLensProvider()
+  );
+  documentSymbolProvider = languages.registerDocumentSymbolProvider(
+    utils.constants.languageId,
+    new providers.documentSymbolProvider()
   );
 });
 

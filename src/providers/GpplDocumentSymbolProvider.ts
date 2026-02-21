@@ -81,7 +81,7 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
           ).length;
           const showDetail = workspace
             .getConfiguration('gpp')
-            .get<boolean>('gpp.outline.showSymbolDetail', true);
+            .get<boolean>('outline.showSymbolDetail', true);
           const detail = showDetail
             ? utils.i18n.t('outline.detail.calls').replace('{count}', callCount.toString())
             : '';
