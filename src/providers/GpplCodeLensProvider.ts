@@ -1,4 +1,3 @@
-'use strict';
 import {
   CodeLens,
   CodeLensProvider,
@@ -60,10 +59,9 @@ export class GpplCodeLensProvider implements CodeLensProvider {
       if (symbol.kind === SymbolKind.Namespace) {
         continue;
       }
-      const escapedName = this.escapeRegExp(symbol.name);
-      const allLocations = textParser.getWordLocationsInDoc(
+      const allLocations = textParser.getWordLocationsForLiteral(
         document,
-        escapedName
+        symbol.name
       );
       const template = utils.i18n.t('codelens.procedure.references');
       const title = template.replace('{count}', allLocations.length.toString());
@@ -78,17 +76,6 @@ export class GpplCodeLensProvider implements CodeLensProvider {
     }
 
     return codeLenses;
-  }
-
-  /**
-   * Escapes special regex characters in a string.
-   *
-   * @private
-   * @param value - The string to escape
-   * @returns The escaped string safe for use in regular expressions
-   */
-  private escapeRegExp(value: string): string {
-    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   /**

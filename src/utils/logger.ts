@@ -1,4 +1,3 @@
-'use strict';
 import { ExtensionContext, ExtensionMode, OutputChannel, window } from 'vscode';
 import { constants } from './constants';
 

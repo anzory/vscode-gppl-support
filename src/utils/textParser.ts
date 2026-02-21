@@ -3,7 +3,7 @@ import { Location, Position, Range, TextDocument } from 'vscode';
 /**
  * Maximum size of the RegExp cache to prevent memory leaks.
  */
-const MAX_CACHE_SIZE = 100;
+const MAX_CACHE_SIZE = 500;
 
 /**
  * Simple LRU (Least Recently Used) cache entry.
@@ -25,6 +25,16 @@ interface CacheEntry {
 export default class TextParser {
   private regExpCache: Map<string, CacheEntry> = new Map();
   private cacheOrder: number = 0;
+
+  /**
+   * Escapes special regex characters in a string.
+   *
+   * @param value - The string to escape
+   * @returns The escaped string safe for use in RegExp
+   */
+  escapeRegExp(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
 
   /**
    * Creates start and end positions from character index and length.
@@ -111,13 +121,27 @@ export default class TextParser {
     doc: TextDocument | undefined,
     word: string
   ): Location[] {
-    if (!doc || !word) {
+    return this.getLocationsInDoc(doc, word + '\\b');
+  }
+
+  /**
+   * Finds all locations of a regex pattern in a document.
+   *
+   * @param doc - The text document to search in
+   * @param pattern - The regex pattern string
+   * @returns Array of locations where the pattern was found
+   */
+  getLocationsInDoc(
+    doc: TextDocument | undefined,
+    pattern: string
+  ): Location[] {
+    if (!doc || !pattern) {
       return [];
     }
 
     const locations: Location[] = [];
     const text = doc.getText();
-    const regExp = this.getCachedRegExp(word + '\\b');
+    const regExp = this.getCachedRegExp(pattern);
     // Ensure lastIndex is reset in case a cached RegExp has state
     try {
       (regExp as RegExp).lastIndex = 0;
@@ -137,6 +161,28 @@ export default class TextParser {
     } while (regExpResult);
 
     return locations;
+  }
+
+  /**
+   * Finds all locations of a literal word in a document with escaping.
+   *
+   * @param doc - The text document to search in
+   * @param word - The literal word to search for
+   * @returns Array of locations where the word was found
+   */
+  getWordLocationsForLiteral(
+    doc: TextDocument | undefined,
+    word: string
+  ): Location[] {
+    if (!word) {
+      return [];
+    }
+    const escaped = this.escapeRegExp(word);
+    const startsWithWordChar = /^\w/.test(word);
+    const endsWithWordChar = /\w$/.test(word);
+    const startBoundary = startsWithWordChar ? '\\b' : '(?<!\\w)';
+    const endBoundary = endsWithWordChar ? '\\b' : '(?!\\w)';
+    return this.getLocationsInDoc(doc, `${startBoundary}${escaped}${endBoundary}`);
   }
 
   /**

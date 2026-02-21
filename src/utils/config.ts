@@ -1,4 +1,3 @@
-'use strict';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import {
@@ -60,9 +59,15 @@ export class Config {
    */
   constructor() {
     this.config = workspace.getConfiguration(constants.configId);
-    workspace
-      .getConfiguration('[gpp]')
-      .update('editor.defaultFormatter', 'anzory.vscode-gppl-support');
+    const gppEditorConfig = workspace.getConfiguration('[gpp]');
+    const currentFormatter = gppEditorConfig.get<string>('editor.defaultFormatter');
+    if (!currentFormatter) {
+      gppEditorConfig.update(
+        'editor.defaultFormatter',
+        'anzory.vscode-gppl-support',
+        ConfigurationTarget.Workspace
+      );
+    }
     this.setFilesEncoding();
     this.addColorizationSettings();
   }
@@ -74,7 +79,7 @@ export class Config {
    */
   configure(context: ExtensionContext) {
     context.subscriptions.push(
-      workspace.onDidChangeConfiguration(this.onConfigurationChanged)
+      workspace.onDidChangeConfiguration((e) => this.onConfigurationChanged(e))
     );
   }
 
@@ -110,9 +115,15 @@ export class Config {
    */
   private setFilesEncoding() {
     const encoding = constants.files.encoding;
-    workspace
-      .getConfiguration('[gpp]')
-      .update('files.encoding', encoding, ConfigurationTarget.Global);
+    const gppEditorConfig = workspace.getConfiguration('[gpp]');
+    const currentEncoding = gppEditorConfig.get<string>('files.encoding');
+    if (currentEncoding !== encoding) {
+      gppEditorConfig.update(
+        'files.encoding',
+        encoding,
+        ConfigurationTarget.Workspace
+      );
+    }
   }
 
   /**

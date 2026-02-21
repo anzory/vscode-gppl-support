@@ -45,17 +45,19 @@ export class GpplReferenceProvider implements ReferenceProvider {
     }
 
     const word = document.getText(wordRange);
+    if (!word) {
+      return undefined;
+    }
 
     if (token.isCancellationRequested) {
       return undefined;
     }
 
-    if (semanticHelper.isThisUserVariableOrArray(word)) {
-      const locations = textParser.getWordLocationsInDoc(document, '\\b' + word);
-      return locations;
-    } else if (semanticHelper.isThisProcedureDeclaration(word)) {
-      const locations = textParser.getWordLocationsInDoc(document, word);
-      return locations;
+    if (
+      semanticHelper.isThisUserVariableOrArray(word) ||
+      semanticHelper.isThisProcedureDeclaration(word)
+    ) {
+      return textParser.getWordLocationsForLiteral(document, word);
     }
 
     return undefined;

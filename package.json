@@ -2,7 +2,7 @@
   "name": "vscode-gppl-support",
   "displayName": "SolidCAM postprocessor editor",
   "description": "Full SolidCAM GPP language support for VSCode: highlighting, formatting, autocomplete, code lens, code snippets and more. Write your postprocessor for SolidCAM like a pro.",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "preview": false,
   "license": "MIT",
   "publisher": "anzory",
@@ -20,7 +20,7 @@
     "highlighter",
     "formatting"
   ],
-  "icon": "./images/new-logo.png",
+  "icon": "./images/gpp-logo.png",
   "galleryBanner": {
     "color": "#666666",
     "theme": "dark"
@@ -91,10 +91,30 @@
       "type": "object",
       "title": "SolidCAM GPP",
       "properties": {
+        "gpp.localization.defaultLocale": {
+          "type": "string",
+          "enum": [
+            "en",
+            "ru"
+          ],
+          "default": "en",
+          "description": "Determines which language to use for messages",
+          "scope": "window"
+        },
         "gpp.files.encoding": {
           "type": "string",
+          "enum": [
+            "windows1251",
+            "windows1252"
+          ],
           "default": "windows1251",
           "description": "Default GPPL files encoding",
+          "scope": "window"
+        },
+        "gpp.outline.showSymbolDetail": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show call count in document outline symbol detail",
           "scope": "window"
         },
         "gpp.format.enable": {
@@ -119,22 +139,6 @@
           "type": "boolean",
           "default": true,
           "description": "Determines whether indents should be applied to `#regions`",
-          "scope": "window"
-        },
-        "gpp.localization.defaultLocale": {
-          "type": "string",
-          "enum": [
-            "en",
-            "ru"
-          ],
-          "default": "en",
-          "description": "Determines which language to use for messages",
-          "scope": "window"
-        },
-        "gpp.outline.showSymbolDetail": {
-          "type": "boolean",
-          "default": true,
-          "description": "Show call count in document outline symbol detail",
           "scope": "window"
         }
       }
@@ -176,7 +180,6 @@
     "prelaunch": "npm run clean:dist && npm run webpack:dev"
   },
   "devDependencies": {
-    "@types/glob": "^8.1.0",
     "@types/i18n": "^0.13.12",
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.19.7",
@@ -188,8 +191,6 @@
     "@vscode/vsce": "^2.32.0",
     "copy-webpack-plugin": "^12.0.2",
     "eslint": "^9.39.2",
-    "fs": "^0.0.1-security",
-    "glob": "^11.1.0",
     "i18n": "^0.15.3",
     "rimraf": "^6.1.2",
     "ts-loader": "^9.5.4",

@@ -93,6 +93,11 @@ function getSystemVariableNames(): string[] {
 }
 
 /**
+ * Regex that matches all GPP variable type keywords in a single pass.
+ */
+const VARIABLE_KEYWORDS_RE = /\b(global|local|string|logical|integer|numeric)\b/g;
+
+/**
  * Provides semantic analysis functionality for GPP code.
  *
  * This class analyzes GPP documents to extract:
@@ -122,6 +127,8 @@ class SemanticHelper implements Disposable {
   private textParser = textParser;
   /** Cached document version to avoid unnecessary reparsing */
   private lastDocumentVersion: number = -1;
+  /** Cached document URI to detect document switches */
+  private lastDocumentUri: string = '';
   /** Disposables to clean up on dispose */
   private disposables: Disposable[] = [];
 
@@ -207,6 +214,7 @@ class SemanticHelper implements Disposable {
   getProcedures(): IProcedure[] {
     return this._procedures;
   }
+
   /**
    * Gets a global user-defined array by name.
    *
@@ -224,17 +232,7 @@ class SemanticHelper implements Disposable {
    * @returns The variable definition or undefined if not found
    */
   getGlobalUserVariable(name: string): IVariable | undefined {
-    let res: IVariable | undefined = undefined;
-    if (
-      this._globalUserVariables.some((variable) => {
-        res = variable;
-        return variable.name === name;
-      })
-    ) {
-      return res;
-    } else {
-      return undefined;
-    }
+    return this._globalUserVariables.find((v) => v.name === name);
   }
 
   /**
@@ -244,17 +242,7 @@ class SemanticHelper implements Disposable {
    * @returns The array definition or undefined if not found
    */
   getLocalUserArray(name: string): IVariable | undefined {
-    let res: IVariable | undefined = undefined;
-    if (
-      this._localUserArrays.some((array) => {
-        res = array;
-        return array.name === name;
-      })
-    ) {
-      return res;
-    } else {
-      return undefined;
-    }
+    return this._localUserArrays.find((a) => a.name === name);
   }
 
   /**
@@ -264,17 +252,7 @@ class SemanticHelper implements Disposable {
    * @returns The variable definition or undefined if not found
    */
   getLocalUserVariable(name: string): IVariable | undefined {
-    let res: IVariable | undefined = undefined;
-    if (
-      this._localUserVariables.some((variable) => {
-        res = variable;
-        return variable.name === name;
-      })
-    ) {
-      return res;
-    } else {
-      return undefined;
-    }
+    return this._localUserVariables.find((v) => v.name === name);
   }
 
   /**
@@ -284,7 +262,7 @@ class SemanticHelper implements Disposable {
    * @returns The system variable definition or undefined if not found
    */
   getGpplSystemVariable(name: string): IVariable | undefined {
-    return this.findInArray(this._systemGppVariables, name);
+    return this._systemGppVariables.find((item) => item.name === name);
   }
 
   /**
@@ -294,22 +272,7 @@ class SemanticHelper implements Disposable {
    * @returns The procedure definition or undefined if not found
    */
   getGpplProcedure(name: string): IProcedure | undefined {
-    return this.findInArray(this._procedures, name);
-  }
-
-  /**
-   * Finds an item in an array by name.
-   *
-   * @private
-   * @param array - The array to search in
-   * @param name - The name to search for
-   * @returns The found item or undefined if not found
-   */
-  private findInArray<T extends { name: string }>(
-    array: T[],
-    name: string
-  ): T | undefined {
-    return array.find((item) => item.name === name);
+    return this._procedures.find((item) => item.name === name);
   }
 
   /**
@@ -330,7 +293,7 @@ class SemanticHelper implements Disposable {
         scope: 'global',
         type: '',
         references: doc
-          ? this.textParser.getWordLocationsInDoc(doc, '\\b' + sv)
+          ? this.textParser.getWordLocationsForLiteral(doc, sv)
           : [],
         info: undefined,
       });
@@ -350,7 +313,7 @@ class SemanticHelper implements Disposable {
     if (doc) {
       const ranges: Range[] = this.textParser.getRegExpRangesInDoc(
         doc,
-        /^\s*\@\w*\b.*$/gm
+        /^\s*@\w*\b.*$/gm
       );
       ranges.forEach((range) => {
         const line = doc.getText(range);
@@ -358,13 +321,14 @@ class SemanticHelper implements Disposable {
           const info = this.getInfo(line);
           const name = this.getProcedureName(line);
           const args = this.getProcedureArgs(line);
+          const escapedName = this.textParser.escapeRegExp(name);
           this._procedures.push({
             name: name,
             args: args,
             info: info,
-            references: this.textParser.getWordLocationsInDoc(
+            references: this.textParser.getLocationsInDoc(
               doc,
-              'call ' + name
+              `\\bcall\\s+${escapedName}`
             ),
           });
         }
@@ -403,10 +367,7 @@ class SemanticHelper implements Disposable {
                 name: uga,
                 scope: gppScope,
                 type: gppType + ' array',
-                references: this.textParser.getWordLocationsInDoc(
-                  doc,
-                  '\\b' + uga
-                ),
+                references: this.textParser.getWordLocationsForLiteral(doc, uga),
                 info: gppInfo,
               });
             } else {
@@ -414,10 +375,7 @@ class SemanticHelper implements Disposable {
                 name: ugv,
                 scope: gppScope,
                 type: gppType,
-                references: this.textParser.getWordLocationsInDoc(
-                  doc,
-                  '\\b' + ugv
-                ),
+                references: this.textParser.getWordLocationsForLiteral(doc, ugv),
                 info: gppInfo,
               });
             }
@@ -439,10 +397,7 @@ class SemanticHelper implements Disposable {
                 name: ula,
                 scope: gppScope,
                 type: gppType + ' array',
-                references: this.textParser.getWordLocationsInDoc(
-                  doc,
-                  '\\b' + ula
-                ),
+                references: this.textParser.getWordLocationsForLiteral(doc, ula),
                 info: gppInfo,
               });
             } else {
@@ -450,10 +405,7 @@ class SemanticHelper implements Disposable {
                 name: ulv,
                 scope: gppScope,
                 type: gppType,
-                references: this.textParser.getWordLocationsInDoc(
-                  doc,
-                  '\\b' + ulv
-                ),
+                references: this.textParser.getWordLocationsForLiteral(doc, ulv),
                 info: gppInfo,
               });
             }
@@ -496,7 +448,7 @@ class SemanticHelper implements Disposable {
    * @returns The procedure arguments or undefined if no arguments
    */
   getProcedureArgs(line: string): string | undefined {
-    let _arg = line.replace(/;.*/gm, '').trim();
+    const _arg = line.replace(/;.*/gm, '').trim();
     if (/\(/.test(_arg)) {
       return _arg.replace(/^(.+?)\(/gm, '').replace(/\).*$/gm, '');
     } else {
@@ -506,6 +458,7 @@ class SemanticHelper implements Disposable {
 
   /**
    * Extracts variable names from a variable declaration line.
+   * Uses a single regex to remove all type keywords at once.
    *
    * @private
    * @param line - The variable declaration line
@@ -515,12 +468,7 @@ class SemanticHelper implements Disposable {
     const _items: string[] = [];
     line
       .replace(/;.*/gm, '')
-      .replace(/\bglobal\b/gm, '')
-      .replace(/\blocal\b/gm, '')
-      .replace(/\bstring\b/gm, '')
-      .replace(/\blogical\b/gm, '')
-      .replace(/\binteger\b/gm, '')
-      .replace(/\bnumeric\b/gm, '')
+      .replace(VARIABLE_KEYWORDS_RE, '')
       .replace(/\s{2,}/gm, ' ')
       .trim()
       .split(' ')
@@ -539,7 +487,7 @@ class SemanticHelper implements Disposable {
    * @returns True if the name is a system variable
    */
   isThisSystemVariable(name: string): boolean {
-    return this._systemGppVariables.find((x) => x.name === name) ? true : false;
+    return this._systemGppVariables.some((x) => x.name === name);
   }
 
   /**
@@ -564,9 +512,7 @@ class SemanticHelper implements Disposable {
    * @returns True if the name is a global user variable
    */
   isThisGlobalUserVariable(name: string): boolean {
-    return this._globalUserVariables.find((x) => x.name === name)
-      ? true
-      : false;
+    return this._globalUserVariables.some((x) => x.name === name);
   }
 
   /**
@@ -576,7 +522,7 @@ class SemanticHelper implements Disposable {
    * @returns True if the name is a local user variable
    */
   isThisLocalUserVariable(name: string): boolean {
-    return this._localUserVariables.find((x) => x.name === name) ? true : false;
+    return this._localUserVariables.some((x) => x.name === name);
   }
 
   /**
@@ -586,7 +532,7 @@ class SemanticHelper implements Disposable {
    * @returns True if the name is a global user array
    */
   isThisGlobalUserArray(name: string): boolean {
-    return this._globalUserArrays.find((x) => x.name === name) ? true : false;
+    return this._globalUserArrays.some((x) => x.name === name);
   }
 
   /**
@@ -596,7 +542,7 @@ class SemanticHelper implements Disposable {
    * @returns True if the name is a local user array
    */
   isThisLocalUserArray(name: string): boolean {
-    return this._localUserArrays.find((x) => x.name === name) ? true : false;
+    return this._localUserArrays.some((x) => x.name === name);
   }
 
   /**
@@ -606,8 +552,7 @@ class SemanticHelper implements Disposable {
    * @returns True if the name starts with '@' (procedure declaration)
    */
   isThisProcedureDeclaration(name: string): boolean {
-    const i = name.match(/@/);
-    return i ? i.index === 0 : false;
+    return name.startsWith('@');
   }
 
   /**
@@ -615,9 +560,26 @@ class SemanticHelper implements Disposable {
    */
   parseDocument() {
     try {
+      this.editor = window.activeTextEditor;
+      const doc = this.editor?.document;
+
+      // Skip if document version and URI haven't changed
+      if (
+        doc &&
+        this.lastDocumentVersion === doc.version &&
+        this.lastDocumentUri === doc.uri.toString()
+      ) {
+        return;
+      }
+
       this.parseUserVariables();
       this.parseSystemVariables();
       this.parseProcedures();
+
+      if (doc) {
+        this.lastDocumentVersion = doc.version;
+        this.lastDocumentUri = doc.uri.toString();
+      }
     } catch (error) {
       Logger.error('Error during document parsing:', error);
       // Clear data on error to prevent inconsistent state
@@ -641,10 +603,24 @@ class SemanticHelper implements Disposable {
 
   /**
    * Handles document change events with debouncing.
+   * Only reacts to GPP document changes.
    *
    * @param e - The document change event (optional)
    */
   onDocumentChanged(e?: TextDocumentChangeEvent) {
+    // Filter: only react to GPP documents
+    if (e && e.document.languageId !== constants.languageId) {
+      return;
+    }
+
+    // Also check active editor languageId for editor-switch events (no event arg)
+    if (!e) {
+      const activeDoc = window.activeTextEditor?.document;
+      if (activeDoc && activeDoc.languageId !== constants.languageId) {
+        return;
+      }
+    }
+
     // Use debouncing to prevent multiple parsing calls
     if (this.debounceTimer) {
       clearTimeout(this.debounceTimer);
@@ -659,6 +635,7 @@ class SemanticHelper implements Disposable {
     }, 300);
   }
 }
+
 /**
  * Global instance of SemanticHelper for semantic analysis.
  *

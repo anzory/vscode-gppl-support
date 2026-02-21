@@ -1,9 +1,9 @@
-import { gpplComletionsItemsList } from './comletionsItemsList';
+import { gpplComletionsItemsList } from './completionsItemsList';
 import { Config } from './config';
 import { constants } from './constants';
 import { i18n } from './i18n';
 import { Logger } from './logger';
-import { semanticHelper, IVariable, IProcedure } from './semanticHelper';
+import { semanticHelper } from './semanticHelper';
 import textParser from './textParser';
 
 /**
@@ -27,13 +27,3 @@ export const utils = {
   semanticHelper,
   textParser,
 };
-
-/**
- * Interface for GPP variables extending the base variable interface.
- */
-export interface IGpplVariable extends IVariable {}
-
-/**
- * Interface for GPP procedures extending the base procedure interface.
- */
-export interface IGpplProcedure extends IProcedure {}

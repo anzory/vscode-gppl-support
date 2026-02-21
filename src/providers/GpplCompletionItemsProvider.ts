@@ -10,7 +10,7 @@ import {
   SnippetString,
   TextDocument,
 } from 'vscode';
-import { gpplComletionsItemsList } from '../utils/comletionsItemsList';
+import { gpplComletionsItemsList } from '../utils/completionsItemsList';
 import { i18n } from '../utils/i18n';
 
 /**

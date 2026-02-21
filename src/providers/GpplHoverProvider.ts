@@ -8,7 +8,8 @@ import {
   Range,
   TextDocument,
 } from 'vscode';
-import { utils, IGpplVariable, IGpplProcedure } from '../utils/utils';
+import { utils } from '../utils/utils';
+import { IVariable, IProcedure } from '../utils/semanticHelper';
 
 /**
  * Provides hover information for GPP language constructs in VS Code.
@@ -20,11 +21,6 @@ import { utils, IGpplVariable, IGpplProcedure } from '../utils/utils';
  * - References and additional information
  */
 export class GpplHoverProvider implements HoverProvider {
-  /**
-   * Creates an instance of GpplHoverProvider.
-   */
-  constructor() {}
-
   /**
    * Provides hover information for the symbol at the given position.
    *
@@ -65,6 +61,9 @@ export class GpplHoverProvider implements HoverProvider {
 
     // Check for procedure declarations
     this.appendProcedureHoverInfo(hoverContent, word);
+    if (hoverContent.value.trim().length === 0) {
+      return undefined;
+    }
 
     return Promise.resolve(new Hover(hoverContent, wordRange));
   }
@@ -80,7 +79,7 @@ export class GpplHoverProvider implements HoverProvider {
     hoverContent: MarkdownString,
     word: string
   ): void {
-    let gppVar: IGpplVariable | undefined;
+    let gppVar: IVariable | undefined;
     let varType: string = '';
 
     if (utils.semanticHelper.isThisGlobalUserArray(word)) {
@@ -112,7 +111,7 @@ export class GpplHoverProvider implements HoverProvider {
    */
   private appendVariableDetails(
     hoverContent: MarkdownString,
-    gppVar: IGpplVariable,
+    gppVar: IVariable,
     varType: string
   ): void {
     hoverContent.appendCodeblock(
@@ -147,7 +146,7 @@ export class GpplHoverProvider implements HoverProvider {
       return;
     }
 
-    const procedure: IGpplProcedure | undefined =
+    const procedure: IProcedure | undefined =
       utils.semanticHelper.getGpplProcedure(word);
 
     if (!procedure) {

@@ -44,8 +44,15 @@ class GpplConstants {
       version: gpp.version,
     },
     commands: {
-      formatDocument: gpp.contributes.commands[0].command,
-      showProcedureReferences: gpp.contributes.commands[1].command,
+      formatDocument:
+        gpp.contributes.commands.find(
+          (c: { command: string }) => c.command === 'gpp.editor.Format'
+        )?.command ?? 'gpp.editor.Format',
+      showProcedureReferences:
+        gpp.contributes.commands.find(
+          (c: { command: string }) =>
+            c.command === 'gpp.editor.ShowProcedureReferences'
+        )?.command ?? 'gpp.editor.ShowProcedureReferences',
     },
     urls: {
       changeLog:

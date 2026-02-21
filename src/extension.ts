@@ -1,4 +1,3 @@
-'use strict';
 import {
   commands,
   Disposable,
@@ -18,10 +17,39 @@ import { initializeConstants } from './utils/constants';
 import { Logger } from './utils/logger';
 import { utils } from './utils/utils';
 
-let completionItemProvider: Disposable;
-let hoverProvider: Disposable;
-let codeLensProvider: Disposable;
-let documentSymbolProvider: Disposable;
+/** Disposables for language-feature providers managed by the config-change listener. */
+let providerDisposables: Disposable[] = [];
+
+/**
+ * Registers all language-feature providers and returns their disposables.
+ */
+function registerProviders(): Disposable[] {
+  const langId = utils.constants.languageId;
+  return [
+    languages.registerCompletionItemProvider(
+      langId,
+      new providers.completionItemsProvider()
+    ),
+    languages.registerHoverProvider(langId, new providers.hoverProvider()),
+    languages.registerCodeLensProvider(langId, new providers.codeLensProvider()),
+    languages.registerDocumentSymbolProvider(
+      langId,
+      new providers.documentSymbolProvider()
+    ),
+    languages.registerDefinitionProvider(
+      langId,
+      new providers.definitionProvider()
+    ),
+    languages.registerReferenceProvider(
+      langId,
+      new providers.referenceProvider()
+    ),
+    languages.registerDocumentFormattingEditProvider(
+      langId,
+      new providers.formattingProvider()
+    ),
+  ];
+}
 
 /**
  * Activates the VS Code extension for SolidCAM GPP language support.
@@ -36,83 +64,50 @@ let documentSymbolProvider: Disposable;
 export async function activate(context: ExtensionContext) {
   // Initialize Logger first
   Logger.configure(context);
-  
+
   // Initialize constants with proper subscription management
   initializeConstants(context.subscriptions);
-  
+
   new utils.config().configure(context);
 
-  commands.registerCommand(
-    utils.constants.commands.formatDocument,
-    async () => {
-      // Get the current active editor at the time of command execution
-      const activeEditor = window.activeTextEditor;
-      const docUri: Uri | undefined = activeEditor?.document.uri;
-      const textEdits: TextEdit[] | undefined = await commands.executeCommand(
-        'vscode.executeFormatDocumentProvider',
-        docUri
-      );
-      if (textEdits && docUri) {
-        const edit = new WorkspaceEdit();
-        for (const textEdit of textEdits) {
-          edit.replace(docUri, textEdit.range, textEdit.newText);
+  context.subscriptions.push(
+    commands.registerCommand(
+      utils.constants.commands.formatDocument,
+      async () => {
+        const activeEditor = window.activeTextEditor;
+        const docUri: Uri | undefined = activeEditor?.document.uri;
+        const textEdits: TextEdit[] | undefined =
+          await commands.executeCommand(
+            'vscode.executeFormatDocumentProvider',
+            docUri
+          );
+        if (textEdits && docUri) {
+          const edit = new WorkspaceEdit();
+          for (const textEdit of textEdits) {
+            edit.replace(docUri, textEdit.range, textEdit.newText);
+          }
+          await workspace.applyEdit(edit);
         }
-        await workspace.applyEdit(edit);
       }
-    }
-  );
-
-  commands.registerCommand(
-    utils.constants.commands.showProcedureReferences,
-    async (documentUri: Uri, position: Position, locations: Location[]) => {
-      await commands.executeCommand(
-        'editor.action.showReferences',
-        documentUri,
-        position,
-        locations
-      );
-    }
-  );
-
-  completionItemProvider = languages.registerCompletionItemProvider(
-    utils.constants.languageId,
-    new providers.completionItemsProvider()
-  );
-  hoverProvider = languages.registerHoverProvider(
-    utils.constants.languageId,
-    new providers.hoverProvider()
-  );
-  codeLensProvider = languages.registerCodeLensProvider(
-    utils.constants.languageId,
-    new providers.codeLensProvider()
-  );
-  context.subscriptions.push(completionItemProvider);
-  context.subscriptions.push(hoverProvider);
-  context.subscriptions.push(codeLensProvider);
-  context.subscriptions.push(
-    languages.registerDefinitionProvider(
-      utils.constants.languageId,
-      new providers.definitionProvider()
-    )
-  );
-  context.subscriptions.push(
-    languages.registerReferenceProvider(
-      utils.constants.languageId,
-      new providers.referenceProvider()
     )
   );
 
   context.subscriptions.push(
-    languages.registerDocumentFormattingEditProvider(
-      utils.constants.languageId,
-      new providers.formattingProvider()
+    commands.registerCommand(
+      utils.constants.commands.showProcedureReferences,
+      async (documentUri: Uri, position: Position, locations: Location[]) => {
+        await commands.executeCommand(
+          'editor.action.showReferences',
+          documentUri,
+          position,
+          locations
+        );
+      }
     )
   );
-  documentSymbolProvider = languages.registerDocumentSymbolProvider(
-    utils.constants.languageId,
-    new providers.documentSymbolProvider()
-  );
-  context.subscriptions.push(documentSymbolProvider);
+
+  // Register initial providers
+  providerDisposables = registerProviders();
 
   // Register configuration change listener
   registerConfigurationChangeListener(context);
@@ -121,7 +116,7 @@ export async function activate(context: ExtensionContext) {
 /**
  * Handles configuration changes for the extension.
  *
- * When the extension configuration changes, this function:
+ * When the GPP extension configuration changes, this function:
  * - Reformats all open GPP documents
  * - Updates internationalization settings
  * - Recreates language feature providers to apply new settings
@@ -130,7 +125,12 @@ export async function activate(context: ExtensionContext) {
  */
 function registerConfigurationChangeListener(context: ExtensionContext): void {
   context.subscriptions.push(
-    workspace.onDidChangeConfiguration(() => {
+    workspace.onDidChangeConfiguration((e) => {
+      // Only react to GPP-related configuration changes
+      if (!e.affectsConfiguration('gpp')) {
+        return;
+      }
+
       // Format all open GPP documents
       window.visibleTextEditors.forEach((editor: TextEditor) => {
         if (editor.document.languageId === utils.constants.languageId) {
@@ -141,35 +141,13 @@ function registerConfigurationChangeListener(context: ExtensionContext): void {
       // Update internationalization settings
       utils.i18n.update();
 
-      // Dispose old providers
-      completionItemProvider.dispose();
-      hoverProvider.dispose();
-      codeLensProvider.dispose();
-      documentSymbolProvider.dispose();
+      // Dispose old providers (without touching context.subscriptions)
+      for (const d of providerDisposables) {
+        d.dispose();
+      }
 
       // Recreate providers with new settings
-      completionItemProvider = languages.registerCompletionItemProvider(
-        utils.constants.languageId,
-        new providers.completionItemsProvider()
-      );
-      hoverProvider = languages.registerHoverProvider(
-        utils.constants.languageId,
-        new providers.hoverProvider()
-      );
-      codeLensProvider = languages.registerCodeLensProvider(
-        utils.constants.languageId,
-        new providers.codeLensProvider()
-      );
-      documentSymbolProvider = languages.registerDocumentSymbolProvider(
-        utils.constants.languageId,
-        new providers.documentSymbolProvider()
-      );
-
-      // Add new providers to subscriptions
-      context.subscriptions.push(completionItemProvider);
-      context.subscriptions.push(hoverProvider);
-      context.subscriptions.push(codeLensProvider);
-      context.subscriptions.push(documentSymbolProvider);
+      providerDisposables = registerProviders();
     })
   );
 }
@@ -178,8 +156,12 @@ function registerConfigurationChangeListener(context: ExtensionContext): void {
  * Deactivates the VS Code extension.
  *
  * This function is called when the extension is deactivated.
- * Cleans up Logger resources.
+ * Cleans up Logger resources and provider disposables.
  */
 export function deactivate() {
+  for (const d of providerDisposables) {
+    d.dispose();
+  }
+  providerDisposables = [];
   Logger.close();
 }

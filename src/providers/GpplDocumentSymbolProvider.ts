@@ -1,4 +1,3 @@
-'use strict';
 import {
   DocumentSymbol,
   DocumentSymbolProvider,
@@ -72,9 +71,9 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
             new Position(line, startChar),
             new Position(line, startChar + label.length)
           );
-          const allLocations = this.textParser.getWordLocationsInDoc(
+          const allLocations = this.textParser.getWordLocationsForLiteral(
             document,
-            this.escapeRegExp(label)
+            label
           );
           const callCount = allLocations.filter(
             (loc) => !this.isSameRange(loc.range, range)
@@ -103,7 +102,7 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
 
         if (nameMatch && nameMatch[1]) {
           label = nameMatch[1];
-          const locations = this.textParser.getWordLocationsInDoc(
+          const locations = this.textParser.getWordLocationsForLiteral(
             document,
             label
           );
@@ -160,17 +159,6 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
   }
 
   /**
-   * Escapes special regex characters in a string for use in RegExp.
-   *
-   * @private
-   * @param value - The string to escape
-   * @returns The escaped string safe for use in regular expressions
-   */
-  private escapeRegExp(value: string): string {
-    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  }
-
-  /**
    * Finds the end line of a region block.
    *
    * @private
@@ -179,15 +167,15 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
    * @returns The line number where the region ends
    */
   private findEndOfRegion(document: TextDocument, startLine: number): number {
-    const findEndOfRegion = /#endregion/gm;
-    const findRegion = /#region/gm;
+    const findEndOfRegionRe = /#endregion/;
+    const findRegionRe = /#region/;
     let line = startLine + 1;
 
     for (; line < document.lineCount; line++) {
       const text = document.lineAt(line).text;
-      if (findEndOfRegion.test(text)) {
+      if (findEndOfRegionRe.test(text)) {
         return line;
-      } else if (findRegion.test(text)) {
+      } else if (findRegionRe.test(text)) {
         line = this.findEndOfRegion(document, line);
       }
     }

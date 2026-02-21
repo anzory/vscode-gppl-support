@@ -1,21 +1,18 @@
 {
   "compilerOptions": {
     "module": "CommonJS",
-    "target": "ES2020",
-    "strict": true /* enable all strict type-checking options */,
+    "target": "ES2022",
+    "strict": true,
     "lib": [
-      "ES2020"
+      "ES2022"
     ],
     "rootDir": "src",
     "outDir": "out",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
-    // "sourceMap": true,
-    /* Additional Checks */
-    // "noImplicitReturns": true, /* Report error when not all code paths in function return a value. */
-    // "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
-    // "noUnusedParameters": true,  /* Report errors on unused parameters. */
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true
   },
   "exclude": [
     "node_modules",

@@ -3,13 +3,10 @@ import {
   Definition,
   DefinitionLink,
   DefinitionProvider,
-  Disposable,
   Location,
   Position,
   ProviderResult,
   TextDocument,
-  TextEditor,
-  window,
 } from 'vscode';
 import { semanticHelper } from '../utils/semanticHelper';
 import { textParser } from '../utils/textParser';
@@ -22,40 +19,7 @@ import { textParser } from '../utils/textParser';
  * - Procedure declarations
  * - Other GPP language elements
  */
-export class GpplDefinitionProvider implements DefinitionProvider, Disposable {
-  private definition: Location | undefined = undefined;
-  private editor: TextEditor | undefined = window.activeTextEditor;
-  private doc: TextDocument | undefined = this.editor?.document;
-  private disposable: Disposable | undefined;
-
-  /**
-   * Creates an instance of GpplDefinitionProvider.
-   *
-   * Sets up event listener for active editor changes to maintain current document context.
-   */
-  constructor() {
-    this.disposable = window.onDidChangeActiveTextEditor(() =>
-      this.onActiveEditorChanged()
-    );
-  }
-
-  /**
-   * Disposes of the provider and cleans up resources.
-   */
-  dispose(): void {
-    this.disposable?.dispose();
-  }
-
-  /**
-   * Handles active editor change events.
-   *
-   * Updates the current editor and document references when the active editor changes.
-   */
-  private onActiveEditorChanged(): void {
-    this.editor = window.activeTextEditor;
-    this.doc = this.editor?.document;
-  }
-
+export class GpplDefinitionProvider implements DefinitionProvider {
   /**
    * Provides the definition location for the symbol at the given position.
    *
@@ -80,33 +44,36 @@ export class GpplDefinitionProvider implements DefinitionProvider, Disposable {
     }
 
     const word = document.getText(wordRange);
+    if (!word) {
+      return undefined;
+    }
+
+    let definition: Location | undefined;
 
     if (semanticHelper.isThisUserVariableOrArray(word)) {
       if (token.isCancellationRequested) {
         return undefined;
       }
-      const locations = textParser.getWordLocationsInDoc(
-        document,
-        '\\b' + word
-      );
-      this.definition = locations[0];
+      const locations = textParser.getWordLocationsForLiteral(document, word);
+      definition = locations[0];
     } else if (semanticHelper.isThisProcedureDeclaration(word)) {
       if (token.isCancellationRequested) {
         return undefined;
       }
-      const locations = textParser.getWordLocationsInDoc(document, word);
+      const locations = textParser.getWordLocationsForLiteral(document, word);
       for (const location of locations) {
         if (token.isCancellationRequested) {
           return undefined;
         }
         const line = document.lineAt(location.range.start.line).text;
-        if (line && !/;|(\bcall\b)/.test(line)) {
-          this.definition = location;
+        const codeOnly = line.split(';')[0];
+        if (codeOnly && !/\bcall\b/i.test(codeOnly)) {
+          definition = location;
           break;
         }
       }
     }
 
-    return this.definition;
+    return definition;
   }
 }

@@ -66,7 +66,7 @@ export class GpplDocumentFormattingEditProvider
       const textEditList: TextEdit[] = [];
       for (let i = 0; i < document.lineCount; i++) {
         const line = document.lineAt(i);
-        const trimmedLine = line.text.trimStart(); // Use modern method
+        const trimmedLine = line.text.trimStart();
 
         textEditList.push(
           new TextEdit(line.range, this.formatLineWithIndentation(trimmedLine))
@@ -123,8 +123,8 @@ export class GpplDocumentFormattingEditProvider
     // Block-starting constructs (indent increases AFTER)
     if (
       /^@\w+/.test(text) || // Procedure definitions
-      /^\b(i|I)f\b/.test(text) || // Conditional statements
-      /^\b(w|W)hile\b/.test(text) || // Loops
+      /^\bif\b/i.test(text) || // Conditional statements
+      /^\bwhile\b/i.test(text) || // Loops
       (applyIndentsToRegions && /#region\b/.test(text))
     ) {
       const formattedText = this.createIndent() + text;
@@ -133,7 +133,7 @@ export class GpplDocumentFormattingEditProvider
     }
 
     // else/elseif constructs (special handling)
-    if (/^\b(e|E)lse\b/.test(text) || /^\b(e|E)lse(i|I)f\b/.test(text)) {
+    if (/^\belse\b/i.test(text) || /^\belseif\b/i.test(text)) {
       --this.indentLevel;
       const formattedText = this.createIndent() + text;
       ++this.indentLevel;
@@ -142,7 +142,7 @@ export class GpplDocumentFormattingEditProvider
 
     // Block-ending constructs (indent decreases BEFORE)
     if (
-      /^\b(e|E)nd(w|p|((i|I)f))\b/.test(text) || // endwhile, endproc, endif
+      /^\bend(?:w|p|if)\b/i.test(text) || // endwhile, endproc, endif
       (applyIndentsToRegions && /#endregion\b/.test(text))
     ) {
       --this.indentLevel;
