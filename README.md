@@ -27,7 +27,7 @@ Document Symbols in the Outline Window
 ![Document Symbols in the Outline Window](/images/screens/documentSymbols.gif?raw=true)
 
 > **Tip:** You can now use search and filtering in the Outline panel for quick symbol lookup. Use `Ctrl+Alt+F` in the Outline panel to search and filter items.
->
+> **Tip:** You can disable the display of call numbers in the settings.
 > **Reminder:** Don't forget to enable breadcrumbs in VSCode (`View -> Appearance -> Breadcrumbs` or setting `Breadcrumbs: Enabled`) for better code structure navigation.
 
 ---
@@ -36,11 +36,13 @@ Document Symbols in the Outline Window
 
 ![CodeLens for Document Symbols](/images/screens/codeLens.gif?raw=true)
 
+> **Tip:** You can disable CodeLens in the settings.
+
 ---
 
 **Autocompletion**:
 
-![Auto-complete code functionality](/images/screens/auto-complete-functionality.gif?raw=true)
+![Auto-complete code functionality](/images/screens/auto-complete.gif?raw=true)
 
 ---
 
@@ -56,7 +58,7 @@ Document Symbols in the Outline Window
 
 **Hover Hints**:
 
-![Displays information](/images/screens/info-when-hover.gif?raw=true)
+![Displays information](/images/screens/hover.gif?raw=true)
 
 ---
 
@@ -71,7 +73,7 @@ Document Symbols in the Outline Window
 1. Open VSCode.
 2. Go to Extensions Marketplace.
 3. Search for `anzory.vscode-gppl-support` and click Install.
-4. Or download [VSIX](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/anzory/vsextensions/vscode-gppl-support/1.8.0/vspackage) and install offline from it.
+4. Or download [VSIX](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/anzory/vsextensions/vscode-gppl-support/1.9.1/vspackage) and install offline from it.
 
 ---
 
@@ -81,17 +83,20 @@ There are a few settings for this extension:
 
 (File -> Preferences -> Settings -> Extensions)
 
-- `Editor: Default Formatter`: you must specify _'anzory.vscode-gppl-support'_ to be able to format GPPL documents (by default)
-- `Format: Enable`: specifies whether or not the document can be formatted
-- `Format: Insert Spaces`: indicates whether or not to replace tabs with spaces
-- `Format: Tab Size`: specifies the indent size
-- `Files: Encoding`: one of the [common encodings](https://en.wikipedia.org/wiki/Character_encoding#Common_character_encodings)
+- `Gpp: Localization: Default Locale` (`gpp.localization.defaultLocale`): language used for messages and completion hints (`en`/`ru`).
+- `Gpp: Files: Encoding` (`gpp.files.encoding`): default GPPL files encoding (`windows1251`/`windows1252`).
+- `Gpp: Outline: Show Symbol Detail` (`gpp.outline.showSymbolDetail`): show call count in document outline symbol detail.
+- `Gpp: Format: Enable` (`gpp.format.enable`): enables document formatting.
+- `Gpp: Format: Tab Size` (`gpp.format.tabSize`): indent size (in spaces) used by the formatter.
+- `Gpp: Format: Prefer Spaces` (`gpp.format.preferSpaces`): use spaces instead of tabs.
+- `Gpp: Format: Apply Indents To Regions` (`gpp.format.applyIndentsToRegions`): apply indents inside `#region` blocks.
+- If you need to disable CodeLens, you can do so in one of two ways:
+  - In the VSCode settings
+    ![codeLens](/images/screens/codeLensSettings.png)
+  - Or add “editor.codeLens”: false to settings.json
 
-In addition, the formatting behavior depends on the following settings:
-
-(File -> Preferences -> Settings -> Text Editor -> Formatting)
-
-- `Format On Save`: defines whether or not the document will be formatted when it is saved
+- In addition, the formatting behavior depends on the following settings:
+  - `File -> Preferences -> Settings -> Text Editor -> Formatting`
 
 ---
 
@@ -117,15 +122,12 @@ Found an issue? Feel free to open the [issues](https://github.com/anzory/vscode-
 
 ## Release Notes
 
-### 1.8.0
-
-### Added
-
-- `CodeLens` for Document Symbols
+### 1.9.1
 
 ### Improved
 
-- double character output during autocompletion
+- Now `CodeLens` shows links instead of calls
+- The `Document Symbol` `Details` field shows calls
 
 ---
 
@@ -144,8 +146,8 @@ It is a good text editor with GPPL language support for SolidCAM postprocessor e
 
 Love this extension? Here’s how you can help:
 
-- ⭐ Leave a star on GitHub.
-- 📝 Write a review or share your feedback.
+- ⭐ Leave a star on [GitHub](https://github.com/anzory/vscode-gppl-support).
+- 📝 [Write a review](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support&ssr=false#review-details) or share your feedback.
 - 🌍 Add language files for your locale — email me at <andrey.a.zorin@gmail.com>!
 - 💻 Contribute code or report issues via pull requests.
 - [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/anzory?locale.x=en_EN)

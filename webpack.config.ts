@@ -25,6 +25,7 @@ const config: Configuration = {
         { from: './languages', to: 'languages' },
         { from: './i18n', to: 'i18n' },
         { from: './images/icons/**.*', to: './' },
+        { from: './images/screens/**.*', to: './' },
         { from: './images/**.png', to: './' },
         { from: './images/**.ico', to: './' },
         { from: './images/**.svg', to: './' },
