@@ -51,6 +51,7 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
     startLine: number,
     endLine: number
   ): void {
+    const findComment = /^\s*;/;
     const findProcedure = /^\s*@\w+\b/;
     const findRegion = /^[;\s]*#region/;
     const findNameOfRegion = /^[;\s]*#region\s*(\w+)\b/;
@@ -58,7 +59,7 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
     for (let line = startLine; line < endLine; line++) {
       const text = document.lineAt(line).text;
 
-      if (findProcedure.test(text)) {
+      if (!findComment.test(text) && findProcedure.test(text)) {
         const match = findProcedure.exec(text);
         if (match) {
           // Trim leading whitespace so label represents the actual token (e.g. "@proc")

@@ -1,12 +1,12 @@
 # Change Log
 
-## [Unreleased]
+---
 
-- rewrite the extension code using the [LSP](https://code.visualstudio.com/api/language-extensions/overview#language-server-protocol)
+## [1.9.2] - 2026-02-28
 
-- implement the semantic analyzer of the `GPP Language` on the Language Server
+### Improved
 
-- and more ...
+- Now `Document Symbols` are no longer defined inside `comments`.
 
 ---
 
@@ -14,8 +14,8 @@
 
 ### Improved
 
-- Now CodeLens shows links instead of calls
-- The Document Symbol Details field shows calls
+- Now `CodeLens` shows `links` instead of `calls`
+- The `Document Symbol` `Details` field shows `calls`
 
 ---
 
@@ -23,7 +23,7 @@
 
 ### Added
 
-- `CodeLens` for Document Symbols
+- `CodeLens` for `Document Symbols`
 
 ### Improved
 

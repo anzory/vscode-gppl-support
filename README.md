@@ -122,12 +122,11 @@ Found an issue? Feel free to open the [issues](https://github.com/anzory/vscode-
 
 ## Release Notes
 
-### 1.9.1
+### 1.9.2
 
 ### Improved
 
-- Now `CodeLens` shows links instead of calls
-- The `Document Symbol` `Details` field shows calls
+- Now `Document Symbols` are no longer defined inside `comments`.
 
 ---
 

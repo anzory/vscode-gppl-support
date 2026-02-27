@@ -156,7 +156,10 @@ export default class TextParser {
           regExpResult.index,
           regExpResult[0].length
         );
-        locations.push(new Location(doc.uri, new Range(start, end)));
+        // Skip matches that are inside comments (after ';' on the line)
+        if (!this.isInsideComment(doc, start)) {
+          locations.push(new Location(doc.uri, new Range(start, end)));
+        }
       }
     } while (regExpResult);
 
@@ -183,6 +186,20 @@ export default class TextParser {
     const startBoundary = startsWithWordChar ? '\\b' : '(?<!\\w)';
     const endBoundary = endsWithWordChar ? '\\b' : '(?!\\w)';
     return this.getLocationsInDoc(doc, `${startBoundary}${escaped}${endBoundary}`);
+  }
+
+  /**
+   * Checks if a position is inside a comment (after ';' on the line).
+   *
+   * @private
+   * @param doc - The text document
+   * @param position - The position to check
+   * @returns True if the position is inside a comment
+   */
+  private isInsideComment(doc: TextDocument, position: Position): boolean {
+    const lineText = doc.lineAt(position.line).text;
+    const commentIndex = lineText.indexOf(';');
+    return commentIndex >= 0 && commentIndex < position.character;
   }
 
   /**
