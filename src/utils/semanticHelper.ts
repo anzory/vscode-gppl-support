@@ -4,6 +4,7 @@ import {
   Disposable,
   Range,
   Location,
+  TextDocument,
   TextDocumentChangeEvent,
   TextEditor,
   window,
@@ -23,8 +24,6 @@ export interface IVariable {
   scope: string;
   /** The data type of the variable */
   type: string;
-  /** Array of locations where this variable is referenced */
-  references?: Location[];
   /** Additional information about the variable */
   info?: string | undefined;
 }
@@ -37,8 +36,6 @@ export interface IProcedure {
   name: string;
   /** The arguments of the procedure */
   args?: string;
-  /** Array of locations where this procedure is referenced */
-  references?: Location[];
   /** Additional information about the procedure */
   info?: string | undefined;
 }
@@ -104,7 +101,8 @@ const VARIABLE_KEYWORDS_RE = /\b(global|local|string|logical|integer|numeric)\b/
  * - User-defined variables and arrays (global and local)
  * - System variables
  * - Procedure definitions and calls
- * - References and relationships between elements
+ *
+ * References are computed lazily on demand to avoid O(N*M) scanning on every keystroke.
  */
 class SemanticHelper implements Disposable {
   /** Current active text editor */
@@ -216,6 +214,35 @@ class SemanticHelper implements Disposable {
   }
 
   /**
+   * Lazily computes references for a given name in the current document.
+   *
+   * @param name - The name to find references for
+   * @returns Array of locations where the name is referenced
+   */
+  getReferencesFor(name: string): Location[] {
+    const doc = this.editor?.document;
+    if (!doc) {
+      return [];
+    }
+    return this.textParser.getWordLocationsForLiteral(doc, name);
+  }
+
+  /**
+   * Lazily computes call references for a procedure.
+   *
+   * @param name - The procedure name (with @)
+   * @returns Array of locations where the procedure is called
+   */
+  getProcedureCallReferences(name: string): Location[] {
+    const doc = this.editor?.document;
+    if (!doc) {
+      return [];
+    }
+    const escapedName = this.textParser.escapeRegExp(name);
+    return this.textParser.getLocationsInDoc(doc, `\\bcall\\s+${escapedName}`);
+  }
+
+  /**
    * Gets a global user-defined array by name.
    *
    * @param name - The name of the array to find
@@ -277,7 +304,7 @@ class SemanticHelper implements Disposable {
 
   /**
    * Parses system variables from the GPP language configuration.
-   * Uses cached system variable names for better performance.
+   * No longer computes references eagerly — use getReferencesFor() instead.
    *
    * @private
    */
@@ -285,16 +312,12 @@ class SemanticHelper implements Disposable {
     this._systemGppVariables = [];
 
     const systemVarNames = getSystemVariableNames();
-    const doc = this.editor?.document;
 
     systemVarNames.forEach((sv: string) => {
       this._systemGppVariables.push({
         name: sv,
         scope: 'global',
         type: '',
-        references: doc
-          ? this.textParser.getWordLocationsForLiteral(doc, sv)
-          : [],
         info: undefined,
       });
     });
@@ -302,6 +325,7 @@ class SemanticHelper implements Disposable {
 
   /**
    * Parses procedure definitions from the current document.
+   * No longer computes references eagerly — use getProcedureCallReferences() instead.
    *
    * @private
    */
@@ -321,15 +345,10 @@ class SemanticHelper implements Disposable {
           const info = this.getInfo(line);
           const name = this.getProcedureName(line);
           const args = this.getProcedureArgs(line);
-          const escapedName = this.textParser.escapeRegExp(name);
           this._procedures.push({
             name: name,
             args: args,
             info: info,
-            references: this.textParser.getLocationsInDoc(
-              doc,
-              `\\bcall\\s+${escapedName}`
-            ),
           });
         }
       });
@@ -338,6 +357,7 @@ class SemanticHelper implements Disposable {
 
   /**
    * Parses user-defined variables and arrays from the current document.
+   * No longer computes references eagerly — use getReferencesFor() instead.
    *
    * @private
    */
@@ -367,7 +387,6 @@ class SemanticHelper implements Disposable {
                 name: uga,
                 scope: gppScope,
                 type: gppType + ' array',
-                references: this.textParser.getWordLocationsForLiteral(doc, uga),
                 info: gppInfo,
               });
             } else {
@@ -375,7 +394,6 @@ class SemanticHelper implements Disposable {
                 name: ugv,
                 scope: gppScope,
                 type: gppType,
-                references: this.textParser.getWordLocationsForLiteral(doc, ugv),
                 info: gppInfo,
               });
             }
@@ -397,7 +415,6 @@ class SemanticHelper implements Disposable {
                 name: ula,
                 scope: gppScope,
                 type: gppType + ' array',
-                references: this.textParser.getWordLocationsForLiteral(doc, ula),
                 info: gppInfo,
               });
             } else {
@@ -405,7 +422,6 @@ class SemanticHelper implements Disposable {
                 name: ulv,
                 scope: gppScope,
                 type: gppType,
-                references: this.textParser.getWordLocationsForLiteral(doc, ulv),
                 info: gppInfo,
               });
             }

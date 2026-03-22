@@ -2,6 +2,7 @@ import {
   CancellationToken,
   Hover,
   HoverProvider,
+  Location,
   MarkdownString,
   Position,
   ProviderResult,
@@ -104,7 +105,8 @@ export class GpplHoverProvider implements HoverProvider {
     }
 
     if (gppVar) {
-      this.appendVariableDetails(hoverContent, gppVar, varType);
+      const references = utils.semanticHelper.getReferencesFor(gppVar.name);
+      this.appendVariableDetails(hoverContent, gppVar, varType, references);
     }
   }
 
@@ -119,17 +121,18 @@ export class GpplHoverProvider implements HoverProvider {
   private appendVariableDetails(
     hoverContent: MarkdownString,
     gppVar: IVariable,
-    varType: string
+    varType: string,
+    references?: Location[]
   ): void {
     hoverContent.appendCodeblock(
       `${gppVar.scope} ${gppVar.type} ${gppVar.name} ; (${varType})`,
       utils.constants.languageId
     );
 
-    if (gppVar.references) {
-      const rf = gppVar.references.length > 1 ? 'references' : 'reference';
+    if (references && references.length > 0) {
+      const rf = references.length > 1 ? 'references' : 'reference';
       hoverContent.appendMarkdown(
-        `\n---\nFound \`${gppVar.references.length}\` ${rf}`
+        `\n---\nFound \`${references.length}\` ${rf}`
       );
     }
 
@@ -166,9 +169,10 @@ export class GpplHoverProvider implements HoverProvider {
       utils.constants.languageId
     );
 
-    if (procedure.references) {
+    const references = utils.semanticHelper.getProcedureCallReferences(procedure.name);
+    if (references.length > 0) {
       hoverContent.appendMarkdown(
-        `\n---\nFind \`${procedure.references.length}\` references`
+        `\n---\nFind \`${references.length}\` references`
       );
     }
 

@@ -2,6 +2,15 @@
 
 ---
 
+## [1.9.3] - 2026-03-22
+
+### Improved
+
+- Significant performance optimization: references are now computed lazily on demand instead of on every keystroke
+- Proper resource cleanup on extension deactivation (semanticHelper, textParser cache)
+
+---
+
 ## [1.9.2] - 2026-02-28
 
 ### Improved

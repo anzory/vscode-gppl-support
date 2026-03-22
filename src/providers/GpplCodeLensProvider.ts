@@ -8,7 +8,7 @@ import {
   TextDocument,
 } from 'vscode';
 import { GpplDocumentSymbolProvider } from './GpplDocumentSymbolProvider';
-import { textParser } from '../utils/textParser';
+import { semanticHelper } from '../utils/semanticHelper';
 import { utils } from '../utils/utils';
 
 /**
@@ -59,10 +59,7 @@ export class GpplCodeLensProvider implements CodeLensProvider {
       if (symbol.kind === SymbolKind.Namespace) {
         continue;
       }
-      const allLocations = textParser.getWordLocationsForLiteral(
-        document,
-        symbol.name
-      );
+      const allLocations = semanticHelper.getReferencesFor(symbol.name);
       const template = utils.i18n.t('codelens.procedure.references');
       const title = template.replace('{count}', allLocations.length.toString());
       const command: Command = {

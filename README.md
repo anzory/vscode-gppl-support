@@ -122,11 +122,12 @@ Found an issue? Feel free to open the [issues](https://github.com/anzory/vscode-
 
 ## Release Notes
 
-### 1.9.2
+### 1.9.3
 
 ### Improved
 
-- Now `Document Symbols` are no longer defined inside `comments`.
+- Significant performance optimization: references are now computed lazily on demand instead of on every keystroke
+- Proper resource cleanup on extension deactivation (semanticHelper, textParser cache)
 
 ---
 

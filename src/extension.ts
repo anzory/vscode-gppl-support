@@ -15,6 +15,8 @@ import {
 import { providers } from './providers/providers';
 import { initializeConstants } from './utils/constants';
 import { Logger } from './utils/logger';
+import { semanticHelper } from './utils/semanticHelper';
+import { textParser } from './utils/textParser';
 import { utils } from './utils/utils';
 
 /** Disposables for language-feature providers managed by the config-change listener. */
@@ -106,6 +108,9 @@ export async function activate(context: ExtensionContext) {
     )
   );
 
+  // Register semanticHelper for proper disposal
+  context.subscriptions.push(semanticHelper);
+
   // Register initial providers
   providerDisposables = registerProviders();
 
@@ -163,5 +168,6 @@ export function deactivate() {
     d.dispose();
   }
   providerDisposables = [];
+  textParser.clearCache();
   Logger.close();
 }
