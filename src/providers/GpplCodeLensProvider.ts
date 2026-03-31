@@ -7,15 +7,23 @@ import {
   ProviderResult,
   TextDocument,
 } from 'vscode';
+import { ISemanticHelper, II18n, ITextParser } from '../interfaces';
+import { getConstants } from '../utils/constants';
 import { GpplDocumentSymbolProvider } from './GpplDocumentSymbolProvider';
-import { semanticHelper } from '../utils/semanticHelper';
-import { utils } from '../utils/utils';
 
 /**
  * Provides CodeLens for GPP functions and document stats.
  */
 export class GpplCodeLensProvider implements CodeLensProvider {
-  private documentSymbolProvider = new GpplDocumentSymbolProvider();
+  private documentSymbolProvider: GpplDocumentSymbolProvider;
+  private semanticHelper: ISemanticHelper;
+  private i18n: II18n;
+
+  constructor(semanticHelper: ISemanticHelper, i18n: II18n, textParser: ITextParser) {
+    this.semanticHelper = semanticHelper;
+    this.i18n = i18n;
+    this.documentSymbolProvider = new GpplDocumentSymbolProvider(textParser, i18n);
+  }
 
   /**
    * Provides CodeLens for all symbols and a summary of symbol count.
@@ -59,12 +67,12 @@ export class GpplCodeLensProvider implements CodeLensProvider {
       if (symbol.kind === SymbolKind.Namespace) {
         continue;
       }
-      const allLocations = semanticHelper.getReferencesFor(symbol.name);
-      const template = utils.i18n.t('codelens.procedure.references');
+      const allLocations = this.semanticHelper.getReferencesFor(symbol.name);
+      const template = this.i18n.t('codelens.procedure.references');
       const title = template.replace('{count}', allLocations.length.toString());
       const command: Command = {
         title,
-        command: utils.constants.commands.showProcedureReferences,
+        command: getConstants().commands.showProcedureReferences,
         arguments: [document.uri, symbol.selectionRange.start, allLocations],
       };
       // Use selectionRange (the symbol name range) so CodeLens appears on declaration line

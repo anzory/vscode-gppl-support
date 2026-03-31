@@ -10,7 +10,9 @@ import {
   window,
   workspace,
 } from 'vscode';
-import { constants } from './constants';
+import { getConstants } from './constants';
+import { getProcedureName, getProcedureArgs, getInfo, getVariables } from './gpplParser';
+import { ISemanticHelper } from '../interfaces';
 import { Logger } from './logger';
 import { textParser } from './textParser';
 
@@ -63,7 +65,7 @@ function getSystemVariableNames(): string[] {
         resolve(
           __dirname,
           'languages',
-          constants.languageId,
+          getConstants().languageId,
           'gpp.tmLanguage.json'
         )
       ).toString()
@@ -90,11 +92,6 @@ function getSystemVariableNames(): string[] {
 }
 
 /**
- * Regex that matches all GPP variable type keywords in a single pass.
- */
-const VARIABLE_KEYWORDS_RE = /\b(global|local|string|logical|integer|numeric)\b/g;
-
-/**
  * Provides semantic analysis functionality for GPP code.
  *
  * This class analyzes GPP documents to extract:
@@ -104,7 +101,7 @@ const VARIABLE_KEYWORDS_RE = /\b(global|local|string|logical|integer|numeric)\b/
  *
  * References are computed lazily on demand to avoid O(N*M) scanning on every keystroke.
  */
-class SemanticHelper implements Disposable {
+class SemanticHelper implements Disposable, ISemanticHelper {
   /** Current active text editor */
   private editor: TextEditor | undefined;
   /** Global user-defined variables extracted from the document */
@@ -133,17 +130,24 @@ class SemanticHelper implements Disposable {
   /**
    * Creates an instance of SemanticHelper.
    *
-   * Sets up event listeners for document changes and initializes
-   * the semantic analysis with the current active editor.
+   * Only initializes fields. Call initialize() to subscribe to events
+   * and perform initial document parsing.
    */
   constructor() {
+    this.editor = window.activeTextEditor;
+  }
+
+  /**
+   * Subscribes to VS Code events and performs the initial document parse.
+   * Must be called after construction (e.g. during extension activation).
+   */
+  initialize(): void {
     this.disposables.push(
       workspace.onDidChangeTextDocument((e) => this.onDocumentChanged(e))
     );
     this.disposables.push(
       window.onDidChangeActiveTextEditor(() => this.onDocumentChanged())
     );
-    this.editor = window.activeTextEditor;
     this.parseDocument();
   }
 
@@ -342,9 +346,9 @@ class SemanticHelper implements Disposable {
       ranges.forEach((range) => {
         const line = doc.getText(range);
         if (line) {
-          const info = this.getInfo(line);
-          const name = this.getProcedureName(line);
-          const args = this.getProcedureArgs(line);
+          const info = getInfo(line);
+          const name = getProcedureName(line);
+          const args = getProcedureArgs(line);
           this._procedures.push({
             name: name,
             args: args,
@@ -370,6 +374,8 @@ class SemanticHelper implements Disposable {
     this.editor = window.activeTextEditor;
     const doc = this.editor?.document;
     if (doc) {
+      const systemVarNames = this._systemGppVariables.map((v) => v.name);
+
       let ranges: Range[] = this.textParser.getRegExpRangesInDoc(
         doc,
         /\bglobal\b.*$/gm
@@ -377,12 +383,12 @@ class SemanticHelper implements Disposable {
       ranges.forEach((range) => {
         const line = doc.getText(range);
         if (line) {
-          const gppInfo = this.getInfo(line);
+          const gppInfo = getInfo(line);
           const gppScope = line.trim().split(' ')[0];
           const gppType = line.trim().split(' ')[1];
-          this.getVariables(line).forEach((ugv) => {
-            if (ugv.match(/<<.*>>/g)) {
-              const uga = ugv.replace(/<<.*>>/g, '');
+          getVariables(line, systemVarNames).forEach((ugv) => {
+            if (ugv.match(/<<.*?>>/g)) {
+              const uga = ugv.replace(/<<.*?>>/g, '');
               this._globalUserArrays.push({
                 name: uga,
                 scope: gppScope,
@@ -405,12 +411,12 @@ class SemanticHelper implements Disposable {
       ranges.forEach((range) => {
         const line = doc.getText(range);
         if (line) {
-          const gppInfo = this.getInfo(line);
+          const gppInfo = getInfo(line);
           const gppScope = line.trim().split(' ')[0];
           const gppType = line.trim().split(' ')[1];
-          this.getVariables(line).forEach((ulv) => {
-            if (ulv.match(/<<.*>>/g)) {
-              const ula = ulv.replace(/<<.*>>/g, '');
+          getVariables(line, systemVarNames).forEach((ulv) => {
+            if (ulv.match(/<<.*?>>/g)) {
+              const ula = ulv.replace(/<<.*?>>/g, '');
               this._localUserArrays.push({
                 name: ula,
                 scope: gppScope,
@@ -432,68 +438,14 @@ class SemanticHelper implements Disposable {
   }
 
   /**
-   * Extracts additional information from a comment on the same line.
-   *
-   * @private
-   * @param line - The line of code to extract info from
-   * @returns The comment text or undefined if no comment found
-   */
-  private getInfo(line: string): string | undefined {
-    if (/;/g.test(line)) {
-      return line.replace(/^.+?;/gm, '').trim();
-    } else {
-      return undefined;
-    }
-  }
-
-  /**
-   * Extracts the procedure name from a procedure declaration line.
-   *
-   * @private
-   * @param line - The procedure declaration line
-   * @returns The procedure name
-   */
-  private getProcedureName(line: string): string {
-    return line.replace(/;.*/gm, '').trim().replace(/\(.*/gm, '');
-  }
-
-  /**
    * Extracts procedure arguments from a procedure declaration line.
+   * Delegates to the pure function from gpplParser.
    *
    * @param line - The procedure declaration line
    * @returns The procedure arguments or undefined if no arguments
    */
   getProcedureArgs(line: string): string | undefined {
-    const _arg = line.replace(/;.*/gm, '').trim();
-    if (/\(/.test(_arg)) {
-      return _arg.replace(/^(.+?)\(/gm, '').replace(/\).*$/gm, '');
-    } else {
-      return undefined;
-    }
-  }
-
-  /**
-   * Extracts variable names from a variable declaration line.
-   * Uses a single regex to remove all type keywords at once.
-   *
-   * @private
-   * @param line - The variable declaration line
-   * @returns Array of variable names found in the line
-   */
-  private getVariables(line: string): string[] {
-    const _items: string[] = [];
-    line
-      .replace(/;.*/gm, '')
-      .replace(VARIABLE_KEYWORDS_RE, '')
-      .replace(/\s{2,}/gm, ' ')
-      .trim()
-      .split(' ')
-      .forEach((uv) => {
-        if (uv && !this.isThisSystemVariable(uv)) {
-          _items.push(uv);
-        }
-      });
-    return _items;
+    return getProcedureArgs(line);
   }
 
   /**
@@ -624,6 +576,7 @@ class SemanticHelper implements Disposable {
    * @param e - The document change event (optional)
    */
   onDocumentChanged(e?: TextDocumentChangeEvent) {
+    const constants = getConstants();
     // Filter: only react to GPP documents
     if (e && e.document.languageId !== constants.languageId) {
       return;

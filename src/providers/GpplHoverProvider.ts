@@ -9,7 +9,8 @@ import {
   Range,
   TextDocument,
 } from 'vscode';
-import { utils } from '../utils/utils';
+import { ISemanticHelper, II18n } from '../interfaces';
+import { getConstants } from '../utils/constants';
 import { IVariable, IProcedure } from '../utils/semanticHelper';
 
 /**
@@ -22,6 +23,14 @@ import { IVariable, IProcedure } from '../utils/semanticHelper';
  * - References and additional information
  */
 export class GpplHoverProvider implements HoverProvider {
+  private semanticHelper: ISemanticHelper;
+  private i18n: II18n;
+
+  constructor(semanticHelper: ISemanticHelper, i18n: II18n) {
+    this.semanticHelper = semanticHelper;
+    this.i18n = i18n;
+  }
+
   /**
    * Provides hover information for the symbol at the given position.
    *
@@ -42,7 +51,7 @@ export class GpplHoverProvider implements HoverProvider {
 
     const hoverContent: MarkdownString = new MarkdownString();
     const wordRange: Range | undefined = document.getWordRangeAtPosition(position);
-    
+
     if (!wordRange) {
       return undefined;
     }
@@ -53,15 +62,15 @@ export class GpplHoverProvider implements HoverProvider {
     this.appendVariableHoverInfo(hoverContent, word);
 
     // Check for system variables
-    if (utils.semanticHelper.isThisSystemVariable(word)) {
+    if (this.semanticHelper.isThisSystemVariable(word)) {
       hoverContent.appendCodeblock(
         'global system variable: ' + word,
-        utils.constants.languageId
+        getConstants().languageId
       );
 
       // Add localized documentation from i18n if available
       const i18nKey = `completion.doc.${word}.variable`;
-      const doc = utils.i18n.t(i18nKey);
+      const doc = this.i18n.t(i18nKey);
       if (doc && doc !== i18nKey) {
         hoverContent.appendMarkdown(`\n---\n${doc}`);
       }
@@ -90,22 +99,22 @@ export class GpplHoverProvider implements HoverProvider {
     let gppVar: IVariable | undefined;
     let varType: string = '';
 
-    if (utils.semanticHelper.isThisGlobalUserArray(word)) {
-      gppVar = utils.semanticHelper.getGlobalUserArray(word);
+    if (this.semanticHelper.isThisGlobalUserArray(word)) {
+      gppVar = this.semanticHelper.getGlobalUserArray(word);
       varType = 'user array';
-    } else if (utils.semanticHelper.isThisLocalUserArray(word)) {
-      gppVar = utils.semanticHelper.getLocalUserArray(word);
+    } else if (this.semanticHelper.isThisLocalUserArray(word)) {
+      gppVar = this.semanticHelper.getLocalUserArray(word);
       varType = 'user array';
-    } else if (utils.semanticHelper.isThisGlobalUserVariable(word)) {
-      gppVar = utils.semanticHelper.getGlobalUserVariable(word);
+    } else if (this.semanticHelper.isThisGlobalUserVariable(word)) {
+      gppVar = this.semanticHelper.getGlobalUserVariable(word);
       varType = 'user variable';
-    } else if (utils.semanticHelper.isThisLocalUserVariable(word)) {
-      gppVar = utils.semanticHelper.getLocalUserVariable(word);
+    } else if (this.semanticHelper.isThisLocalUserVariable(word)) {
+      gppVar = this.semanticHelper.getLocalUserVariable(word);
       varType = 'user variable';
     }
 
     if (gppVar) {
-      const references = utils.semanticHelper.getReferencesFor(gppVar.name);
+      const references = this.semanticHelper.getReferencesFor(gppVar.name);
       this.appendVariableDetails(hoverContent, gppVar, varType, references);
     }
   }
@@ -126,7 +135,7 @@ export class GpplHoverProvider implements HoverProvider {
   ): void {
     hoverContent.appendCodeblock(
       `${gppVar.scope} ${gppVar.type} ${gppVar.name} ; (${varType})`,
-      utils.constants.languageId
+      getConstants().languageId
     );
 
     if (references && references.length > 0) {
@@ -152,12 +161,12 @@ export class GpplHoverProvider implements HoverProvider {
     hoverContent: MarkdownString,
     word: string
   ): void {
-    if (!utils.semanticHelper.isThisProcedureDeclaration(word)) {
+    if (!this.semanticHelper.isThisProcedureDeclaration(word)) {
       return;
     }
 
     const procedure: IProcedure | undefined =
-      utils.semanticHelper.getGpplProcedure(word);
+      this.semanticHelper.getGpplProcedure(word);
 
     if (!procedure) {
       return;
@@ -166,10 +175,10 @@ export class GpplHoverProvider implements HoverProvider {
     const args = procedure.args ? `(${procedure.args})` : '';
     hoverContent.appendCodeblock(
       `Procedure: ${procedure.name}${args}`,
-      utils.constants.languageId
+      getConstants().languageId
     );
 
-    const references = utils.semanticHelper.getProcedureCallReferences(procedure.name);
+    const references = this.semanticHelper.getProcedureCallReferences(procedure.name);
     if (references.length > 0) {
       hoverContent.appendMarkdown(
         `\n---\nFind \`${references.length}\` references`

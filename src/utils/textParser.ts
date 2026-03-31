@@ -1,4 +1,5 @@
 import { Location, Position, Range, TextDocument } from 'vscode';
+import { ITextParser } from '../interfaces';
 
 /**
  * Maximum size of the RegExp cache to prevent memory leaks.
@@ -22,7 +23,7 @@ interface CacheEntry {
  * - Position and range calculations
  * - Performance optimization through LRU regex caching
  */
-export default class TextParser {
+export default class TextParser implements ITextParser {
   private regExpCache: Map<string, CacheEntry> = new Map();
   private cacheOrder: number = 0;
 
@@ -145,7 +146,7 @@ export default class TextParser {
     // Ensure lastIndex is reset in case a cached RegExp has state
     try {
       (regExp as RegExp).lastIndex = 0;
-    } catch {}
+    } catch { }
 
     let regExpResult: RegExpExecArray | null;
     do {
@@ -191,12 +192,11 @@ export default class TextParser {
   /**
    * Checks if a position is inside a comment (after ';' on the line).
    *
-   * @private
    * @param doc - The text document
    * @param position - The position to check
    * @returns True if the position is inside a comment
    */
-  private isInsideComment(doc: TextDocument, position: Position): boolean {
+  isInsideComment(doc: TextDocument, position: Position): boolean {
     const lineText = doc.lineAt(position.line).text;
     const commentIndex = lineText.indexOf(';');
     return commentIndex >= 0 && commentIndex < position.character;
@@ -220,7 +220,7 @@ export default class TextParser {
     // Reset lastIndex on incoming RegExp to avoid stateful exec issues
     try {
       (regExp as RegExp).lastIndex = 0;
-    } catch {}
+    } catch { }
 
     // Create a copy of the regex to avoid modifying the original
     const regExpCopy = new RegExp(regExp.source, regExp.flags);

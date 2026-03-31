@@ -89,12 +89,40 @@ class GpplConstants {
   };
 }
 
+/** Type of the constants object */
+type ConstantsType = GpplConstants['constants'];
+
 /**
- * Global constants instance for the GPP extension.
- *
- * This instance is automatically updated when configuration changes occur.
+ * Lazily-initialized constants cache.
+ * @private
  */
-export let constants = new GpplConstants().constants;
+let _constants: ConstantsType | null = null;
+
+/**
+ * Returns the application constants, creating them lazily on first access.
+ *
+ * @returns The constants object
+ */
+export function getConstants(): ConstantsType {
+  if (!_constants) {
+    _constants = new GpplConstants().constants;
+  }
+  return _constants;
+}
+
+/**
+ * Resets the cached constants, forcing re-creation on next access.
+ * Useful for tests and for configuration change handling.
+ */
+export function resetConstants(): void {
+  _constants = null;
+}
+
+/**
+ * Backward-compatible mutable binding.
+ * @deprecated Use getConstants() instead.
+ */
+export let constants = getConstants();
 
 /**
  * Stores the configuration change subscription for proper cleanup.
@@ -116,7 +144,8 @@ export function initializeConstants(subscriptions: Disposable[]): void {
 
   // Create new subscription and add to subscriptions for proper cleanup
   configChangeDisposable = workspace.onDidChangeConfiguration(() => {
-    constants = new GpplConstants().constants;
+    resetConstants();
+    constants = getConstants();
   });
   subscriptions.push(configChangeDisposable);
 }
@@ -125,5 +154,6 @@ export function initializeConstants(subscriptions: Disposable[]): void {
  * Updates constants immediately (used for initial load or manual refresh).
  */
 export function refreshConstants(): void {
-  constants = new GpplConstants().constants;
+  resetConstants();
+  constants = getConstants();
 }

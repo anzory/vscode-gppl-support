@@ -5,8 +5,9 @@ import {
   TextDocument,
   TextEdit,
 } from 'vscode';
+import { computeFormattedLines } from '../utils/gpplFormatter';
+import { getConstants } from '../utils/constants';
 import { Logger } from '../utils/logger';
-import { utils } from '../utils/utils';
 
 /**
  * Provides document formatting functionality for GPP language files.
@@ -18,12 +19,9 @@ import { utils } from '../utils/utils';
  * - Customizable tab size and space preferences
  */
 export class GpplDocumentFormattingEditProvider
-  implements DocumentFormattingEditProvider
-{
-  /** Current indentation level for nested structures */
-  indentLevel = 0;
+  implements DocumentFormattingEditProvider {
   /** Indentation string (spaces or tabs) based on configuration */
-  indent: string;
+  private indent: string;
 
   /**
    * Creates an instance of GpplDocumentFormattingEditProvider.
@@ -34,7 +32,7 @@ export class GpplDocumentFormattingEditProvider
    */
   constructor() {
     // Safely get formatting settings with fallback values
-    const formatConfig = utils.constants?.format;
+    const formatConfig = getConstants()?.format;
     const indentSize = formatConfig?.tabSize || 2;
     const preferSpaces = formatConfig?.preferSpace !== false;
 
@@ -58,113 +56,30 @@ export class GpplDocumentFormattingEditProvider
   ): TextEdit[] {
     try {
       // Safely check formatting settings
-      const formatConfig = utils.constants?.format;
+      const formatConfig = getConstants()?.format;
       if (!formatConfig?.enable) {
         return [];
       }
 
-      const textEditList: TextEdit[] = [];
+      const lines: string[] = [];
       for (let i = 0; i < document.lineCount; i++) {
-        const line = document.lineAt(i);
-        const trimmedLine = line.text.trimStart();
-
-        textEditList.push(
-          new TextEdit(line.range, this.formatLineWithIndentation(trimmedLine))
-        );
+        lines.push(document.lineAt(i).text);
       }
 
-      this.indentLevel = 0;
+      const formatted = computeFormattedLines(lines, {
+        indent: this.indent,
+        applyIndentsToRegions: formatConfig?.applyIndentsToRegions !== false,
+      });
+
+      const textEditList: TextEdit[] = [];
+      for (let i = 0; i < document.lineCount; i++) {
+        textEditList.push(new TextEdit(document.lineAt(i).range, formatted[i]));
+      }
+
       return textEditList;
     } catch (error) {
       Logger.error('Error in document formatting:', error);
       return [];
     }
-  }
-
-  /**
-   * Formats a single line with appropriate indentation.
-   *
-   * @param text - The text line to format
-   * @returns The formatted line with proper indentation
-   */
-  formatLineWithIndentation(text: string): string {
-    try {
-      if (!text) {
-        return '';
-      }
-
-      // Normalize regions
-      text = text.replace(/[;\s]*#\s*(end)?region\b/g, ';#$1region');
-
-      // Check if line is a comment
-      if (text.startsWith(';') && !/(;#(end)?region)/.test(text)) {
-        return this.createIndent() + text;
-      }
-
-      // Apply original indentation logic
-      return this.formatLineWithOriginalLogic(text);
-    } catch (error) {
-      Logger.error('Error formatting line:', error);
-      return text; // Return original text on error
-    }
-  }
-
-  /**
-   * Applies the original formatting logic to a line of text.
-   *
-   * @private
-   * @param text - The text line to format
-   * @returns The formatted line with proper indentation and structure
-   */
-  private formatLineWithOriginalLogic(text: string): string {
-    const formatConfig = utils.constants?.format;
-    const applyIndentsToRegions = formatConfig?.applyIndentsToRegions !== false;
-
-    // Block-starting constructs (indent increases AFTER)
-    if (
-      /^@\w+/.test(text) || // Procedure definitions
-      /^\bif\b/i.test(text) || // Conditional statements
-      /^\bwhile\b/i.test(text) || // Loops
-      (applyIndentsToRegions && /#region\b/.test(text))
-    ) {
-      const formattedText = this.createIndent() + text;
-      ++this.indentLevel;
-      return formattedText;
-    }
-
-    // else/elseif constructs (special handling)
-    if (/^\belse\b/i.test(text) || /^\belseif\b/i.test(text)) {
-      --this.indentLevel;
-      const formattedText = this.createIndent() + text;
-      ++this.indentLevel;
-      return formattedText;
-    }
-
-    // Block-ending constructs (indent decreases BEFORE)
-    if (
-      /^\bend(?:w|p|if)\b/i.test(text) || // endwhile, endproc, endif
-      (applyIndentsToRegions && /#endregion\b/.test(text))
-    ) {
-      --this.indentLevel;
-      return this.createIndent() + text;
-    }
-
-    // Regular lines (current indent)
-    if (text !== '') {
-      return this.createIndent() + text;
-    }
-
-    // Empty lines
-    return text;
-  }
-
-  /**
-   * Creates an indentation string for the current indent level.
-   *
-   * @private
-   * @returns A string containing the appropriate amount of indentation
-   */
-  private createIndent(): string {
-    return this.indent.repeat(Math.max(0, this.indentLevel));
   }
 }

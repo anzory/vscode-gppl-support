@@ -7,7 +7,8 @@ import {
   workspace,
   WorkspaceConfiguration,
 } from 'vscode';
-import { constants } from './constants';
+import { getConstants } from './constants';
+import { Logger } from './logger';
 
 /**
  * Represents a TextMate rule for syntax highlighting.
@@ -58,15 +59,16 @@ export class Config {
    * - Colorization settings
    */
   constructor() {
-    this.config = workspace.getConfiguration(constants.configId);
-    const gppEditorConfig = workspace.getConfiguration('[gpp]');
+    this.config = workspace.getConfiguration(getConstants().configId);
+    const gppEditorConfig = workspace.getConfiguration('', { languageId: 'gpp' });
     const currentFormatter = gppEditorConfig.get<string>('editor.defaultFormatter');
     if (!currentFormatter) {
       gppEditorConfig.update(
         'editor.defaultFormatter',
         'anzory.vscode-gppl-support',
-        ConfigurationTarget.Workspace
-      );
+        ConfigurationTarget.Workspace,
+        true
+      ).then(undefined, err => Logger.error('Error setting default formatter:', err));
     }
     this.setFilesEncoding();
     this.addColorizationSettings();
@@ -90,7 +92,7 @@ export class Config {
    * @param e - The configuration change event
    */
   private onConfigurationChanged(e: ConfigurationChangeEvent) {
-    if (e.affectsConfiguration(constants.configId)) {
+    if (e.affectsConfiguration(getConstants().configId)) {
       this.reloadConfig();
       this.setFilesEncoding();
     }
@@ -102,7 +104,7 @@ export class Config {
    * @private
    */
   private reloadConfig() {
-    this.config = workspace.getConfiguration(constants.configId);
+    this.config = workspace.getConfiguration(getConstants().configId);
   }
 
   /**
@@ -114,15 +116,16 @@ export class Config {
    * @private
    */
   private setFilesEncoding() {
-    const encoding = constants.files.encoding;
-    const gppEditorConfig = workspace.getConfiguration('[gpp]');
+    const encoding = getConstants().files.encoding;
+    const gppEditorConfig = workspace.getConfiguration('', { languageId: 'gpp' });
     const currentEncoding = gppEditorConfig.get<string>('files.encoding');
     if (currentEncoding !== encoding) {
       gppEditorConfig.update(
         'files.encoding',
         encoding,
-        ConfigurationTarget.Workspace
-      );
+        ConfigurationTarget.Workspace,
+        true
+      ).then(undefined, err => Logger.error('Error setting files encoding:', err));
     }
   }
 
@@ -145,13 +148,14 @@ export class Config {
    * @param global - Whether to set globally or workspace-specific
    * @returns True if the parameter was set successfully
    */
-  setParam(param: string, value: unknown, global = true): boolean {
+  async setParam(param: string, value: unknown, global = true): Promise<boolean> {
     try {
-      this.config.update(param, value, global);
+      await this.config.update(param, value, global);
       this.reloadConfig();
       // Verify the value was set correctly
       return this.config.get(param) === value;
-    } catch {
+    } catch (err) {
+      Logger.error('Error setting config param:', err);
       return false;
     }
   }
@@ -179,7 +183,7 @@ export class Config {
         resolve(
           __dirname,
           'languages',
-          constants.languageId,
+          getConstants().languageId,
           'colorsDefaultDark.json'
         )
       ).toString()
@@ -189,7 +193,7 @@ export class Config {
         resolve(
           __dirname,
           'languages',
-          constants.languageId,
+          getConstants().languageId,
           'colorsDefaultLight.json'
         )
       ).toString()
@@ -246,7 +250,7 @@ export class Config {
           'tokenColorCustomizations',
           customTokenColorCustomizations,
           true
-        );
+        ).then(undefined, err => Logger.error('Error updating token color customizations:', err));
     }
   }
 }

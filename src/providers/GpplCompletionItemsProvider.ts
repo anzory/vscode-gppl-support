@@ -10,8 +10,8 @@ import {
   SnippetString,
   TextDocument,
 } from 'vscode';
+import { II18n } from '../interfaces';
 import { gpplComletionsItemsList } from '../utils/completionsItemsList';
-import { i18n } from '../utils/i18n';
 
 /**
  * Interface for completion item template data.
@@ -34,21 +34,22 @@ interface CompletionItemTemplate {
  * - User-defined variables and procedures
  */
 export class GpplCompletionItemsProvider
-  implements CompletionItemProvider<CompletionItem>
-{
+  implements CompletionItemProvider<CompletionItem> {
   /**
    * Templates for completion items.
    * These are used to create new CompletionItem instances for each request,
    * avoiding mutation of shared state.
    */
   private _itemTemplates: CompletionItemTemplate[] = [];
+  private i18n: II18n;
 
   /**
    * Creates an instance of GpplCompletionItemsProvider.
    *
    * Initializes completion item templates from the predefined list.
    */
-  constructor() {
+  constructor(i18n: II18n) {
+    this.i18n = i18n;
     gpplComletionsItemsList.forEach((item) => {
       this._itemTemplates.push({
         label: item.label as string,
@@ -77,10 +78,10 @@ export class GpplCompletionItemsProvider
     item.range = range;
 
     if (template.documentation) {
-      item.documentation = new MarkdownString(i18n.t(template.documentation));
+      item.documentation = new MarkdownString(this.i18n.t(template.documentation));
     }
     if (template.detail) {
-      item.detail = i18n.t(template.detail);
+      item.detail = this.i18n.t(template.detail);
     }
 
     return item;

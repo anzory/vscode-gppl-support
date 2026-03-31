@@ -8,8 +8,7 @@ import {
   TextDocument,
   workspace,
 } from 'vscode';
-import TextParser from '../utils/textParser';
-import { utils } from '../utils/utils';
+import { ITextParser, II18n } from '../interfaces';
 
 /**
  * Provides document symbols (outline) for GPP language files.
@@ -20,7 +19,13 @@ import { utils } from '../utils/utils';
  * - Hierarchical structure of the document
  */
 export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
-  private textParser = new TextParser();
+  private textParser: ITextParser;
+  private i18n: II18n;
+
+  constructor(textParser: ITextParser, i18n: II18n) {
+    this.textParser = textParser;
+    this.i18n = i18n;
+  }
 
   /**
    * Provides symbol information for the entire document.
@@ -83,7 +88,7 @@ export class GpplDocumentSymbolProvider implements DocumentSymbolProvider {
             .getConfiguration('gpp')
             .get<boolean>('outline.showSymbolDetail', true);
           const detail = showDetail
-            ? utils.i18n.t('outline.detail.calls').replace('{count}', callCount.toString())
+            ? this.i18n.t('outline.detail.calls').replace('{count}', callCount.toString())
             : '';
           const symbol = new DocumentSymbol(
             label,

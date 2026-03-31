@@ -1,9 +1,8 @@
 'use strict';
-import { resolve } from 'path';
-import { Compiler, Configuration } from 'webpack';
-
+const { resolve } = require('path');
 const fs = require('fs');
 const cp = require('copy-webpack-plugin');
+import type { Compiler, Configuration } from 'webpack';
 
 let dist = 'dist';
 
@@ -91,6 +90,6 @@ function writeDistPackageJson(): void {
     resolve(__dirname, dist, 'package.json'),
     JSON.stringify(distPackageJson, null, ' '),
     'utf8',
-    () => {}
+    () => { }
   );
 }

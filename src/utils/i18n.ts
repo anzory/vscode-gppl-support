@@ -1,7 +1,8 @@
 import { I18n, TranslateOptions } from 'i18n';
 import { resolve } from 'path';
 import { workspace } from 'vscode';
-import { constants } from './constants';
+import { II18n } from '../interfaces';
+import { getConstants } from './constants';
 
 /**
  * Provides internationalization functionality for the GPP extension.
@@ -11,23 +12,32 @@ import { constants } from './constants';
  * - Locale management
  * - Dynamic locale switching
  */
-class _i18n {
-  private lcl = workspace
-    .getConfiguration('gpp.localization')
-    .get<string>('defaultLocale');
+class _i18n implements II18n {
+  private lcl: string | undefined;
+  private i18n: I18n | undefined;
 
   /**
    * Creates an instance of _i18n.
-   *
-   * Initializes the i18n system with the current locale setting.
+   * Initialization is deferred to first use or explicit initialize() call.
    */
-  constructor() {}
+  constructor() { }
 
-  private i18n = new I18n({
-    locales: constants.localesEnum,
-    defaultLocale: this.lcl,
-    directory: resolve(__dirname, 'i18n'),
-  });
+  /**
+   * Ensures the i18n engine is initialized. Called lazily on first translation.
+   */
+  private ensureInitialized(): void {
+    if (this.i18n) {
+      return;
+    }
+    this.lcl = workspace
+      .getConfiguration('gpp.localization')
+      .get<string>('defaultLocale');
+    this.i18n = new I18n({
+      locales: getConstants().localesEnum,
+      defaultLocale: this.lcl,
+      directory: resolve(__dirname, 'i18n'),
+    });
+  }
 
   /**
    * Translates a phrase or options using the current locale.
@@ -36,7 +46,8 @@ class _i18n {
    * @returns The translated string
    */
   public t(phraseOrOptions: string | TranslateOptions): string {
-    return this.i18n.__(phraseOrOptions);
+    this.ensureInitialized();
+    return this.i18n!.__(phraseOrOptions);
   }
 
   /**
@@ -46,8 +57,8 @@ class _i18n {
     this.lcl = workspace
       .getConfiguration('gpp.localization')
       .get<string>('defaultLocale');
-    this.i18n.configure({
-      locales: constants.localesEnum,
+    this.i18n = new I18n({
+      locales: getConstants().localesEnum,
       defaultLocale: this.lcl,
       directory: resolve(__dirname, 'i18n'),
     });

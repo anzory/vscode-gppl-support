@@ -12,12 +12,19 @@ import {
   workspace,
   WorkspaceEdit,
 } from 'vscode';
-import { providers } from './providers/providers';
-import { initializeConstants } from './utils/constants';
+import { GpplCodeLensProvider } from './providers/GpplCodeLensProvider';
+import { GpplCompletionItemsProvider } from './providers/GpplCompletionItemsProvider';
+import { GpplDefinitionProvider } from './providers/GpplDefinitionProvider';
+import { GpplDocumentFormattingEditProvider } from './providers/GpplDocumentFormattingEditProvider';
+import { GpplDocumentSymbolProvider } from './providers/GpplDocumentSymbolProvider';
+import { GpplHoverProvider } from './providers/GpplHoverProvider';
+import { GpplReferenceProvider } from './providers/GpplReferenceProvider';
+import { Config } from './utils/config';
+import { getConstants, initializeConstants } from './utils/constants';
+import { i18n } from './utils/i18n';
 import { Logger } from './utils/logger';
 import { semanticHelper } from './utils/semanticHelper';
 import { textParser } from './utils/textParser';
-import { utils } from './utils/utils';
 
 /** Disposables for language-feature providers managed by the config-change listener. */
 let providerDisposables: Disposable[] = [];
@@ -26,29 +33,29 @@ let providerDisposables: Disposable[] = [];
  * Registers all language-feature providers and returns their disposables.
  */
 function registerProviders(): Disposable[] {
-  const langId = utils.constants.languageId;
+  const langId = getConstants().languageId;
   return [
     languages.registerCompletionItemProvider(
       langId,
-      new providers.completionItemsProvider()
+      new GpplCompletionItemsProvider(i18n)
     ),
-    languages.registerHoverProvider(langId, new providers.hoverProvider()),
-    languages.registerCodeLensProvider(langId, new providers.codeLensProvider()),
+    languages.registerHoverProvider(langId, new GpplHoverProvider(semanticHelper, i18n)),
+    languages.registerCodeLensProvider(langId, new GpplCodeLensProvider(semanticHelper, i18n, textParser)),
     languages.registerDocumentSymbolProvider(
       langId,
-      new providers.documentSymbolProvider()
+      new GpplDocumentSymbolProvider(textParser, i18n)
     ),
     languages.registerDefinitionProvider(
       langId,
-      new providers.definitionProvider()
+      new GpplDefinitionProvider(semanticHelper, textParser)
     ),
     languages.registerReferenceProvider(
       langId,
-      new providers.referenceProvider()
+      new GpplReferenceProvider(semanticHelper, textParser)
     ),
     languages.registerDocumentFormattingEditProvider(
       langId,
-      new providers.formattingProvider()
+      new GpplDocumentFormattingEditProvider()
     ),
   ];
 }
@@ -70,11 +77,13 @@ export async function activate(context: ExtensionContext) {
   // Initialize constants with proper subscription management
   initializeConstants(context.subscriptions);
 
-  new utils.config().configure(context);
+  new Config().configure(context);
+
+  const constants = getConstants();
 
   context.subscriptions.push(
     commands.registerCommand(
-      utils.constants.commands.formatDocument,
+      constants.commands.formatDocument,
       async () => {
         const activeEditor = window.activeTextEditor;
         const docUri: Uri | undefined = activeEditor?.document.uri;
@@ -96,7 +105,7 @@ export async function activate(context: ExtensionContext) {
 
   context.subscriptions.push(
     commands.registerCommand(
-      utils.constants.commands.showProcedureReferences,
+      constants.commands.showProcedureReferences,
       async (documentUri: Uri, position: Position, locations: Location[]) => {
         await commands.executeCommand(
           'editor.action.showReferences',
@@ -108,6 +117,8 @@ export async function activate(context: ExtensionContext) {
     )
   );
 
+  // Initialize semanticHelper (subscribe to events + initial parse)
+  semanticHelper.initialize();
   // Register semanticHelper for proper disposal
   context.subscriptions.push(semanticHelper);
 
@@ -138,13 +149,13 @@ function registerConfigurationChangeListener(context: ExtensionContext): void {
 
       // Format all open GPP documents
       window.visibleTextEditors.forEach((editor: TextEditor) => {
-        if (editor.document.languageId === utils.constants.languageId) {
-          commands.executeCommand('editor.action.formatDocument');
+        if (editor.document.languageId === getConstants().languageId) {
+          commands.executeCommand('editor.action.formatDocument').then(undefined, err => Logger.error('Error formatting document on config change:', err));
         }
       });
 
       // Update internationalization settings
-      utils.i18n.update();
+      i18n.update();
 
       // Dispose old providers (without touching context.subscriptions)
       for (const d of providerDisposables) {

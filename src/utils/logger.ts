@@ -1,5 +1,5 @@
 import { ExtensionContext, ExtensionMode, OutputChannel, window } from 'vscode';
-import { constants } from './constants';
+import { getConstants } from './constants';
 
 /**
  * Log levels for the Logger.
@@ -31,8 +31,8 @@ export class Logger {
    * @param context - The extension context
    */
   static configure(context: ExtensionContext) {
-    this.output = this.output || window.createOutputChannel(constants.extensionOutputChannelName);
-    
+    this.output = this.output || window.createOutputChannel(getConstants().extensionOutputChannelName);
+
     // Set log level based on extension mode
     if (context.extensionMode === ExtensionMode.Development) {
       this.currentLogLevel = LogLevel.TRACE;
@@ -103,15 +103,15 @@ export class Logger {
    */
   static error(message: string | Error, error?: unknown): void {
     if (this.output !== undefined && this.currentLogLevel >= LogLevel.ERROR) {
-      const errorMessage = message instanceof Error 
-        ? message.message 
+      const errorMessage = message instanceof Error
+        ? message.message
         : message;
-      const errorStack = message instanceof Error 
-        ? message.stack 
-        : error instanceof Error 
-          ? error.stack 
+      const errorStack = message instanceof Error
+        ? message.stack
+        : error instanceof Error
+          ? error.stack
           : String(error);
-      
+
       this.output.appendLine(`[ERROR] ${errorMessage}`);
       if (errorStack && errorStack !== String(error)) {
         this.output.appendLine(`  Stack: ${errorStack}`);

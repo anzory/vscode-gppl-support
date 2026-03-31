@@ -17,6 +17,9 @@
   "exclude": [
     "node_modules",
     "tmp",
-    "webpack.config.ts"
+    "webpack.config.ts",
+    "vitest.config.ts",
+    "src/test",
+    "src/__mocks__"
   ]
 }

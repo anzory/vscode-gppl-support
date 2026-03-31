@@ -8,8 +8,7 @@ import {
   ProviderResult,
   TextDocument,
 } from 'vscode';
-import { semanticHelper } from '../utils/semanticHelper';
-import { textParser } from '../utils/textParser';
+import { ISemanticHelper, ITextParser } from '../interfaces';
 
 /**
  * Provides "Go to Definition" functionality for GPP language constructs.
@@ -20,6 +19,14 @@ import { textParser } from '../utils/textParser';
  * - Other GPP language elements
  */
 export class GpplDefinitionProvider implements DefinitionProvider {
+  private semanticHelper: ISemanticHelper;
+  private textParser: ITextParser;
+
+  constructor(semanticHelper: ISemanticHelper, textParser: ITextParser) {
+    this.semanticHelper = semanticHelper;
+    this.textParser = textParser;
+  }
+
   /**
    * Provides the definition location for the symbol at the given position.
    *
@@ -50,17 +57,17 @@ export class GpplDefinitionProvider implements DefinitionProvider {
 
     let definition: Location | undefined;
 
-    if (semanticHelper.isThisUserVariableOrArray(word)) {
+    if (this.semanticHelper.isThisUserVariableOrArray(word)) {
       if (token.isCancellationRequested) {
         return undefined;
       }
-      const locations = textParser.getWordLocationsForLiteral(document, word);
+      const locations = this.textParser.getWordLocationsForLiteral(document, word);
       definition = locations[0];
-    } else if (semanticHelper.isThisProcedureDeclaration(word)) {
+    } else if (this.semanticHelper.isThisProcedureDeclaration(word)) {
       if (token.isCancellationRequested) {
         return undefined;
       }
-      const locations = textParser.getWordLocationsForLiteral(document, word);
+      const locations = this.textParser.getWordLocationsForLiteral(document, word);
       for (const location of locations) {
         if (token.isCancellationRequested) {
           return undefined;

@@ -100,8 +100,8 @@
       "patterns": [
         {
           "name": "comment.gpp",
-          "match": "('?(?=;\\s{0,}\\{.*\\})(;\\s{0,}\\{.*)|(;(?!(.*\\})).*$))",
-          "comment": "Define GPPL Comments (https://regex101.com/r/tUf5UN/1)"
+          "match": ";.*$",
+          "comment": "Define GPPL Comments"
         },
         {
           "name": "keyword.control.user.region.gpp",

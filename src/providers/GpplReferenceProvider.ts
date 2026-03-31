@@ -7,8 +7,7 @@ import {
   ReferenceProvider,
   TextDocument,
 } from 'vscode';
-import { semanticHelper } from '../utils/semanticHelper';
-import { textParser } from '../utils/textParser';
+import { ISemanticHelper, ITextParser } from '../interfaces';
 
 /**
  * Provides "Find All References" functionality for GPP language constructs.
@@ -19,6 +18,14 @@ import { textParser } from '../utils/textParser';
  * - Other GPP language elements
  */
 export class GpplReferenceProvider implements ReferenceProvider {
+  private semanticHelper: ISemanticHelper;
+  private textParser: ITextParser;
+
+  constructor(semanticHelper: ISemanticHelper, textParser: ITextParser) {
+    this.semanticHelper = semanticHelper;
+    this.textParser = textParser;
+  }
+
   /**
    * Provides all reference locations for the symbol at the given position.
    *
@@ -54,10 +61,10 @@ export class GpplReferenceProvider implements ReferenceProvider {
     }
 
     if (
-      semanticHelper.isThisUserVariableOrArray(word) ||
-      semanticHelper.isThisProcedureDeclaration(word)
+      this.semanticHelper.isThisUserVariableOrArray(word) ||
+      this.semanticHelper.isThisProcedureDeclaration(word)
     ) {
-      return textParser.getWordLocationsForLiteral(document, word);
+      return this.textParser.getWordLocationsForLiteral(document, word);
     }
 
     return undefined;
