@@ -67,9 +67,11 @@ export interface II18n {
  * Provides logging functionality with different log levels.
  */
 export interface ILogger {
+    configure?(context: import('vscode').ExtensionContext): void;
     info(message: string): void;
     warn(message: string): void;
     error(message: string | Error, error?: unknown): void;
     debug(message: string): void;
     show(): void;
+    close(): void;
 }

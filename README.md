@@ -73,7 +73,7 @@ Document Symbols in the Outline Window
 1. Open VSCode.
 2. Go to Extensions Marketplace.
 3. Search for `anzory.vscode-gppl-support` and click Install.
-4. Or download [VSIX](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/anzory/vsextensions/vscode-gppl-support/1.9.1/vspackage) and install offline from it.
+4. Or download [VSIX](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/anzory/vsextensions/vscode-gppl-support/1.10.0/vspackage) and install offline from it.
 
 ---
 
@@ -122,12 +122,16 @@ Found an issue? Feel free to open the [issues](https://github.com/anzory/vscode-
 
 ## Release Notes
 
-### 1.9.3
+## 1.10.0
 
-### Improved
+### Fixed
 
-- Significant performance optimization: references are now computed lazily on demand instead of on every keystroke
-- Proper resource cleanup on extension deactivation (semanticHelper, textParser cache)
+- Fixed a bug that caused the parser to crash or incorrectly process comments containing curly braces {}.
+
+### Added
+
+- Added unit tests
+- Code coverage increased to 93.75%
 
 ---
 

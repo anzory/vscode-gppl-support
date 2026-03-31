@@ -12,7 +12,7 @@ import { getConstants } from './constants';
  * - Locale management
  * - Dynamic locale switching
  */
-class _i18n implements II18n {
+export class I18nService implements II18n {
   private lcl: string | undefined;
   private i18n: I18n | undefined;
 
@@ -66,9 +66,8 @@ class _i18n implements II18n {
 }
 
 /**
- * Global instance of the internationalization helper.
- *
- * This singleton instance provides translation functionality
- * for the extension.
+ * Creates a new internationalization service.
  */
-export const i18n = new _i18n();
+export function createI18n(): II18n {
+  return new I18nService();
+}

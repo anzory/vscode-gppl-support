@@ -9,5 +9,15 @@
   // Turn off tsc task auto detection since we have the necessary tasks as npm scripts
   "typescript.tsc.autoDetect": "on",
   "files.defaultLanguage": "$(activeEditorLanguage)",
-  "svg.preview.background": "black"
+  "svg.preview.background": "black",
+  "chat.tools.terminal.autoApprove": {
+    "/^powershell -NoProfile -Command \"Get-Content src/extension\\.ts \\| Select-Object -Index 17,127,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204\"$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^node -e \"const fs=require\\('fs'\\); const lines=fs\\.readFileSync\\('src/extension\\.ts','utf8'\\)\\.split\\(/\\\\r\\?\\\\n/\\); \\[18,128,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205\\]\\.forEach\\(i=>console\\.log\\(i, lines\\[i-1\\]\\)\\);\"$/": {
+      "approve": true,
+      "matchCommandLine": true
+    }
+  }
 }

@@ -12,9 +12,7 @@ import {
 } from 'vscode';
 import { getConstants } from './constants';
 import { getProcedureName, getProcedureArgs, getInfo, getVariables } from './gpplParser';
-import { ISemanticHelper } from '../interfaces';
-import { Logger } from './logger';
-import { textParser } from './textParser';
+import { ISemanticHelper, ILogger, ITextParser } from '../interfaces';
 
 /**
  * Interface representing a variable in GPP code.
@@ -64,6 +62,8 @@ function getSystemVariableNames(): string[] {
       readFileSync(
         resolve(
           __dirname,
+          '..',
+          '..',
           'languages',
           getConstants().languageId,
           'gpp.tmLanguage.json'
@@ -84,7 +84,7 @@ function getSystemVariableNames(): string[] {
       cachedSystemVariableNames = [];
     }
   } catch (error) {
-    Logger.error('Error loading system variables:', error);
+    console.error('Error loading system variables:', error);
     cachedSystemVariableNames = [];
   }
 
@@ -119,7 +119,9 @@ class SemanticHelper implements Disposable, ISemanticHelper {
   /** Timer for debouncing document change events */
   private debounceTimer?: ReturnType<typeof setTimeout>;
   /** Text parser instance for document analysis */
-  private textParser = textParser;
+  private textParser: ITextParser;
+  /** Logger instance for error reporting */
+  private logger: ILogger;
   /** Cached document version to avoid unnecessary reparsing */
   private lastDocumentVersion: number = -1;
   /** Cached document URI to detect document switches */
@@ -133,8 +135,10 @@ class SemanticHelper implements Disposable, ISemanticHelper {
    * Only initializes fields. Call initialize() to subscribe to events
    * and perform initial document parsing.
    */
-  constructor() {
+  constructor(textParser: ITextParser, logger: ILogger) {
     this.editor = window.activeTextEditor;
+    this.textParser = textParser;
+    this.logger = logger;
   }
 
   /**
@@ -540,8 +544,8 @@ class SemanticHelper implements Disposable, ISemanticHelper {
         return;
       }
 
-      this.parseUserVariables();
       this.parseSystemVariables();
+      this.parseUserVariables();
       this.parseProcedures();
 
       if (doc) {
@@ -549,7 +553,7 @@ class SemanticHelper implements Disposable, ISemanticHelper {
         this.lastDocumentUri = doc.uri.toString();
       }
     } catch (error) {
-      Logger.error('Error during document parsing:', error);
+      this.logger.error('Error during document parsing:', error);
       // Clear data on error to prevent inconsistent state
       this.clearAllData();
     }
@@ -599,16 +603,18 @@ class SemanticHelper implements Disposable, ISemanticHelper {
       try {
         this.parseDocument();
       } catch (error) {
-        Logger.error('Error parsing document:', error);
+        this.logger.error('Error parsing document:', error);
       }
     }, 300);
   }
 }
 
 /**
- * Global instance of SemanticHelper for semantic analysis.
- *
- * This singleton instance provides semantic analysis functionality
- * for the currently active document in the extension.
+ * Creates a SemanticHelper instance with injected dependencies.
  */
-export const semanticHelper = new SemanticHelper();
+export function createSemanticHelper(
+  textParser: ITextParser,
+  logger: ILogger
+): SemanticHelper {
+  return new SemanticHelper(textParser, logger);
+}

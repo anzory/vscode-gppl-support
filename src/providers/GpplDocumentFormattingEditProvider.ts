@@ -7,7 +7,7 @@ import {
 } from 'vscode';
 import { computeFormattedLines } from '../utils/gpplFormatter';
 import { getConstants } from '../utils/constants';
-import { Logger } from '../utils/logger';
+import { ILogger } from '../interfaces';
 
 /**
  * Provides document formatting functionality for GPP language files.
@@ -22,6 +22,7 @@ export class GpplDocumentFormattingEditProvider
   implements DocumentFormattingEditProvider {
   /** Indentation string (spaces or tabs) based on configuration */
   private indent: string;
+  private logger: ILogger | undefined;
 
   /**
    * Creates an instance of GpplDocumentFormattingEditProvider.
@@ -30,7 +31,8 @@ export class GpplDocumentFormattingEditProvider
    * - Tab size (default: 2)
    * - Spaces vs tabs preference
    */
-  constructor() {
+  constructor(logger?: ILogger) {
+    this.logger = logger;
     // Safely get formatting settings with fallback values
     const formatConfig = getConstants()?.format;
     const indentSize = formatConfig?.tabSize || 2;
@@ -78,7 +80,7 @@ export class GpplDocumentFormattingEditProvider
 
       return textEditList;
     } catch (error) {
-      Logger.error('Error in document formatting:', error);
+      this.logger?.error('Error in document formatting:', error);
       return [];
     }
   }

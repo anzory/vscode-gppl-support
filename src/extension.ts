@@ -21,18 +21,28 @@ import { GpplHoverProvider } from './providers/GpplHoverProvider';
 import { GpplReferenceProvider } from './providers/GpplReferenceProvider';
 import { Config } from './utils/config';
 import { getConstants, initializeConstants } from './utils/constants';
-import { i18n } from './utils/i18n';
-import { Logger } from './utils/logger';
-import { semanticHelper } from './utils/semanticHelper';
-import { textParser } from './utils/textParser';
+import { createI18n } from './utils/i18n';
+import { Logger, createLogger } from './utils/logger';
+import { createSemanticHelper } from './utils/semanticHelper';
+import { createTextParser } from './utils/textParser';
+import { II18n, ITextParser, ISemanticHelper, ILogger } from './interfaces';
 
 /** Disposables for language-feature providers managed by the config-change listener. */
 let providerDisposables: Disposable[] = [];
+let sharedTextParser: ITextParser | undefined;
+let sharedI18n: II18n | undefined;
+let sharedSemanticHelper: ISemanticHelper | undefined;
+let sharedLogger: ILogger = createLogger();
 
 /**
  * Registers all language-feature providers and returns their disposables.
  */
-function registerProviders(): Disposable[] {
+function registerProviders(
+  semanticHelper: ISemanticHelper,
+  textParser: ITextParser,
+  i18n: II18n,
+  logger: ILogger
+): Disposable[] {
   const langId = getConstants().languageId;
   return [
     languages.registerCompletionItemProvider(
@@ -55,7 +65,7 @@ function registerProviders(): Disposable[] {
     ),
     languages.registerDocumentFormattingEditProvider(
       langId,
-      new GpplDocumentFormattingEditProvider()
+      new GpplDocumentFormattingEditProvider(logger)
     ),
   ];
 }
@@ -71,13 +81,21 @@ function registerProviders(): Disposable[] {
  * @param context - The extension context provided by VS Code
  */
 export async function activate(context: ExtensionContext) {
-  // Initialize Logger first
+  // Initialize a local logger instance so extension can pass logger into providers.
+  sharedLogger = createLogger();
+  sharedLogger.configure?.(context);
+
+  // Ensure legacy modules can still log through the shared static logger.
   Logger.configure(context);
 
   // Initialize constants with proper subscription management
   initializeConstants(context.subscriptions);
 
   new Config().configure(context);
+
+  sharedTextParser = createTextParser();
+  sharedI18n = createI18n();
+  sharedSemanticHelper = createSemanticHelper(sharedTextParser, sharedLogger);
 
   const constants = getConstants();
 
@@ -118,15 +136,30 @@ export async function activate(context: ExtensionContext) {
   );
 
   // Initialize semanticHelper (subscribe to events + initial parse)
-  semanticHelper.initialize();
+  sharedSemanticHelper?.initialize();
   // Register semanticHelper for proper disposal
-  context.subscriptions.push(semanticHelper);
+  if (sharedSemanticHelper) {
+    context.subscriptions.push(sharedSemanticHelper as Disposable);
+  }
 
   // Register initial providers
-  providerDisposables = registerProviders();
+  if (sharedSemanticHelper && sharedTextParser && sharedI18n && sharedLogger) {
+    providerDisposables = registerProviders(
+      sharedSemanticHelper,
+      sharedTextParser,
+      sharedI18n,
+      sharedLogger
+    );
+  }
 
   // Register configuration change listener
-  registerConfigurationChangeListener(context);
+  registerConfigurationChangeListener(
+    context,
+    sharedSemanticHelper,
+    sharedTextParser,
+    sharedI18n,
+    sharedLogger
+  );
 }
 
 /**
@@ -139,7 +172,13 @@ export async function activate(context: ExtensionContext) {
  *
  * @param context - The extension context for managing subscriptions
  */
-function registerConfigurationChangeListener(context: ExtensionContext): void {
+function registerConfigurationChangeListener(
+  context: ExtensionContext,
+  semanticHelper: ISemanticHelper | undefined,
+  textParser: ITextParser | undefined,
+  i18n: II18n | undefined,
+  logger: ILogger
+): void {
   context.subscriptions.push(
     workspace.onDidChangeConfiguration((e) => {
       // Only react to GPP-related configuration changes
@@ -150,12 +189,12 @@ function registerConfigurationChangeListener(context: ExtensionContext): void {
       // Format all open GPP documents
       window.visibleTextEditors.forEach((editor: TextEditor) => {
         if (editor.document.languageId === getConstants().languageId) {
-          commands.executeCommand('editor.action.formatDocument').then(undefined, err => Logger.error('Error formatting document on config change:', err));
+          commands.executeCommand('editor.action.formatDocument').then(undefined, err => logger?.error('Error formatting document on config change:', err));
         }
       });
 
       // Update internationalization settings
-      i18n.update();
+      i18n?.update();
 
       // Dispose old providers (without touching context.subscriptions)
       for (const d of providerDisposables) {
@@ -163,7 +202,7 @@ function registerConfigurationChangeListener(context: ExtensionContext): void {
       }
 
       // Recreate providers with new settings
-      providerDisposables = registerProviders();
+      providerDisposables = registerProviders(semanticHelper!, textParser!, i18n!, logger!);
     })
   );
 }
@@ -179,6 +218,8 @@ export function deactivate() {
     d.dispose();
   }
   providerDisposables = [];
-  textParser.clearCache();
+  sharedTextParser?.clearCache();
+  sharedSemanticHelper?.dispose();
+  sharedLogger?.close();
   Logger.close();
 }

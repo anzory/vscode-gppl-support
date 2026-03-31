@@ -2,6 +2,19 @@
 
 ---
 
+## [1.10.0] - 2026-03-31
+
+### Fixed
+
+- Fixed a bug that caused the parser to crash or incorrectly process comments containing curly braces {}.
+
+### Added
+
+- Added unit tests
+- Code coverage increased to 93.75%
+
+---
+
 ## [1.9.3] - 2026-03-22
 
 ### Improved

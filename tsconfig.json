@@ -12,7 +12,10 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "types": [
+      "node"
+    ]
   },
   "exclude": [
     "node_modules",
@@ -20,6 +23,6 @@
     "webpack.config.ts",
     "vitest.config.ts",
     "src/test",
-    "src/__mocks__"
+    "src/test/__mocks__"
   ]
 }

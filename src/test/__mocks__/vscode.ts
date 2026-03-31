@@ -152,6 +152,10 @@ export class MarkdownString {
     }
 }
 
+export class SnippetString {
+    constructor(public value: string) { }
+}
+
 export class TextEdit {
     static replace(range: Range, newText: string): TextEdit {
         return new TextEdit(range, newText);
@@ -163,6 +167,38 @@ export class TextEdit {
         return new TextEdit(range, '');
     }
     constructor(public readonly range: Range, public readonly newText: string) { }
+}
+
+export class WorkspaceEdit {
+    private edits: Array<{ uri: Uri; range: Range; newText: string }> = [];
+
+    replace(uri: Uri, range: Range, newText: string): void {
+        this.edits.push({ uri, range, newText });
+    }
+
+    insert(uri: Uri, position: Position, newText: string): void {
+        this.edits.push({ uri, range: new Range(position, position), newText });
+    }
+
+    delete(uri: Uri, range: Range): void {
+        this.edits.push({ uri, range, newText: '' });
+    }
+}
+
+export class Command {
+    constructor(
+        public readonly title: string,
+        public readonly command: string,
+        public readonly args?: any[]
+    ) { }
+}
+
+export class CodeLens {
+    constructor(public readonly range: Range, public readonly command?: Command) { }
+}
+
+export class Hover {
+    constructor(public readonly contents: any, public readonly range?: Range) { }
 }
 
 export class Disposable {
@@ -248,6 +284,12 @@ export enum TextEditorRevealType {
     Default = 0, InCenter = 1, InCenterIfOutsideViewport = 2, AtTop = 3,
 }
 
+export enum ExtensionMode {
+    Production = 0,
+    Development = 1,
+    Test = 2,
+}
+
 export class ThemeColor {
     constructor(public readonly id: string) { }
 }
@@ -258,8 +300,3 @@ export class ThemeIcon {
     constructor(public readonly id: string) { }
 }
 
-export enum CodeLensProvider { }
-
-export class CodeLens {
-    constructor(public range: Range, public command?: any) { }
-}

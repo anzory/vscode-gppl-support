@@ -250,9 +250,9 @@ export default class TextParser implements ITextParser {
 }
 
 /**
- * Global instance of TextParser for text parsing operations.
- *
- * This singleton instance provides text parsing functionality
- * for the extension.
+ * Creates a new TextParser instance.
  */
-export const textParser = new TextParser();
+export function createTextParser(): TextParser {
+  return new TextParser();
+}
+
