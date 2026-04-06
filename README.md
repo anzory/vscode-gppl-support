@@ -4,6 +4,18 @@
 
 Enhance your `SolidCAM` postprocessor development with full `GPPL language` support in `Visual Studio Code`. Enjoy syntax highlighting, code formatting, autocompletion, snippets, and document symbols in the Outline panel — all in one extension!
 
+---
+
+## Release Notes
+
+## 1.10.1
+
+### Added
+
+- a notification about the new `GPPL editor` based on `LSP` server with extended capabilities! Details on the [IndustryArena forum](https://bit.ly/forum-485393).
+
+---
+
 ## Features
 
 - **Document Symbols** in the Outline Window
@@ -73,7 +85,7 @@ Document Symbols in the Outline Window
 1. Open VSCode.
 2. Go to Extensions Marketplace.
 3. Search for `anzory.vscode-gppl-support` and click Install.
-4. Or download [VSIX](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/anzory/vsextensions/vscode-gppl-support/1.10.0/vspackage) and install offline from it.
+4. Or [download VSIX](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/anzory/vsextensions/vscode-gppl-support/1.10.0/vspackage) and install offline from it.
 
 ---
 
@@ -117,21 +129,6 @@ There are no hard dependencies here, but I highly recommend using:
 There are no known issues with this extension.
 
 Found an issue? Feel free to open the [issues](https://github.com/anzory/vscode-gppl-support/issues/new/choose).
-
----
-
-## Release Notes
-
-## 1.10.0
-
-### Fixed
-
-- Fixed a bug that caused the parser to crash or incorrectly process comments containing curly braces {}.
-
-### Added
-
-- Added unit tests
-- Code coverage increased to 93.75%
 
 ---
 

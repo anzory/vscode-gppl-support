@@ -2,6 +2,14 @@
 
 ---
 
+## [1.10.1] - 2026-04-06
+
+### Added
+
+- a notification about the new `GPPL editor` based on `LSP` server with extended capabilities! Details on the [IndustryArena forum](https://bit.ly/forum-485393).
+
+---
+
 ## [1.10.0] - 2026-03-31
 
 ### Fixed

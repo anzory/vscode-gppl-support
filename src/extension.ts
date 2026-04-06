@@ -1,6 +1,7 @@
 import {
   commands,
   Disposable,
+  env,
   ExtensionContext,
   languages,
   Location,
@@ -160,6 +161,20 @@ export async function activate(context: ExtensionContext) {
     sharedI18n,
     sharedLogger
   );
+  // Show LSP promotion notification (once per user)
+  const LSP_PROMOTION_KEY = 'gppl.lspPromotion.dismissed';
+  if (!context.globalState.get<boolean>(LSP_PROMOTION_KEY)) {
+    const selection = await window.showInformationMessage(
+      'Try the new GPPL editor based on LSP server with extended capabilities! Details on the IndustryArena forum (https://bit.ly/forum-485393).',
+      'OK',
+      "Don't show again"
+    );
+    if (selection === 'OK') {
+      await env.openExternal(Uri.parse('https://bit.ly/forum-485393'));
+    } else if (selection === "Don't show again") {
+      await context.globalState.update(LSP_PROMOTION_KEY, true);
+    }
+  }
 }
 
 /**
