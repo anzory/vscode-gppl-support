@@ -2,11 +2,12 @@
 
 ---
 
-## [1.10.1] - 2026-04-06
+## [1.10.7] - 2026-06-19
 
-### Added
+### Changed
 
-- a notification about the new `GPPL editor` based on `LSP` server with extended capabilities! Details on the [IndustryArena forum](https://bit.ly/forum-485393).
+- Updated README: added GitHub Wiki badge and migration guide block; replaced "Plan to implement" with "New GPPL Editor" section.
+- Removed direct links to another extension to comply with Marketplace policy.
 
 ---
 

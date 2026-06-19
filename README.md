@@ -1,18 +1,10 @@
 # GPPL Support for VSCode
 
-[![VS Code Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/anzory.vscode-gppl-support)](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support) [![Installs](https://img.shields.io/visual-studio-marketplace/i/anzory.vscode-gppl-support)](https://marketplace.visualstudio.com/items?itemName=anzory.vscode-gppl-support) [![GitHub Stars](https://img.shields.io/github/stars/anzory/vscode-gppl-support?style=social)](https://github.com/anzory/vscode-gppl-support) [![License](https://img.shields.io/github/license/anzory/vscode-gppl-support)](https://github.com/anzory/vscode-gppl-support/blob/master/LICENSE.md)
+[![GitHub Stars](https://img.shields.io/github/stars/anzory/vscode-gppl-support?style=social)](https://github.com/anzory/vscode-gppl-support) [![License](https://img.shields.io/github/license/anzory/vscode-gppl-support)](https://github.com/anzory/vscode-gppl-support/blob/master/LICENSE.md) [![GitHub Wiki](https://img.shields.io/badge/Wiki-Migration%20Guide-blue)](https://github.com/anzory/vscode-gppl-support/wiki)
 
 Enhance your `SolidCAM` postprocessor development with full `GPPL language` support in `Visual Studio Code`. Enjoy syntax highlighting, code formatting, autocompletion, snippets, and document symbols in the Outline panel — all in one extension!
 
----
-
-## Release Notes
-
-## 1.10.1
-
-### Added
-
-- a notification about the new `GPPL editor` based on `LSP` server with extended capabilities! Details on the [IndustryArena forum](https://bit.ly/forum-485393).
+> 🚀 **A new full-featured GPPL editor is available.** If you are considering the switch, read the migration guide in the [GitHub Wiki](https://github.com/anzory/vscode-gppl-support/wiki).
 
 ---
 
@@ -85,7 +77,7 @@ Document Symbols in the Outline Window
 1. Open VSCode.
 2. Go to Extensions Marketplace.
 3. Search for `anzory.vscode-gppl-support` and click Install.
-4. Or [download VSIX](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/anzory/vsextensions/vscode-gppl-support/1.10.0/vspackage) and install offline from it.
+4. Or [download VSIX](https://marketplace.visualstudio.com/_apis/public/gallery/publishers/anzory/vsextensions/vscode-gppl-support/1.10.7/vspackage) and install offline from it.
 
 ---
 
@@ -132,14 +124,15 @@ Found an issue? Feel free to open the [issues](https://github.com/anzory/vscode-
 
 ---
 
-## Plan to implement
+## New GPPL Editor
 
-It is a good text editor with GPPL language support for SolidCAM postprocessor editing at the moment. But I want even better. The next version will be 2.0.0, and I'll implement in it:
+A new full-featured GPPL editor for SolidCAM postprocessor development is now available. It is based on an LSP server and provides extended IDE capabilities:
 
-- [LSP](https://code.visualstudio.com/api/language-extensions/overview#language-server-protocol) functionality to improve performance
-- a semantic analyzer for the GPPL
-- here should be a complete project with a settings file, parsing of all dependent files, deploy functionality and packaging into an archive
-- and more ...
+- advanced code analysis and language features
+- project-level workflow with settings, dependency parsing, deployment and packaging
+- improved performance and reliability
+
+If you are considering the switch, read the migration guide in the [GitHub Wiki](https://github.com/anzory/vscode-gppl-support/wiki).
 
 ---
 
